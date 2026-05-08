@@ -1,11 +1,11 @@
 # ECG Time Series Analysis with MIT-BIH
 
-Dự án này phân tích tín hiệu ECG từ **MIT-BIH Arrhythmia Database** bằng hai hướng chính:
+This project analyzes ECG signals from the **MIT-BIH Arrhythmia Database** following two main directions:
 
-1. **Time series analysis / forecasting**: tiền xử lý ECG, trích xuất HR/RR, kiểm tra tính dừng và so sánh ARIMA/SARIMA.
-2. **Abnormality classification**: tạo cửa sổ ECG và phân loại `Normal` / `Abnormal` bằng feature-based ML models và 1D CNN.
+1. **Time series analysis / forecasting**: ECG preprocessing, HR/RR extraction, stationarity testing, and ARIMA/SARIMA comparison.
+2. **Abnormality classification**: ECG windowing and classification of `Normal` / `Abnormal` beats using feature-based ML models and 1D CNN.
 
-Dữ liệu được đọc bằng `wfdb`, chủ yếu từ PhysioNet (`pn_dir="mitdb"`). Một số cell trong notebook ARIMA/SARIMA dùng đường dẫn local `DB_PATH`, cần chỉnh lại theo máy của bạn nếu chạy notebook đó.
+Data is loaded using `wfdb`, primarily from PhysioNet (`pn_dir="mitdb"`). Some cells in the ARIMA/SARIMA notebook use a local path `DB_PATH` that needs adjustment on your machine if running that notebook.
 
 ## Project Structure
 
@@ -24,101 +24,106 @@ Dữ liệu được đọc bằng `wfdb`, chủ yếu từ PhysioNet (`pn_dir="
 
 ## Main Notebooks
 
-| Notebook | Mục đích chính |
+| Notebook | Purpose |
 | --- | --- |
-| `notebooks/01_explore_data.ipynb` | Load MIT-BIH records, xem metadata/lead, plot ECG raw, detect R-peak, cắt beat quanh R-peak và trích xuất QRS features cơ bản. |
-| `notebooks/02_EDA.ipynb` | EDA tín hiệu: quality check, baseline/powerline/noise, filtering demo, RR/HR analysis, HRV metrics, STL decomposition và thống kê label. |
-| `notebooks/03_preprocessing_data.ipynb` | Minh họa pipeline tiền xử lý ECG: band-pass 0.5-40 Hz, khử baseline wander, notch 50/60 Hz, so sánh phổ tần số và chuẩn hóa. |
-| `notebooks/ARIMA and SARIMA model.ipynb` | Trích xuất HR/RR từ ECG đã lọc, kiểm tra stationarity bằng ADF, chọn ARIMA qua ACF/PACF và grid search, rolling forecast HR/RR, tune SARIMA và so sánh ARIMA vs SARIMA. |
-| `notebooks/Classification/sliding window.ipynb` | Tạo sliding-window feature dataset và huấn luyện `RandomForest`, `ExtraTrees`, `XGBoost`, soft-voting ensemble cho phân loại normal/abnormal. |
-| `notebooks/Classification/CNN_model.ipynb` | Tạo raw ECG windows đã chuẩn hóa và huấn luyện 1D CNN cho binary classification `Normal` / `Abnormal`. |
+| `notebooks/01_explore_data.ipynb` | Load MIT-BIH records, view metadata/lead info, plot raw ECG, detect R-peaks, extract beats around R-peak, and extract basic QRS features. |
+| `notebooks/02_EDA.ipynb` | Signal EDA: quality check, baseline/powerline/noise analysis, filtering demo, RR/HR analysis, HRV metrics, STL decomposition, and label statistics. |
+| `notebooks/03_preprocessing_data.ipynb` | Demonstrates ECG preprocessing pipeline: band-pass 0.5-40 Hz, baseline wander removal, notch 50/60 Hz, frequency spectrum comparison, and normalization. |
+| `notebooks/ARIMA and SARIMA model.ipynb` | Extract HR/RR from filtered ECG, check stationarity with ADF, select ARIMA via ACF/PACF and grid search, rolling forecast HR/RR, tune SARIMA, and compare ARIMA vs SARIMA. |
+| `notebooks/Classification/sliding window.ipynb` | Create sliding-window feature dataset and train `RandomForest`, `ExtraTrees`, `XGBoost`, soft-voting ensemble for normal/abnormal classification. |
+| `notebooks/Classification/CNN_model.ipynb` | Create normalized raw ECG windows and train 1D CNN for binary classification `Normal` / `Abnormal`. |
 
 ## Installation
 
-Khuyến nghị dùng Python environment riêng.
+A separate Python environment is recommended.
 
 ```bash
 pip install numpy pandas matplotlib seaborn scipy wfdb statsmodels scikit-learn imbalanced-learn xgboost tensorflow tqdm ipython
 ```
 
-Nếu chỉ chạy các notebook EDA/preprocessing/ARIMA thì `tensorflow`, `imbalanced-learn`, `xgboost` không bắt buộc. Nếu chạy classification đầy đủ thì cần đủ các package trên.
+Or use the provided `requirements.txt`:
+```bash
+pip install -r requirements.txt
+```
+
+If running only EDA/preprocessing/ARIMA notebooks, `tensorflow`, `imbalanced-learn`, and `xgboost` are optional. For full classification pipelines, all packages are needed.
 
 ## Data Source
 
-Project dùng **MIT-BIH Arrhythmia Database**:
+Project uses the **MIT-BIH Arrhythmia Database**:
 
 - WFDB Python: <https://wfdb.readthedocs.io/>
 - PhysioNet MIT-BIH: <https://physionet.org/content/mitdb/>
 
-Phần lớn notebook đọc dữ liệu trực tiếp bằng:
+Most notebooks load data directly using:
 
 ```python
 record = wfdb.rdrecord(record_id, pn_dir="mitdb")
 ann = wfdb.rdann(record_id, "atr", pn_dir="mitdb")
 ```
 
-Notebook `ARIMA and SARIMA model.ipynb` có một số cell dùng dữ liệu local:
+The `ARIMA and SARIMA model.ipynb` notebook uses local data in some cells:
 
 ```python
 DB_PATH = r"C:\Users\MY PC\Downloads\time series project\mitdb"
 ```
 
-Nếu chạy trên máy khác, đổi `DB_PATH` sang thư mục MIT-BIH local của bạn, hoặc sửa cell để dùng `pn_dir="mitdb"` giống các notebook còn lại.
+If running on a different machine, update `DB_PATH` to your local MIT-BIH directory, or modify the cell to use `pn_dir="mitdb"` like the other notebooks.
 
 ## Workflow
 
 ### 1. Explore Raw ECG
 
-Notebook `01_explore_data.ipynb` thực hiện:
+Notebook `01_explore_data.ipynb` performs:
 
-- Load các record MIT-BIH nhóm `1xx` và `2xx`.
-- Xem thông tin header, sampling rate, lead names và phân bố lead.
-- Plot raw ECG theo thời gian.
-- Detect R-peaks bằng annotation hoặc thuật toán kiểu Pan-Tompkins đơn giản.
-- Cắt beat quanh R-peak, dựng median beat template và tìm beat khác thường bằng correlation.
-- Trích xuất QRS features như Q amplitude, R amplitude, S amplitude, QRS duration, QR/RS slope.
+- Load MIT-BIH records from groups `1xx` and `2xx`.
+- View header info, sampling rate, lead names, and lead distribution.
+- Plot raw ECG over time.
+- Detect R-peaks using annotations or simple Pan-Tompkins-like algorithm.
+- Extract beats around R-peak, build median beat template, and find anomalous beats via correlation.
+- Extract QRS features such as Q amplitude, R amplitude, S amplitude, QRS duration, QR/RS slope.
 
 ### 2. EDA and Signal Quality
 
-Notebook `02_EDA.ipynb` tập trung vào chất lượng tín hiệu và đặc trưng thời gian:
+Notebook `02_EDA.ipynb` focuses on signal quality and temporal characteristics:
 
-- Tính baseline metrics, powerline noise ratio 50/60 Hz, high-frequency noise ratio.
-- Plot ECG với baseline estimate và PSD Welch.
-- Loại baseline wander, notch powerline, band-pass 0.5-40 Hz.
-- Tính RR interval và HR theo beat.
-- Resample HR về 1 Hz để phân tích time series.
-- Tính HRV rolling metrics như RMSSD.
-- STL decomposition trên HR series.
-- Detect các pattern bất thường như RR outlier, PVC-like beat và irregular segment.
-- Thống kê annotation labels giữa record nhóm `1xx` và `2xx`.
+- Compute baseline metrics, powerline noise ratio 50/60 Hz, high-frequency noise ratio.
+- Plot ECG with baseline estimate and Welch PSD.
+- Remove baseline wander, notch powerline, band-pass 0.5-40 Hz.
+- Compute RR intervals and HR per beat.
+- Resample HR to 1 Hz for time series analysis.
+- Compute HRV rolling metrics such as RMSSD.
+- STL decomposition on HR series.
+- Detect anomalous patterns like RR outliers, PVC-like beats, and irregular segments.
+- Compute label statistics between record groups `1xx` and `2xx`.
 
 ### 3. Preprocessing
 
-Notebook `03_preprocessing_data.ipynb` minh họa từng bước tiền xử lý:
+Notebook `03_preprocessing_data.ipynb` demonstrates each preprocessing step:
 
-- Band-pass filter 0.5-40 Hz bằng Butterworth SOS.
-- Khử baseline wander bằng median filter hai tầng.
-- Tự động detect nhiễu điện lưới 50/60 Hz và notch thêm harmonic nếu cần.
-- So sánh phổ trước/sau lọc bằng Welch PSD.
-- Chuẩn hóa bằng z-score hoặc min-max.
+- Band-pass filter 0.5-40 Hz using Butterworth SOS.
+- Remove baseline wander with two-stage median filtering.
+- Automatically detect powerline noise at 50/60 Hz and notch additional harmonics if needed.
+- Compare frequency spectrum before/after filtering using Welch PSD.
+- Normalize using z-score or min-max scaling.
 
-Pipeline này là nền tảng cho các notebook forecasting và classification.
+This pipeline forms the foundation for the forecasting and classification notebooks.
 
 ### 4. ARIMA/SARIMA Forecasting
 
-Notebook `ARIMA and SARIMA model.ipynb` xây dựng pipeline dự báo HR/RR:
+Notebook `ARIMA and SARIMA model.ipynb` builds an HR/RR forecasting pipeline:
 
-- Load ECG từ MIT-BIH local.
-- Tiền xử lý ECG bằng median baseline removal, band-pass và notch.
-- Detect R-peaks, tính RR intervals và HR.
-- Resample HR/RR về chuỗi đều 1 Hz.
-- Kiểm tra tính dừng bằng ADF trên record `1xx` và `2xx`.
-- Dùng ACF/PACF để định hướng chọn `(p,d,q)`.
-- Grid search và fine-tuning ARIMA bằng AIC/BIC.
-- Rolling one-step forecast cho HR và RR trong 50 giây cuối.
-- Tune SARIMA và so sánh ARIMA/SARIMA bằng MAE, MSE, RMSE trên các record `2xx`.
+- Load ECG from local MIT-BIH data.
+- Preprocess ECG using median baseline removal, band-pass, and notch filtering.
+- Detect R-peaks, compute RR intervals, and HR.
+- Resample HR/RR to uniform 1 Hz time series.
+- Check stationarity using ADF test on records `1xx` and `2xx`.
+- Use ACF/PACF to guide selection of `(p,d,q)` parameters.
+- Grid search and fine-tune ARIMA using AIC/BIC.
+- Rolling one-step forecast for HR and RR over the final 50 seconds.
+- Tune SARIMA and compare ARIMA vs SARIMA using MAE, MSE, RMSE on records `2xx`.
 
-Metric chính:
+Key metrics:
 
 - `MAE`
 - `MSE`
@@ -126,54 +131,54 @@ Metric chính:
 
 ### 5. Sliding Window Classification
 
-Notebook `notebooks/Classification/sliding window.ipynb` tạo feature dataset từ ECG windows:
+Notebook `notebooks/Classification/sliding window.ipynb` creates a feature dataset from ECG windows:
 
-- Chia record cố định thành `TRAIN_RECORDS`, `VAL_RECORDS`, `TEST_RECORDS` để tránh leakage.
-- Load record từ local `notebooks/mitdb` nếu có, nếu không fallback sang PhysioNet.
-- Tiền xử lý bằng band-pass, notch, detrend và z-normalization.
-- Tạo sliding windows với cấu hình 4.5s và 9s.
-- Chia window thành frame 0.75s và trích xuất frame-level features.
-- Tính window-level features từ R-peaks như beat count, RR range, HR range, RMSSD.
-- Gán nhãn theo beat gần tâm window: `N` là normal, các symbol hợp lệ khác như `V`, `A`, `L`, `R` là abnormal.
-- Train `RandomForest`, `ExtraTrees`, `XGBoost` và soft-voting ensemble.
-- Dùng `StandardScaler`, `SMOTE`, `SelectKBest` trước khi train.
-- Đánh giá bằng accuracy, precision, recall, F1-score và confusion matrix.
+- Split records into `TRAIN_RECORDS`, `VAL_RECORDS`, `TEST_RECORDS` to avoid data leakage.
+- Load records from local `notebooks/mitdb` if available, fallback to PhysioNet.
+- Preprocess using band-pass, notch, detrend, and z-normalization.
+- Create sliding windows with 4.5s and 9s configurations.
+- Divide windows into 0.75s frames and extract frame-level features.
+- Compute window-level features from R-peaks such as beat count, RR range, HR range, RMSSD.
+- Assign labels based on the beat nearest to window center: `N` is normal, other valid symbols like `V`, `A`, `L`, `R` are abnormal.
+- Train `RandomForest`, `ExtraTrees`, `XGBoost`, and soft-voting ensemble.
+- Use `StandardScaler`, `SMOTE`, `SelectKBest` before training.
+- Evaluate using accuracy, precision, recall, F1-score, and confusion matrix.
 
 ### 6. CNN Classification
 
-Notebook `notebooks/Classification/CNN_model.ipynb` dùng raw ECG windows thay vì handcrafted features:
+Notebook `notebooks/Classification/CNN_model.ipynb` uses raw ECG windows instead of handcrafted features:
 
-- Cấu hình `FS = 360`, danh sách record MIT-BIH và split train/validation/test.
-- Mapping nhãn: `N` là normal; các symbol trong `DROP_SYMBOLS` bị bỏ; các symbol còn lại là abnormal.
-- Cắt ECG thành windows `0.75s`, `4.5s`, `9s` không overlap.
-- Gán nhãn window: chỉ cần một beat abnormal trong window thì toàn bộ window là `Abnormal`.
-- Chuẩn hóa từng window bằng z-score.
-- Build 1D CNN gồm nhiều block `Conv1D -> BatchNormalization -> MaxPooling`, sau đó `GlobalAveragePooling1D`, Dense, Dropout và sigmoid output.
-- Train với `class_weight`, `EarlyStopping`, `ReduceLROnPlateau`.
-- Đánh giá bằng accuracy, precision, recall, F1-score và confusion matrix.
+- Configure `FS = 360`, MIT-BIH record list, and train/validation/test split.
+- Label mapping: `N` is normal; symbols in `DROP_SYMBOLS` are dropped; remaining symbols are abnormal.
+- Segment ECG into windows of 0.75s, 4.5s, 9s without overlap.
+- Assign window labels: a window is `Abnormal` if it contains at least one abnormal beat.
+- Normalize each window using z-score.
+- Build 1D CNN with multiple `Conv1D -> BatchNormalization -> MaxPooling` blocks, followed by `GlobalAveragePooling1D`, Dense, Dropout, and sigmoid output.
+- Train using `class_weight`, `EarlyStopping`, `ReduceLROnPlateau`.
+- Evaluate using accuracy, precision, recall, F1-score, and confusion matrix.
 
 ## Labeling Notes
 
-Hai notebook classification dùng quy tắc nhãn hơi khác nhau:
+The two classification notebooks use slightly different labeling rules:
 
-- `sliding window.ipynb`: chỉ xét `VALID_SYMBOLS = {"N", "V", "A", "L", "R"}` và gán nhãn theo beat gần tâm window.
-- `CNN_model.ipynb`: `N` là normal, một số symbol metadata/noisy bị drop, các symbol còn lại được xem là abnormal; nhãn window là abnormal nếu window chứa ít nhất một beat abnormal.
+- `sliding window.ipynb`: only considers `VALID_SYMBOLS = {"N", "V", "A", "L", "R"}` and labels based on the beat nearest to the window center.
+- `CNN_model.ipynb`: `N` is normal, some metadata/noisy symbols are dropped, remaining symbols are abnormal; window label is abnormal if it contains at least one abnormal beat.
 
-Khi so sánh kết quả giữa hai mô hình, cần chú ý khác biệt này vì nó ảnh hưởng trực tiếp đến phân bố nhãn và độ khó của bài toán.
+When comparing results between the two models, pay attention to these differences as they directly affect label distribution and problem difficulty.
 
 ## How to Run
 
-1. Cài dependencies.
-2. Mở project bằng Jupyter Notebook hoặc VS Code.
-3. Chạy theo thứ tự khuyến nghị:
+1. Install dependencies.
+2. Open the project with Jupyter Notebook or VS Code.
+3. Run in recommended order:
    - `01_explore_data.ipynb`
    - `02_EDA.ipynb`
    - `03_preprocessing_data.ipynb`
-   - `ARIMA and SARIMA model.ipynb` nếu cần forecasting
-   - `Classification/sliding window.ipynb` nếu cần ML classification
-   - `Classification/CNN_model.ipynb` nếu cần deep learning classification
-4. Với notebook ARIMA/SARIMA, kiểm tra lại `DB_PATH` trước khi chạy các cell đọc local data.
-5. Với notebook CNN, nên chạy trên GPU nếu có vì training qua nhiều window size có thể mất thời gian.
+   - `ARIMA and SARIMA model.ipynb` for forecasting
+   - `Classification/sliding window.ipynb` for ML classification
+   - `Classification/CNN_model.ipynb` for deep learning classification
+4. For ARIMA/SARIMA notebook, verify `DB_PATH` before running cells that read local data.
+5. For CNN notebook, preferably run on GPU as training over multiple window sizes can be time-consuming.
 
 ## Outputs
 

@@ -177,7 +177,6 @@ Khi so sánh kết quả giữa hai mô hình, cần chú ý khác biệt này v
 
 ## Outputs
 
-Các notebook tạo ra:
 
 - ECG waveform plots trước/sau lọc.
 - PSD plots và signal quality diagnostics.

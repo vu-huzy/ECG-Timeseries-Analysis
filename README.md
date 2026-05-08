@@ -182,19 +182,18 @@ When comparing results between the two models, pay attention to these difference
 
 ## Outputs
 
-
-- ECG waveform plots trước/sau lọc.
-- PSD plots và signal quality diagnostics.
-- RR/HR time series, HRV metrics và STL decomposition.
-- ARIMA/SARIMA forecast plots và bảng MAE/MSE/RMSE.
+- ECG waveform plots before/after filtering.
+- PSD plots and signal quality diagnostics.
+- RR/HR time series, HRV metrics, and STL decomposition.
+- ARIMA/SARIMA forecast plots and MAE/MSE/RMSE tables.
 - Classification metric tables.
-- Confusion matrices cho các mô hình abnormality detection.
-- Biểu đồ so sánh window size và model performance.
+- Confusion matrices for abnormality detection models.
+- Charts comparing window size and model performance.
 
 ## Important Notes
 
-- MIT-BIH có sampling rate phổ biến là 360 Hz; code trong project mặc định theo giá trị này ở nhiều nơi.
-- Một số notebook tải dữ liệu từ internet thông qua WFDB/PhysioNet, nên cần network nếu chưa có data local.
-- Các cell có comment `thay`, `đổi`, hoặc placeholder `0` là cell tùy chỉnh/thủ công, không phải luôn cần chạy trong pipeline chính.
-- Kết quả classification phụ thuộc mạnh vào split record, label mapping, window size và mức mất cân bằng lớp.
-- Nội dung này phục vụ mục đích học tập/phân tích dữ liệu, không dùng như công cụ chẩn đoán y tế.
+- MIT-BIH commonly uses a sampling rate of 360 Hz; code in this project defaults to this value in many places.
+- Some notebooks load data from the internet via WFDB/PhysioNet, so network access is needed if you don't have local data.
+- Cells with comments like "modify", "adjust", or placeholder `0` are customization/manual cells and don't always need to run in the main pipeline.
+- Classification results depend heavily on record split, label mapping, window size, and class imbalance severity.
+- This project is for learning and data analysis purposes only, not for medical diagnostic tools.

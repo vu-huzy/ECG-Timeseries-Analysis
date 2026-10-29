@@ -1,0 +1,13 @@
+# Dependencies for rebuilding the demo data (the demo pages themselves need nothing but a browser).
+# Tested with Python 3.12, numpy 1.26, scipy 1.15, pandas 2.3, scikit-learn 1.7, statsmodels 0.14,
+# wfdb 4.3, neurokit2 0.2.10, einops 0.8, torch 2.12 (CUDA 12.8).
+numpy>=1.26,<2
+scipy>=1.11
+pandas>=2.0
+scikit-learn>=1.3
+statsmodels>=0.14
+wfdb>=4.1
+neurokit2>=0.2.7
+einops>=0.6
+tqdm>=4.62
+# torch is installed separately, see README ("Web demo" section): choose the build for your GPU/CUDA.

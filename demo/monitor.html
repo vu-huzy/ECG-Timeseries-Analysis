@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ECG Monitor</title>
+  <meta name="description" content="Màn hình theo dõi nhịp tim mô phỏng: phát lại ECG MIT-BIH như thời gian thực, xu hướng HR/RR, cảnh báo theo luật nhịp và theo mô hình ST-MEM.">
+  <link rel="stylesheet" href="monitor.css">
+</head>
+<body>
+  <header class="m-top">
+    <a class="m-back" href="index.html" aria-label="Về trang demo">
+      <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span>Demo</span>
+    </a>
+    <h1 class="m-title">Màn hình theo dõi nhịp tim</h1>
+    <div class="m-controls">
+      <label class="m-field">
+        <span class="sr-only">Bản ghi</span>
+        <select id="m-record" aria-label="Chọn bản ghi"></select>
+      </label>
+      <button id="m-play" class="m-btn m-btn-primary" type="button" aria-label="Tạm dừng (phím cách)">
+        <svg id="m-play-icon" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"></svg>
+        <span id="m-play-text">Tạm dừng</span>
+      </button>
+      <div class="m-seg" id="m-speed" role="group" aria-label="Tốc độ phát"></div>
+      <button id="m-beep" class="m-btn" type="button" aria-pressed="false" title="Tiếng bíp mỗi nhịp">
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4z" fill="currentColor"/><path id="m-beep-wave" d="M16 8.5a5 5 0 0 1 0 7M18.5 6a8.5 8.5 0 0 1 0 12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path id="m-beep-off" d="M16 9l5 6M21 9l-5 6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+        <span>Bíp</span>
+      </button>
+    </div>
+  </header>
+
+  <div id="m-banner" class="m-banner is-ok" role="alert" aria-live="assertive">
+    <span class="m-banner-icon" aria-hidden="true"></span>
+    <span class="m-banner-text">Đang khởi động…</span>
+    <span class="m-banner-more"></span>
+  </div>
+
+  <main class="m-main">
+    <!-- Hàng 1: sóng ECG 9 s + số liệu -->
+    <section class="m-screen" aria-label="Sóng ECG">
+      <div class="m-screen-head">
+        <span class="m-lead" id="m-lead">ECG</span>
+        <span class="m-dim" id="m-scale">9 s/màn</span>
+        <span class="m-spacer"></span>
+        <label class="m-check"><input type="checkbox" id="m-show-ann" checked> Nhãn chuyên gia</label>
+        <span class="m-clock" id="m-clock">00:00 / 00:00</span>
+      </div>
+      <div class="m-canvas-wrap"><canvas id="m-canvas" aria-label="Sóng ECG đang chạy, mỗi màn 9 giây"></canvas></div>
+      <p class="m-record-desc" id="m-desc"></p>
+    </section>
+
+    <aside class="m-nums" aria-label="Số liệu hiện tại">
+      <div class="m-num m-num-hr">
+        <div class="m-num-label">HR <span class="m-dim">bpm</span><span class="m-beat" id="m-beat" aria-hidden="true"></span></div>
+        <div id="m-hr" class="m-num-value">--</div>
+        <div class="m-num-limits"><span>120</span><span>50</span></div>
+      </div>
+      <div class="m-num">
+        <div class="m-num-label">RR <span class="m-dim">ms</span></div>
+        <div id="m-rr" class="m-num-value m-num-sm">--</div>
+      </div>
+      <div class="m-num m-num-pair">
+        <div><div class="m-num-label">PVC</div><div id="m-pvc" class="m-num-value m-num-xs">0</div></div>
+        <div><div class="m-num-label">Ngưng</div><div id="m-pause" class="m-num-value m-num-xs">0</div></div>
+        <div><div class="m-num-label">RMSSD <span class="m-dim">ms</span></div><div id="m-rmssd" class="m-num-value m-num-xs">--</div></div>
+      </div>
+      <div class="m-num m-model">
+        <div class="m-num-label">ST-MEM <span class="m-dim" id="m-model-sub">cửa sổ 9 s</span></div>
+        <div id="m-model-body"></div>
+      </div>
+    </aside>
+
+    <!-- Hàng 2: xu hướng theo thời gian (chung trục) + nhật ký -->
+    <section class="m-trends" aria-label="Xu hướng HR, RR và ST-MEM">
+      <div class="m-screen-head">
+        <span class="m-panel-label">Xu hướng</span>
+        <span class="m-legend">
+          <span><i class="lg lg-hr"></i>HR</span>
+          <span><i class="lg lg-rr"></i>RR (N)</span>
+          <span><i class="lg lg-pvc"></i>RR beat sớm</span>
+          <span><i class="lg lg-p"></i>ST-MEM ≥ ngưỡng</span>
+          <span><i class="lg lg-t"></i>Chuyên gia: bất thường</span>
+        </span>
+      </div>
+      <div class="m-trend-wrap" id="m-trend-wrap" role="slider" tabindex="0" aria-label="Vị trí phát — bấm vào biểu đồ để tua" aria-valuemin="0">
+        <canvas id="m-trend"></canvas>
+      </div>
+      <p class="m-dim m-hint">Bấm vào biểu đồ để tua · phím cách: phát/dừng · ← →: lùi/tiến 9 s · phần mờ là dữ liệu chưa tới</p>
+    </section>
+
+    <aside class="m-side2">
+      <div class="m-panel">
+        <div class="m-panel-label">Poincaré RR <span class="m-dim">RRₙ → RRₙ₊₁ · 60 s gần nhất</span></div>
+        <div class="m-poin-wrap"><canvas id="m-poincare" aria-label="Biểu đồ Poincaré của khoảng RR"></canvas></div>
+      </div>
+      <div class="m-panel m-log-panel">
+        <div class="m-panel-label">Nhật ký cảnh báo <span class="m-dim" id="m-log-count"></span></div>
+        <ol id="m-log" class="m-log"></ol>
+      </div>
+    </aside>
+
+    <section class="m-about">
+      <details>
+        <summary>Cảnh báo được tính thế nào?</summary>
+        <div id="m-rules"></div>
+      </details>
+      <p class="m-disclaimer">Mô phỏng cho mục đích học tập, phát lại dữ liệu MIT-BIH có sẵn. Không dùng để chẩn đoán hay theo dõi bệnh nhân thật.</p>
+    </section>
+  </main>
+
+  <script src="data/monitor_data.js"></script>
+  <script src="monitor.js"></script>
+</body>
+</html>

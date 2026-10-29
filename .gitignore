@@ -1,0 +1,9 @@
+# Python
+__pycache__/
+*.pyc
+
+# PTB-XL+ feature dataset (very large, not used by the demo)
+notebooks/Classification/ST-MEM/data/ptb-xl-a-comprehensive-electrocardiographic-feature-dataset-1.0.1/
+
+# Local editor / tool state
+.claude/settings.local.json

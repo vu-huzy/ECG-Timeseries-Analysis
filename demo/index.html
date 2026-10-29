@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ECG Time Series Demo</title>
+  <meta name="description" content="Demo trực quan dự án phân tích chuỗi thời gian ECG trên MIT-BIH: tiền xử lý, HRV, dự báo ARIMA/SARIMA và phân loại Normal/Abnormal.">
+  <link rel="stylesheet" href="style.css">
+  <script>
+    // Áp theme đã lưu trước khi vẽ trang để không bị nháy màu
+    try {
+      var t = localStorage.getItem("ecg-demo-theme");
+      if (t === "light" || t === "dark") document.documentElement.setAttribute("data-theme", t);
+    } catch (e) {}
+  </script>
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="brand" href="#top" aria-label="Về đầu trang">
+        <svg viewBox="0 0 32 32" fill="none" aria-hidden="true">
+          <rect x="1" y="1" width="30" height="30" rx="8" fill="currentColor" opacity="0.12"/>
+          <path d="M4 17h6l2-5 3 11 3-15 2.5 9H28" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <span class="brand-text">ECG Time Series</span>
+      </a>
+      <nav class="nav" aria-label="Các mục">
+        <a href="#overview">Tổng quan</a>
+        <a href="#explore">Tín hiệu</a>
+        <a href="#preprocess">Tiền xử lý</a>
+        <a href="#hrv">Nhịp tim &amp; HRV</a>
+        <a href="#forecast">Dự báo</a>
+        <a href="#classification">Phân loại</a>
+        <a href="#stmem">ST-MEM</a>
+        <a href="monitor.html" class="nav-ext">Theo dõi ↗</a>
+      </nav>
+      <div class="controls">
+        <label class="field" for="record-select">
+          <span>Record</span>
+          <select id="record-select" aria-describedby="record-scope"></select>
+        </label>
+        <button class="btn btn-ghost" id="theme-toggle" type="button"></button>
+      </div>
+    </div>
+  </header>
+
+  <main id="top">
+    <div id="banner" class="banner" role="alert" hidden></div>
+
+    <section class="hero" aria-labelledby="hero-title">
+      <p class="eyebrow">MIT-BIH Arrhythmia Database</p>
+      <h1 id="hero-title">Phân tích chuỗi thời gian ECG</h1>
+      <p class="lead">
+        Từ tín hiệu điện tim thô đến nhịp tim, dự báo HR bằng ARIMA/SARIMA và phân loại cửa sổ
+        Normal / Abnormal bằng mô hình học máy, 1D CNN và ST-MEM. Mọi biểu đồ đều có thể phóng to, rê chuột
+        để xem giá trị, và chuyển sang dạng bảng.
+      </p>
+      <p class="disclaimer">
+        <svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M10 2a8 8 0 1 0 0 16 8 8 0 0 0 0-16Zm0 4a1 1 0 0 1 1 1v3.5a1 1 0 1 1-2 0V7a1 1 0 0 1 1-1Zm0 8.5a1.1 1.1 0 1 1 0-2.2 1.1 1.1 0 0 1 0 2.2Z"/></svg>
+        <span>Dự án phục vụ học tập và phân tích dữ liệu, không phải công cụ chẩn đoán y tế.</span>
+      </p>
+      <p class="hero-cta">
+        <a class="btn btn-primary" href="monitor.html">
+          <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M1.5 10.5h4l1.6-4 2.6 9 2.4-12 2 7h4.4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <span>Mở màn hình theo dõi</span>
+        </a>
+        <span class="hero-cta-note">ECG chạy như trên máy theo dõi, cảnh báo theo luật nhịp và mô hình ST-MEM.</span>
+      </p>
+    </section>
+
+    <section class="section" id="overview" aria-labelledby="overview-title">
+      <div class="section-head">
+        <p class="section-num">01</p>
+        <h2 id="overview-title">Tổng quan</h2>
+        <p class="lead">Dự án đi theo hai hướng trên cùng một bộ dữ liệu: dự báo nhịp tim theo thời gian và phân loại đoạn ECG bất thường.</p>
+      </div>
+      <div class="stack" id="overview-body"></div>
+    </section>
+
+    <section class="section" id="explore" aria-labelledby="explore-title">
+      <div class="section-head">
+        <p class="section-num">02</p>
+        <h2 id="explore-title">Dữ liệu &amp; tín hiệu</h2>
+        <p class="lead">Mỗi record dài 30 phút, lấy mẫu 360 Hz. Chuyên gia đã gán nhãn cho từng beat, ví dụ N là nhịp bình thường, V là ngoại tâm thu thất.</p>
+        <p class="scope-note" id="record-scope">Mục 02–04 hiển thị record đang chọn: <strong data-record-label></strong>. Đổi record ở thanh trên cùng hoặc ngay bên dưới.</p>
+      </div>
+      <div class="record-chips" id="record-chips" role="group" aria-label="Chọn record"></div>
+      <div class="stack" id="explore-body"></div>
+    </section>
+
+    <section class="section" id="preprocess" aria-labelledby="preprocess-title">
+      <div class="section-head">
+        <p class="section-num">03</p>
+        <h2 id="preprocess-title">Tiền xử lý</h2>
+        <p class="lead">Band-pass 0.5–40 Hz, khử trôi nền bằng median filter hai tầng, notch 60 Hz và chuẩn hoá z-score. Đây là nền cho cả bài toán dự báo lẫn phân loại.</p>
+      </div>
+      <div class="stack" id="preprocess-body"></div>
+    </section>
+
+    <section class="section" id="hrv" aria-labelledby="hrv-title">
+      <div class="section-head">
+        <p class="section-num">04</p>
+        <h2 id="hrv-title">Nhịp tim &amp; HRV</h2>
+        <p class="lead">Từ vị trí đỉnh R tính khoảng RR, nhịp tim HR, độ biến thiên RMSSD và phân rã STL của HR trên toàn bộ 30 phút.</p>
+      </div>
+      <div class="stack" id="hrv-body"></div>
+    </section>
+
+    <section class="section" id="forecast" aria-labelledby="forecast-title">
+      <div class="section-head">
+        <p class="section-num">05</p>
+        <h2 id="forecast-title">Dự báo nhịp tim</h2>
+        <p class="lead">HR được nội suy về 1 Hz rồi dự báo 50 giây cuối bằng ARIMA và SARIMA, đánh giá bằng MAE, MSE, RMSE.</p>
+      </div>
+      <div class="stack" id="forecast-body"></div>
+    </section>
+
+    <section class="section" id="classification" aria-labelledby="classification-title">
+      <div class="section-head">
+        <p class="section-num">06</p>
+        <h2 id="classification-title">Phân loại Normal / Abnormal</h2>
+        <p class="lead">ECG được cắt thành các cửa sổ 0.75 s, 4.5 s và 9 s, rồi phân loại bằng đặc trưng thủ công + ensemble cây, hoặc bằng 1D CNN trên tín hiệu thô. Tập train/val/test chia theo record để tránh rò rỉ dữ liệu.</p>
+      </div>
+      <div class="stack" id="classification-body"></div>
+    </section>
+
+    <section class="section" id="stmem" aria-labelledby="stmem-title">
+      <div class="section-head">
+        <p class="section-num">07</p>
+        <h2 id="stmem-title">ST-MEM</h2>
+        <p class="lead">Dùng encoder ViT-B đã pretrained bằng ST-MEM (Na et al., ICLR 2024; checkpoint có sẵn), fine-tune theo cách Semi-finetune của report (train lead embedding + classifier head) cho bài toán Normal/Abnormal trên MIT-BIH. Cửa sổ 9 s, cùng record test với 1D CNN.</p>
+      </div>
+      <div class="stack" id="stmem-body"></div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <p>Dữ liệu: <a href="https://physionet.org/content/mitdb/1.0.0/" rel="noopener">MIT-BIH Arrhythmia Database</a> (PhysioNet). Tạo lại dữ liệu demo bằng <code>python demo/build_data.py</code>.</p>
+      <p id="footer-meta"></p>
+    </div>
+  </footer>
+
+  <script src="data/demo_data.js"></script>
+  <script src="vendor/plotly-cartesian-2.35.2.min.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

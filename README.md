@@ -1,17 +1,23 @@
 # ECG Time Series Analysis with MIT-BIH
 
-This project analyzes ECG signals from the **MIT-BIH Arrhythmia Database** following two main directions:
+This project analyzes ECG signals from the **MIT-BIH Arrhythmia Database** following three main directions:
 
 1. **Time series analysis / forecasting**: ECG preprocessing, HR/RR extraction, stationarity testing, and ARIMA/SARIMA comparison.
 2. **Abnormality classification**: ECG windowing and classification of `Normal` / `Abnormal` beats using feature-based ML models and 1D CNN.
+3. **ST-MEM fine-tuning**: a pretrained ST-MEM ViT-B encoder fine-tuned on MIT-BIH (see `notebooks/Classification/ST-MEM`).
 
 Data is loaded using `wfdb`, primarily from PhysioNet (`pn_dir="mitdb"`). Some cells in the ARIMA/SARIMA notebook use a local path `DB_PATH` that needs adjustment on your machine if running that notebook.
+
+A view-only **web demo** of all of the above lives in [`demo/`](demo) (see [Web demo](#web-demo-demo) below).
 
 ## Project Structure
 
 ```text
 .
 ├── README.md
+├── plan.md                    # working log of the demo: decisions, results, open issues
+├── Final_Report_TS-3.pdf      # project report (numbers the ST-MEM results are compared with)
+├── demo/                      # static web demo + scripts that generate its data
 └── notebooks
     ├── 01_explore_data.ipynb
     ├── 02_EDA.ipynb
@@ -23,6 +29,77 @@ Data is loaded using `wfdb`, primarily from PhysioNet (`pn_dir="mitdb"`). Some c
         └── ST-MEM
             └── mit-bih.py
 ```
+
+## Web demo (`demo/`)
+
+A static HTML + JavaScript demo (Plotly charts and a canvas ECG monitor). It has two pages:
+
+- `demo/index.html`: seven sections (overview, signal exploration, preprocessing, HR/HRV, ARIMA/SARIMA forecast, Normal/Abnormal classification, ST-MEM).
+- `demo/monitor.html`: a bedside-monitor style replay of MIT-BIH records, with a 9 s ECG sweep, HR/RR trends, rule-based alerts and ST-MEM predictions per 9 s window.
+
+### 1. Just view it (no installation)
+
+The generated data (`demo/data/*.js`) and Plotly (`demo/vendor/`) are committed, so nothing needs to be built:
+
+```bash
+git clone https://github.com/vu-huzy/ECG-Timeseries-Analysis
+cd ECG-Timeseries-Analysis
+python -m http.server 8765 --bind 127.0.0.1 --directory demo
+```
+
+Then open <http://localhost:8765/index.html> (monitor: <http://localhost:8765/monitor.html>). Double-clicking `demo/index.html` also works in Chrome/Edge because the pages use plain scripts, with no ES modules and no `fetch`. No internet connection is needed.
+
+### 2. Rebuild the data on another machine
+
+Only needed if you change the code or want to regenerate the results. Use a fresh Python environment (developed with Python 3.12).
+
+**a) Install dependencies**
+
+```bash
+pip install -r demo/requirements.txt
+```
+
+Install PyTorch separately, choosing the build that matches your GPU from <https://pytorch.org/get-started/locally/>. NVIDIA RTX 50-series cards need a CUDA 12.8 build. The demo was developed with `torch 2.12.0.dev+cu128` on an RTX 5070. A GPU is strongly recommended for step `train_stmem.py`; it was only run on a GPU.
+
+**b) Download the pretrained ST-MEM encoder (not in git: 340 MB)**
+
+The checkpoint is the official ST-MEM ViT-B encoder from <https://github.com/vuno/ST-MEM> (link taken from `notebooks/Classification/ST-MEM/README.md`):
+<https://drive.google.com/file/d/1E7J-A1HqWa2f08T6Sfk5uWk-_CFJhOYQ/view>
+
+Save it exactly as `notebooks/Classification/ST-MEM/pretrain/st_mem_vit_base_encoder.pth`. From the command line:
+
+```bash
+pip install gdown
+mkdir -p notebooks/Classification/ST-MEM/pretrain
+gdown 1E7J-A1HqWa2f08T6Sfk5uWk-_CFJhOYQ -O notebooks/Classification/ST-MEM/pretrain/st_mem_vit_base_encoder.pth
+```
+
+Expected file: 340,663,413 bytes, SHA-256 `6f63d370fd1a2ccf2fbddd681571adf985eeae3f652973f0071342a39b7793d6` (the copy used for the committed results).
+
+**c) Run the scripts in this order** (from the repository root)
+
+On Windows, set `PYTHONIOENCODING=utf-8` first (`set PYTHONIOENCODING=utf-8` in cmd, `$env:PYTHONIOENCODING="utf-8"` in PowerShell); otherwise Vietnamese log messages crash the default cp1252 console.
+
+```bash
+python demo/train_stmem.py     # ST-MEM Semi-finetune on MIT-BIH
+python demo/build_monitor.py   # data for monitor.html
+python demo/build_data.py      # data for index.html
+```
+
+| Script | What it does | Time (reference machine) | Output |
+| --- | --- | --- | --- |
+| `train_stmem.py` | Fine-tunes ST-MEM as described in the report: MIT-BIH read with WFDB, 2 leads, 9 s windows at 250 Hz, stride 4.5 s (15,200 / 2,000 / 2,000 train / val / test windows), pretrained encoder with only the two lead embeddings and the classifier head trained, threshold 0.5. Also saves the per-window probabilities used by the monitor. | about 7.5 min on an RTX 5070 (the first run also builds and caches the windowed dataset) | `demo/.cache/stmem_results.json` |
+| `build_monitor.py` | Detects R-peaks (NeuroKit2), runs the rhythm rules, adds the ST-MEM probabilities. Five records: 103, 105, 106, 208, 232. | about 10 s | `demo/data/monitor_data.js` |
+| `build_data.py` | Computes everything for the seven sections and merges the notebook results kept in `demo/notebook_results.py`. The first run also runs the ARIMA/SARIMA forecast for record 100, which takes a few minutes; it is then cached. Flags: `--refresh-forecast`, `--skip-forecast`, `--records`. | about 15 s after the first run | `demo/data/demo_data.js` |
+
+All scripts download MIT-BIH (48 records, about 90 MB) into `demo/.cache/mitdb/` on first use, from the PhysioNet S3 mirror `physionet-open.s3.amazonaws.com` (much faster than physionet.org), falling back to `wfdb`. `demo/.cache/` is git-ignored; after a full run it holds about 600 MB (MIT-BIH plus the windowed ST-MEM dataset) and can be deleted at any time.
+
+### Notes on the results
+
+- ST-MEM Semi-finetune reaches test F1 0.778 / AUC 0.817 with this setup, whereas `Final_Report_TS-3.pdf` (Table 5.3) reports F1 0.9695. Dataset, checkpoint and trainable parameters are the same as in the report, but the report does not give epochs, learning rate, batch size or seed, so the gap is not explained yet. Details are in `plan.md`, sections 9 and 10.
+- The ensemble and 1D CNN numbers shown in the demo are copied from the notebook outputs (`demo/notebook_results.py` records the notebook and cell for each number). They use different window-labeling rules, see "Labeling Notes" below.
+- The monitor replays recorded data and precomputed model outputs. It is not a real-time system and not a medical device.
+- `plan.md` is the full working log of this demo (design decisions, issues found, results, remaining work).
 
 ## Main Notebooks
 

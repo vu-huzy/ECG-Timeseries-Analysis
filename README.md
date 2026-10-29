@@ -49,57 +49,62 @@ python -m http.server 8765 --bind 127.0.0.1 --directory demo
 
 Then open <http://localhost:8765/index.html> (monitor: <http://localhost:8765/monitor.html>). Double-clicking `demo/index.html` also works in Chrome/Edge because the pages use plain scripts, with no ES modules and no `fetch`. No internet connection is needed.
 
-### 2. Rebuild the data on another machine
+### 2. Rebuild the data on another machine, without retraining
 
-Only needed if you change the code or want to regenerate the results. Use a fresh Python environment (developed with Python 3.12).
+The trained ST-MEM model is committed, so nothing has to be trained again:
 
-**a) Install dependencies**
+- `demo/models/stmem_semi_finetune.pt` (about 11 KB): the weights that were trained, i.e. the two lead embeddings and the classifier head. In Semi-finetune the rest of the encoder is frozen, so the full model is these weights plus the original pretrained encoder (step 3 below).
+- `demo/results/stmem_results.json`: test metrics, training curves, ROC and the per-window probabilities for every test/validation record. `build_monitor.py` and `build_data.py` read this file.
+
+Use a fresh Python environment (developed with Python 3.12) and run everything from the repository root. On Windows, set `PYTHONIOENCODING=utf-8` first (`set PYTHONIOENCODING=utf-8` in cmd, `$env:PYTHONIOENCODING="utf-8"` in PowerShell); otherwise the Vietnamese log messages crash the default cp1252 console.
+
+**Step 1: install dependencies** (PyTorch is not needed for this step)
 
 ```bash
 pip install -r demo/requirements.txt
 ```
 
-Install PyTorch separately, choosing the build that matches your GPU from <https://pytorch.org/get-started/locally/>. NVIDIA RTX 50-series cards need a CUDA 12.8 build. The demo was developed with `torch 2.12.0.dev+cu128` on an RTX 5070. A GPU is strongly recommended for step `train_stmem.py`; it was only run on a GPU.
+**Step 2: regenerate the demo data from the committed results**
 
-**b) Download the pretrained ST-MEM encoder (not in git: 340 MB)**
+```bash
+python demo/build_monitor.py   # data for monitor.html   (about 10 s)
+python demo/build_data.py      # data for index.html     (about 15 s after the first run)
+```
 
-The checkpoint is the official ST-MEM ViT-B encoder from <https://github.com/vuno/ST-MEM> (link taken from `notebooks/Classification/ST-MEM/README.md`):
+`build_data.py` downloads MIT-BIH (48 records, about 90 MB) into `demo/.cache/mitdb/` on first use, from the PhysioNet S3 mirror `physionet-open.s3.amazonaws.com` (much faster than physionet.org), falling back to `wfdb`. Its first run also runs the ARIMA/SARIMA forecast for record 100, which takes a few minutes and is then cached. Flags: `--refresh-forecast`, `--skip-forecast`, `--records`. `demo/.cache/` is git-ignored and can be deleted at any time.
+
+**Step 3 (optional): check the committed model against the pretrained encoder**
+
+Needs PyTorch (install the build for your GPU from <https://pytorch.org/get-started/locally/>; RTX 50-series cards need a CUDA 12.8 build; the demo was developed with `torch 2.12.0.dev+cu128` on an RTX 5070) and the official pretrained encoder, which is not in git (340 MB). It comes from <https://github.com/vuno/ST-MEM> (link taken from `notebooks/Classification/ST-MEM/README.md`):
 <https://drive.google.com/file/d/1E7J-A1HqWa2f08T6Sfk5uWk-_CFJhOYQ/view>
 
-Save it exactly as `notebooks/Classification/ST-MEM/pretrain/st_mem_vit_base_encoder.pth`. From the command line:
+Save it exactly as `notebooks/Classification/ST-MEM/pretrain/st_mem_vit_base_encoder.pth` (from the command line: `pip install gdown`, then `gdown 1E7J-A1HqWa2f08T6Sfk5uWk-_CFJhOYQ -O notebooks/Classification/ST-MEM/pretrain/st_mem_vit_base_encoder.pth`). Expected file: 340,663,413 bytes, SHA-256 `6f63d370fd1a2ccf2fbddd681571adf985eeae3f652973f0071342a39b7793d6` (the copy used for the committed results). Then:
 
 ```bash
-pip install gdown
-mkdir -p notebooks/Classification/ST-MEM/pretrain
-gdown 1E7J-A1HqWa2f08T6Sfk5uWk-_CFJhOYQ -O notebooks/Classification/ST-MEM/pretrain/st_mem_vit_base_encoder.pth
+python demo/predict_stmem.py
 ```
 
-Expected file: 340,663,413 bytes, SHA-256 `6f63d370fd1a2ccf2fbddd681571adf985eeae3f652973f0071342a39b7793d6` (the copy used for the committed results).
+It loads the encoder and `demo/models/stmem_semi_finetune.pt`, scores the test set (2,000 windows, threshold 0.5) and prints `KHỚP` (match) if the metrics equal the ones stored in `demo/results/stmem_results.json` (accuracy 0.7065, F1 0.7777, AUC 0.8165). The same file shows how to load the model in your own code (`load_trained_model()`). The first run builds and caches the windowed dataset in `demo/.cache/stmem/`.
 
-**c) Run the scripts in this order** (from the repository root)
+**Step 4 (optional): retrain from scratch**
 
-On Windows, set `PYTHONIOENCODING=utf-8` first (`set PYTHONIOENCODING=utf-8` in cmd, `$env:PYTHONIOENCODING="utf-8"` in PowerShell); otherwise Vietnamese log messages crash the default cp1252 console.
+Same requirements as step 3 (a GPU is strongly recommended; it was only run on a GPU).
 
 ```bash
-python demo/train_stmem.py     # ST-MEM Semi-finetune on MIT-BIH
-python demo/build_monitor.py   # data for monitor.html
-python demo/build_data.py      # data for index.html
+python demo/train_stmem.py     # about 7.5 min on an RTX 5070, overwrites demo/models and demo/results
+python demo/build_monitor.py
+python demo/build_data.py
 ```
 
-| Script | What it does | Time (reference machine) | Output |
-| --- | --- | --- | --- |
-| `train_stmem.py` | Fine-tunes ST-MEM as described in the report: MIT-BIH read with WFDB, 2 leads, 9 s windows at 250 Hz, stride 4.5 s (15,200 / 2,000 / 2,000 train / val / test windows), pretrained encoder with only the two lead embeddings and the classifier head trained, threshold 0.5. Also saves the per-window probabilities used by the monitor. | about 7.5 min on an RTX 5070 (the first run also builds and caches the windowed dataset) | `demo/.cache/stmem_results.json` |
-| `build_monitor.py` | Detects R-peaks (NeuroKit2), runs the rhythm rules, adds the ST-MEM probabilities. Five records: 103, 105, 106, 208, 232. | about 10 s | `demo/data/monitor_data.js` |
-| `build_data.py` | Computes everything for the seven sections and merges the notebook results kept in `demo/notebook_results.py`. The first run also runs the ARIMA/SARIMA forecast for record 100, which takes a few minutes; it is then cached. Flags: `--refresh-forecast`, `--skip-forecast`, `--records`. | about 15 s after the first run | `demo/data/demo_data.js` |
-
-All scripts download MIT-BIH (48 records, about 90 MB) into `demo/.cache/mitdb/` on first use, from the PhysioNet S3 mirror `physionet-open.s3.amazonaws.com` (much faster than physionet.org), falling back to `wfdb`. `demo/.cache/` is git-ignored; after a full run it holds about 600 MB (MIT-BIH plus the windowed ST-MEM dataset) and can be deleted at any time.
+`train_stmem.py` fine-tunes ST-MEM as described in the report: MIT-BIH read with WFDB, 2 leads, 9 s windows at 250 Hz, stride 4.5 s (15,200 / 2,000 / 2,000 train / val / test windows), pretrained encoder with only the two lead embeddings and the classifier head trained, threshold 0.5, seed 42. It also saves the per-window probabilities used by the monitor. Training can differ slightly between GPUs and PyTorch versions, so the numbers may not match the committed ones exactly.
 
 ### Notes on the results
 
 - ST-MEM Semi-finetune reaches test F1 0.778 / AUC 0.817 with this setup, whereas `Final_Report_TS-3.pdf` (Table 5.3) reports F1 0.9695. Dataset, checkpoint and trainable parameters are the same as in the report, but the report does not give epochs, learning rate, batch size or seed, so the gap is not explained yet. Details are in `plan.md`, sections 9 and 10.
 - The ensemble and 1D CNN numbers shown in the demo are copied from the notebook outputs (`demo/notebook_results.py` records the notebook and cell for each number). They use different window-labeling rules, see "Labeling Notes" below.
+- **Known inconsistency (feature-based ML rows):** the Ensemble numbers in the demo (`demo/notebook_results.py`) were copied from an earlier run of `sliding window.ipynb`. A collaborator has since re-run that notebook (commit `run ARIMA SARIMA again` and the sliding-window commits), and `Final_Report_TS-3.pdf` reports yet other values (Extra Trees 9 s F1 0.7087). The three sources do not agree, so decide which one is the reference and update `demo/notebook_results.py` accordingly. The 1D CNN rows and the ST-MEM rows are not affected by this. The ARIMA/SARIMA tables were copied from the earlier notebook version too and have not been re-checked against the re-run.
 - The monitor replays recorded data and precomputed model outputs. It is not a real-time system and not a medical device.
-- `plan.md` is the full working log of this demo (design decisions, issues found, results, remaining work).
+- `demo/predict_stmem.py` re-scores the committed model (see step 3); `plan.md` is the full working log of this demo (design decisions, issues found, results, remaining work).
 
 ## Main Notebooks
 

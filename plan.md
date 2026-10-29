@@ -392,3 +392,7 @@ Model bắt được hầu hết cửa sổ bất thường (recall 0.92), nhưn
 - Theo yêu cầu, đã xoá: `demo/.cache/ptbxl/` (2,6 GB), `demo/.cache/ptbxl_arrays.npz` (1,8 GB), `demo/download_ptbxl.py`, `demo/run_ptbxl.py`, `demo/train_stmem_v2.py`. `demo/.cache` còn 585 MB.
 - Vẫn còn vài file log/kết quả nhỏ của mục 9 trong `demo/.cache/` (`ptbxl_*.json`, `ptbxl_*.log`, `stmem_results_v2.json`, `stmem_v2.log`). Demo không đọc các file này.
 - Chưa commit gì.
+
+### Cập nhật khi đưa lên git
+- Trọng số đã train (`demo/models/stmem_semi_finetune.pt`, ~11 KB: 2 lead embedding + head) và kết quả (`demo/results/stmem_results.json`) được commit, nên máy khác không phải train lại. `demo/predict_stmem.py` nạp lại và chấm test: ra đúng accuracy 0.7065, F1 0.7777, AUC 0.8165. `train_stmem.py` giờ ghi vào hai thư mục này thay vì `demo/.cache/`.
+- **Số liệu ML (sliding window) trong demo có thể đã cũ.** Khi `git pull --rebase` lấy 10 commit của hoang3003, notebook `sliding window.ipynb` đã được chạy lại: 9 s giờ có 2.004 cửa sổ test (trước đây demo ghi 1.000), F1 XGBoost 0.479, Extra Trees 0.384; report ghi Extra Trees 9 s F1 0.7087. Ba nguồn không khớp nhau. Bảng ARIMA/SARIMA chép từ notebook bản cũ cũng chưa được kiểm tra lại với bản chạy lại ngày 14/05. Cần bạn chọn nguồn chuẩn (report hay notebook hiện tại) rồi cập nhật `demo/notebook_results.py`.

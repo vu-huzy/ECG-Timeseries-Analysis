@@ -31,7 +31,7 @@ DEMO_DIR = Path(__file__).resolve().parent
 sys.path.insert(0, str(DEMO_DIR))
 import build_data as BD  # noqa: E402
 
-STMEM_FILE = BD.CACHE_DIR / "stmem_results.json"
+STMEM_FILE = DEMO_DIR / "results" / "stmem_results.json"
 OUT_FILE = DEMO_DIR / "data" / "monitor_data.js"
 
 FS = 250                  # tần số của ST-MEM

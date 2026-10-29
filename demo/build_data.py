@@ -744,7 +744,7 @@ def load_or_build_forecast(refresh):
 # (MIT-BIH qua WFDB, checkpoint pretrained có sẵn, Linear probe + Semi-finetune, ngưỡng 0.5)
 # ========================================================================
 
-STMEM_RESULTS = CACHE_DIR / "stmem_results.json"
+STMEM_RESULTS = DEMO_DIR / "results" / "stmem_results.json"
 EXP_NAME = {1: "Linear probe (đóng băng encoder, chỉ train head)",
             2: "Semi-finetune (train lead embedding + head)"}
 

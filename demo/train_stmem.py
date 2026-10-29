@@ -16,7 +16,7 @@ Khác mit-bih.py: stride, cố định seed, lưu model và dự đoán từng c
 
 Chạy (cần GPU để nhanh; CPU vẫn chạy được nhưng rất lâu):
     python demo/train_stmem.py
-Kết quả: demo/.cache/stmem_results.json (build_monitor.py đọc file này).
+Kết quả: demo/results/stmem_results.json, trọng số đã train: demo/models/stmem_semi_finetune.pt (build_monitor.py đọc file này).
 """
 
 import importlib.util
@@ -39,7 +39,9 @@ sys.path.insert(0, str(DEMO_DIR))
 import build_data as BD  # noqa: E402
 
 CACHE = BD.CACHE_DIR / "stmem"
-OUT_FILE = BD.CACHE_DIR / "stmem_results.json"
+# Kết quả và trọng số đã train được commit vào git (nhỏ) để máy khác không phải train lại
+OUT_FILE = DEMO_DIR / "results" / "stmem_results.json"
+WEIGHTS_FILE = DEMO_DIR / "models" / "stmem_semi_finetune.pt"
 SEED = 42
 STRIDE_SECONDS = 4.5      # report Bảng 3.1: 15.200 / 2.000 / 2.000 cửa sổ 9 s
 CHOSEN_EXPERIMENT = 2     # report chọn Semi-finetune (Bảng 5.3, 5.5)
@@ -172,7 +174,8 @@ def train_experiment(mod, exp_type, loaders, class_weights, device):
 
     n_trainable = sum(p.numel() for p in model.parameters() if p.requires_grad)
     trainable = {k: v.cpu() for k, v in model.state_dict().items() if "head" in k or "lead" in k}
-    torch.save(trainable, CACHE / f"exp{exp_type}_trainable.pt")
+    WEIGHTS_FILE.parent.mkdir(parents=True, exist_ok=True)
+    torch.save(trainable, WEIGHTS_FILE)
     return model, {
         "experiment": exp_type,
         "pretrained_loaded": bool(loaded),
@@ -283,6 +286,7 @@ def main():
         "roc_test": roc_test,
         "predictions": predictions,
     }
+    OUT_FILE.parent.mkdir(parents=True, exist_ok=True)
     OUT_FILE.write_text(json.dumps(data, ensure_ascii=False), encoding="utf-8")
     log(f"Đã ghi {OUT_FILE} — tổng thời gian {time.time() - t_start:.0f}s")
 

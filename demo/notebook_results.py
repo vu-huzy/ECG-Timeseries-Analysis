@@ -1,5 +1,9 @@
 """
-Kết quả đã có sẵn trong output của các notebook, chép lại để demo hiển thị.
+Kết quả đã có sẵn trong output của các notebook và trong Final_Report_TS-3.pdf, chép lại để demo hiển thị.
+
+Nguồn chuẩn của các mô hình đặc trưng thủ công (sliding window) và CNN 4.5 s / 9 s là report
+(Bảng 5.1, 5.2, Hình 5.1); notebook sliding window trên main đã được chạy lại và không còn khớp.
+Phần ARIMA/SARIMA không có trong report nên vẫn lấy từ output notebook.
 
 Đây là những phần cần train/grid-search rất lâu (phân loại, chọn bậc ARIMA,
 so sánh ARIMA/SARIMA trên 25 record 2xx) nên demo KHÔNG chạy lại mà lấy đúng
@@ -20,7 +24,7 @@ CLASSIFICATION = {
     "label_rules": {
         "center_beat": {
             "name": "Beat gần tâm cửa sổ",
-            "used_by": "Sliding window + ensemble",
+            "used_by": "Sliding window (Random Forest, Extra Trees, XGBoost)",
             "rule": "Nhãn của cửa sổ = nhãn của beat hợp lệ gần tâm cửa sổ nhất (N → Normal, còn lại → Abnormal).",
         },
         "any_abnormal": {
@@ -33,37 +37,36 @@ CLASSIFICATION = {
     "drop_symbols": ["+", "x", '"', "Q", "~"],
     "models": [
         {
-            # sliding window.ipynb, cell 21 (in kết quả) + cell 23 (confusion matrix)
+            # Final_Report_TS-3.pdf, Bảng 5.1 (số của report) + Hình 5.1 (confusion matrix 4.5s XGBoost).
+            # Bảng 5.1 là kết quả tốt nhất của từng cửa sổ; notebook hiện tại (đã chạy lại) cho cùng số ở 4.5s.
             "id": "ml_4.5s",
             "family": "ml",
-            "name": "Ensemble RF + ET + XGB",
+            "name": "XGBoost",
             "window": "4.5s",
             "window_seconds": 4.5,
             "label_rule": "center_beat",
-            "source": "notebooks/Classification/sliding window.ipynb — cell 21, 23",
+            "source": "Final_Report_TS-3.pdf — Bảng 5.1, Hình 5.1",
             "train_samples": 15238, "val_samples": 2004, "test_samples": 2004,
             "test_normal": 1150, "test_abnormal": 854,
-            "accuracy": 0.6083, "precision": 0.5638, "recall": 0.3571,
-            "f1": 0.4373, "auc": 0.7342, "specificity": 0.7948,
-            "confusion_matrix": [[914, 236], [549, 305]],
+            "accuracy": 0.6282, "precision": 0.5945, "recall": 0.4016,
+            "f1": 0.4794, "auc": None, "specificity": 0.7965,
+            "confusion_matrix": [[916, 234], [511, 343]],
         },
         {
-            # sliding window.ipynb, cell 25. Notebook chỉ in metric, không in
-            # confusion matrix của 9s; ma trận dưới đây suy ra chính xác từ
-            # phân bố test (567/433) + recall 0.2979 + specificity 0.8325 và
-            # khớp lại đúng precision 0.5759, accuracy 0.6010.
+            # Final_Report_TS-3.pdf, Bảng 5.1 + Hình 5.1 (confusion matrix 9s Extra Trees).
+            # Số này khớp Bảng 5.5 của report (mô hình sliding window tốt nhất).
             "id": "ml_9s",
             "family": "ml",
-            "name": "Ensemble RF + ET + XGB",
+            "name": "Extra Trees",
             "window": "9s",
             "window_seconds": 9.0,
             "label_rule": "center_beat",
-            "source": "notebooks/Classification/sliding window.ipynb — cell 25",
-            "train_samples": 7600, "val_samples": 1000, "test_samples": 1000,
-            "test_normal": 567, "test_abnormal": 433,
-            "accuracy": 0.6010, "precision": 0.5759, "recall": 0.2979,
-            "f1": 0.3927, "auc": 0.7314, "specificity": 0.8325,
-            "confusion_matrix": [[472, 95], [304, 129]],
+            "source": "Final_Report_TS-3.pdf — Bảng 5.1, 5.5, Hình 5.1",
+            "train_samples": 15200, "val_samples": 2000, "test_samples": 2000,
+            "test_normal": 1143, "test_abnormal": 857,
+            "accuracy": 0.7300, "precision": 0.6590, "recall": 0.7666,
+            "f1": 0.7087, "auc": None, "specificity": 0.7025,
+            "confusion_matrix": [[803, 340], [200, 657]],
         },
         {
             # CNN_model.ipynb, cell 35 (cấu hình 0.75s) + cell 37 (bảng tổng hợp)
@@ -109,16 +112,34 @@ CLASSIFICATION = {
             "confusion_matrix": [[402, 37], [25, 536]],
         },
     ],
+    # Bảng 5.1 của report: cả ba mô hình đặc trưng thủ công ở hai cửa sổ.
+    # Report chỉ in confusion matrix của XGBoost 4.5s và Extra Trees 9s (Hình 5.1); bốn ma trận còn lại
+    # suy ra từ recall + precision + số cửa sổ mỗi lớp, và khớp lại cả bốn chỉ số (accuracy, precision, recall, F1)
+    # của Bảng 5.1 (sai lệch < 0.0006). Test: 4.5s có 1150 N / 854 A, 9s có 1143 N / 857 A (tổng ma trận của Hình 5.1).
+    "ml_all": [
+        {"model": "Random Forest", "window": "4.5s", "accuracy": 0.5883, "precision": 0.5271, "recall": 0.3302, "f1": 0.4060,
+         "confusion_matrix": [[897, 253], [572, 282]], "cm_source": "suy ra"},
+        {"model": "Extra Trees", "window": "4.5s", "accuracy": 0.5953, "precision": 0.5464, "recall": 0.2963, "f1": 0.3842,
+         "confusion_matrix": [[940, 210], [601, 253]], "cm_source": "suy ra"},
+        {"model": "XGBoost", "window": "4.5s", "accuracy": 0.6282, "precision": 0.5945, "recall": 0.4016, "f1": 0.4794,
+         "confusion_matrix": [[916, 234], [511, 343]], "cm_source": "Hình 5.1"},
+        {"model": "Random Forest", "window": "9s", "accuracy": 0.7385, "precision": 0.6811, "recall": 0.7328, "f1": 0.7060,
+         "confusion_matrix": [[849, 294], [229, 628]], "cm_source": "suy ra"},
+        {"model": "Extra Trees", "window": "9s", "accuracy": 0.7300, "precision": 0.6590, "recall": 0.7666, "f1": 0.7087,
+         "confusion_matrix": [[803, 340], [200, 657]], "cm_source": "Hình 5.1"},
+        {"model": "XGBoost", "window": "9s", "accuracy": 0.6660, "precision": 0.6103, "recall": 0.6103, "f1": 0.6103,
+         "confusion_matrix": [[809, 334], [334, 523]], "cm_source": "suy ra"},
+    ],
     "methods": {
         "ml": {
-            "title": "Đặc trưng thủ công + ensemble cây",
+            "title": "Đặc trưng thủ công + mô hình cây",
             "steps": [
                 "Median filter → high-pass 0.3 Hz → band-pass 0.5–45 Hz → notch 60/120/180 Hz → detrend",
                 "Chuẩn hoá robust (MAD + IQR) cho từng cửa sổ",
                 "Chia cửa sổ thành 6 frame × 0.75 s, mỗi frame 13 đặc trưng thống kê/hình dạng",
                 "Đặc trưng RR/HR của cửa sổ (NeuroKit2): số beat, mean/median RR, HR range, RMSSD (cửa sổ 9 s)",
                 "StandardScaler → SMOTE → SelectKBest (k = 25)",
-                "Soft voting: RandomForest 0.3 + ExtraTrees 0.3 + XGBoost 0.4, ngưỡng 0.5",
+                "Ba mô hình huấn luyện riêng: Random Forest, Extra Trees, XGBoost (report không dùng bỏ phiếu mềm); đặc trưng 86 (4.5 s) hoặc 165 (9 s) trước khi chọn lọc",
             ],
         },
         "cnn": {

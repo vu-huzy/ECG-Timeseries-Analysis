@@ -608,7 +608,7 @@
         ["#explore", "Tín hiệu thô", "Chia train/val/test theo record"],
         ["#preprocess", "Tiền xử lý", "Lọc + z-score từng cửa sổ"],
         ["#classification", "Cắt cửa sổ", "0.75 s · 4.5 s · 9 s, gán nhãn Normal/Abnormal"],
-        ["#classification", "Ensemble · CNN · ST-MEM", "Đánh giá trên 5 record test"],
+        ["#classification", "Mô hình cây · CNN · ST-MEM", "Đánh giá trên 5 record test"],
       ]],
     ];
     lanes.forEach(function (lane) {
@@ -635,7 +635,7 @@
     var ul = el("ul", { class: "findings" });
     function li() { ul.appendChild(el.apply(null, ["li", null].concat(Array.prototype.slice.call(arguments)))); }
     li(el("strong", { text: "1D CNN cửa sổ 9 s đạt F1 " + fmt(best.f1, 3) }),
-      ", còn ensemble đặc trưng thủ công chỉ đạt " + fmt(mlBest.f1, 3) + ". Hai nhóm dùng quy tắc gán nhãn khác nhau nên không so sánh trực tiếp được (xem mục 06).");
+      ", còn mô hình đặc trưng thủ công tốt nhất (" + mlBest.name + ", cửa sổ " + mlBest.window + ") đạt " + fmt(mlBest.f1, 3) + ". Hai nhóm dùng quy tắc gán nhãn khác nhau nên không so sánh trực tiếp được (xem mục 06).");
     if (st) li(el("strong", { text: "ST-MEM Semi-finetune (lead embedding + head) đạt F1 " + fmt(st.test.f1, 3) + ", AUC " + fmt(st.test.auc, 3) }),
       " trên cùng tập test và cùng quy tắc nhãn với CNN, thấp hơn CNN 9 s (" + fmt(best.f1, 3) + ").");
     li(el("strong", { text: "ARIMA thắng SARIMA ở " + arimaWins + "/" + cmp.per_record.length + " record 2xx" }),
@@ -1262,7 +1262,10 @@
       });
     }
     var bestF1 = Math.max.apply(null, models.map(function (m) { return m.f1; }));
-    var FAM = { ml: "Ensemble", cnn: "1D CNN", stmem: "ST-MEM" };
+    var FAM = { ml: "Đặc trưng thủ công + cây (tốt nhất mỗi cửa sổ)", cnn: "1D CNN", stmem: "ST-MEM" };
+    function modelLabel(m) {
+      return m.family === "ml" ? m.name + " (đặc trưng thủ công)" : m.family === "stmem" ? "ST-MEM Semi-finetune" : m.name;
+    }
     var rc = card("Kết quả trên tập test (5 record)", "Hàng tô màu: F1 cao nhất. Cột \"Quy tắc nhãn\" quyết định cửa sổ nào là Abnormal, nên chỉ so sánh trong cùng quy tắc.");
     var thead = el("tr");
     ["Mô hình", "Cửa sổ", "Quy tắc nhãn", "Accuracy", "Precision", "Recall", "Specificity", "F1", "AUC"].forEach(function (h, i) {
@@ -1271,7 +1274,7 @@
     var tbody = el("tbody");
     models.forEach(function (m) {
       tbody.appendChild(el("tr", { class: m.f1 === bestF1 ? "is-best" : null },
-        el("td", { text: FAM[m.family] + (m.family === "ml" ? " RF+ET+XGB" : m.family === "stmem" ? " Semi-finetune" : "") }),
+        el("td", { text: modelLabel(m) }),
         el("td", { text: m.window }),
         el("td", { text: C.label_rules[m.label_rule].name }),
         el("td", { class: "num", text: fmt(m.accuracy, 3) }),
@@ -1282,8 +1285,35 @@
         el("td", { class: "num", text: m.auc != null ? fmt(m.auc, 3) : "—" })));
     });
     rc.body.appendChild(el("div", { class: "table-wrap" }, el("table", { class: "data" }, el("thead", null, thead), tbody)));
-    rc.body.appendChild(el("p", { class: "card-foot", text: "Ensemble và CNN: chép từ output notebook. ST-MEM Semi-finetune: chạy lại trong demo theo report (stride 4.5 s, ngưỡng 0.5). CNN không lưu AUC trong notebook." }));
+    rc.body.appendChild(el("p", { class: "card-foot", text: "Mô hình đặc trưng thủ công và CNN 4.5 s / 9 s: số trong Final_Report_TS-3.pdf (Bảng 5.1, 5.2). CNN 0.75 s chỉ có trong notebook. Specificity và accuracy của CNN 9 s tính từ confusion matrix (accuracy 0.938; report ghi 0.9354, trùng với precision). ST-MEM Semi-finetune: chạy lại trong demo theo report (stride 4.5 s, ngưỡng 0.5), thấp hơn nhiều so với 0.9695 report công bố. Report không có AUC." }));
     body.appendChild(rc.card);
+
+    // Mô hình đặc trưng thủ công: đủ 6 cấu hình của Bảng 5.1
+    var mlAll = C.ml_all || [];
+    if (mlAll.length) {
+      var ac = card("Mô hình đặc trưng thủ công: cả sáu cấu hình",
+        "Bảng 5.1 của report. Hàng tô màu là mô hình tốt nhất (F1) của mỗi cửa sổ. 9 s tốt hơn hẳn 4.5 s, khác với CNN.");
+      var ah = el("tr");
+      ["Mô hình", "Cửa sổ", "Accuracy", "Precision", "Recall", "F1", "TN", "FP", "FN", "TP", "Nguồn ma trận"].forEach(function (h, i) {
+        ah.appendChild(el("th", { scope: "col", class: i >= 2 && i <= 9 ? "num" : null, text: h }));
+      });
+      var bestOf = {};
+      mlAll.forEach(function (m) { if (!bestOf[m.window] || m.f1 > bestOf[m.window]) bestOf[m.window] = m.f1; });
+      var ab = el("tbody");
+      mlAll.forEach(function (m) {
+        var cm = m.confusion_matrix;
+        ab.appendChild(el("tr", { class: m.f1 === bestOf[m.window] ? "is-best" : null },
+          el("td", { text: m.model }), el("td", { text: m.window }),
+          el("td", { class: "num", text: fmt(m.accuracy, 3) }), el("td", { class: "num", text: fmt(m.precision, 3) }),
+          el("td", { class: "num", text: fmt(m.recall, 3) }), el("td", { class: "num", text: fmt(m.f1, 3) }),
+          el("td", { class: "num", text: fmt(cm[0][0]) }), el("td", { class: "num", text: fmt(cm[0][1]) }),
+          el("td", { class: "num", text: fmt(cm[1][0]) }), el("td", { class: "num", text: fmt(cm[1][1]) }),
+          el("td", { text: m.cm_source })));
+      });
+      ac.body.appendChild(el("div", { class: "table-wrap" }, el("table", { class: "data" }, el("thead", null, ah), ab)));
+      ac.body.appendChild(el("p", { class: "card-foot", text: "Report chỉ in confusion matrix của XGBoost 4.5 s và Extra Trees 9 s (Hình 5.1). Bốn ma trận còn lại \"suy ra\" từ recall, precision và số cửa sổ mỗi lớp, và khớp lại cả accuracy, precision, recall, F1 của Bảng 5.1." }));
+      body.appendChild(ac.card);
+    }
 
     // Metric theo độ dài cửa sổ
     var metric = "f1";
@@ -1303,7 +1333,7 @@
           return {
             type: "scatter", mode: "lines+markers+text", name: FAM[f],
             x: ms.map(function (m) { return m.window_seconds; }), y: ms.map(function (m) { return m[metric]; }),
-            text: ms.map(function (m) { return fmt(m[metric], 3); }), textposition: "top center", textfont: { size: 11, color: P.ink2 },
+            text: ms.map(function (m) { return fmt(m[metric], 3); }), textposition: f === "ml" ? "bottom center" : "top center", textfont: { size: 11, color: P.ink2 },
             line: { color: P.series[slot[f]], width: 2 }, marker: { color: P.series[slot[f]], size: 9 },
             hovertemplate: "%{x} s: %{y:.3f}<extra>" + FAM[f] + "</extra>",
           };
@@ -1319,7 +1349,7 @@
     var cmc = card("Confusion matrix", "Hàng = nhãn thật, cột = dự đoán. Ô đậm hơn = tỉ lệ cao hơn trong hàng.");
     var cg = el("div", { class: "cm-grid" });
     models.forEach(function (m) {
-      cg.appendChild(cmBlock(FAM[m.family] + " " + m.window, C.label_rules[m.label_rule].name, m.confusion_matrix));
+      cg.appendChild(cmBlock(modelLabel(m) + " " + m.window, C.label_rules[m.label_rule].name, m.confusion_matrix));
     });
     cmc.body.appendChild(cg);
     body.appendChild(cmc.card);

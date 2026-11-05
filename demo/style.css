@@ -391,6 +391,26 @@ main {
   gap: 16px;
 }
 
+.advanced-details {
+  min-width: 0;
+}
+.advanced-details > summary {
+  cursor: pointer;
+  color: var(--ink-2);
+  font-weight: 600;
+  padding: 10px 14px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+.advanced-details > summary:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+.advanced-details[open] > summary {
+  margin-bottom: 12px;
+}
+
 .grid-2 {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));

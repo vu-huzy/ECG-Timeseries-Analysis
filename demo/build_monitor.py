@@ -14,6 +14,9 @@ Mỗi record lấy một đoạn ~5 phút, căn theo lưới cửa sổ 9 s củ
   - Sự kiện theo luật nhịp (dựa trên 02_EDA, chỉ dùng các beat đã qua → chạy được thời gian thực)
   - Xác suất bất thường của ST-MEM cho từng cửa sổ 9 s (tính trước bởi train_stmem.py)
   - Nhãn chuyên gia chỉ để đối chiếu
+
+File dữ liệu lưu cả đoạn ghi để phát lại. monitor.js chỉ vẽ HR/RR đã đến và chỉ hiện
+điểm ST-MEM sau khi cửa sổ 9 s tương ứng đã hoàn tất.
 """
 
 import argparse
@@ -62,18 +65,18 @@ RULES = {
 }
 
 RULE_INFO = [
-    {"type": "pvc", "severity": "warning", "title": "Beat sớm kiểu PVC",
-     "rule": "RR ngắn hơn 80% trung vị rồi tới khoảng bù dài hơn 120% (02_EDA: pvc_like)"},
-    {"type": "pause", "severity": "critical", "title": "Ngưng nhịp",
-     "rule": "Một khoảng RR dài hơn 2 s và hơn 1.8 lần trung vị (02_EDA: RR outlier)"},
+    {"type": "pvc", "severity": "warning", "title": "Mẫu RR ngắn–dài",
+     "rule": "RR ngắn hơn 80% trung vị rồi tới RR dài hơn 120%; gợi ý nhịp sớm, không xác nhận PVC bằng hình dạng ECG"},
+    {"type": "pause", "severity": "warning", "title": "Khoảng RR dài",
+     "rule": "RR dài hơn 2 s và 1.8 lần trung vị; chỉ ghi nhận khi nhịp tiếp theo xuất hiện, không phải cảnh báo ngưng tim tức thời"},
     {"type": "tachy", "severity": "serious", "title": "Nhịp nhanh",
      "rule": "HR (trung vị 8 RR gần nhất) > 120 bpm trong ≥3 beat liên tiếp; tắt khi < 110 bpm ≥5 beat (02_EDA: tachy)"},
     {"type": "brady", "severity": "serious", "title": "Nhịp chậm",
      "rule": "HR (trung vị 8 RR gần nhất) < 50 bpm trong ≥3 beat liên tiếp; tắt khi > 55 bpm ≥5 beat (02_EDA: brady)"},
-    {"type": "irregular", "severity": "warning", "title": "Nhịp không đều",
-     "rule": "RMSSD của 20 khoảng RR gần nhất > 120 ms trong ≥3 beat; tắt khi < 80 ms ≥5 beat (02_EDA: irregular)"},
-    {"type": "stmem", "severity": "serious", "title": "ST-MEM: đoạn 9 s bất thường",
-     "rule": "Xác suất Abnormal của ST-MEM Semi-finetune ≥ 0.5 (như report), báo khi đã thu đủ 9 s"},
+    {"type": "irregular", "severity": "warning", "title": "Biến thiên RR cao",
+     "rule": "RMSSD của 20 khoảng RR gần nhất > 120 ms trong ≥3 beat; gồm cả nhịp ngoại tâm thu, không phải chỉ số HRV lâm sàng"},
+    {"type": "stmem", "severity": "warning", "title": "ST-MEM gắn cờ cửa sổ 9 s",
+     "rule": "Điểm Abnormal đạt ngưỡng thử nghiệm sau khi thu đủ 9 s; kết quả mô hình không phải cảnh báo y tế"},
 ]
 
 

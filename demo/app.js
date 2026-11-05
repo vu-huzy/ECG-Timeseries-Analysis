@@ -258,6 +258,17 @@
     return { card: card, chart: chart };
   }
 
+  function advancedDetails(label, card, entry) {
+    var details = el("details", { class: "advanced-details" },
+      el("summary", { text: label }), card);
+    details.addEventListener("toggle", function () {
+      if (details.open && entry && HAS_PLOTLY) {
+        window.requestAnimationFrame(function () { drawEntry(entry); });
+      }
+    });
+    return details;
+  }
+
   function dataTable(spec) {
     var thead = el("thead");
     var hr = el("tr");
@@ -637,17 +648,17 @@
     li(el("strong", { text: "1D CNN cửa sổ 9 s đạt F1 " + fmt(best.f1, 3) }),
       ", còn mô hình đặc trưng thủ công tốt nhất (" + mlBest.name + ", cửa sổ " + mlBest.window + ") đạt " + fmt(mlBest.f1, 3) + ". Hai nhóm dùng quy tắc gán nhãn khác nhau nên không so sánh trực tiếp được (xem mục 06).");
     if (st) li(el("strong", { text: "ST-MEM Semi-finetune (lead embedding + head) đạt F1 " + fmt(st.test.f1, 3) + ", AUC " + fmt(st.test.auc, 3) }),
-      " trên cùng tập test và cùng quy tắc nhãn với CNN, thấp hơn CNN 9 s (" + fmt(best.f1, 3) + ").");
+      " trên 5 record test. CNN 9 s có F1 " + fmt(best.f1, 3) + "; cách lấy cửa sổ và pipeline khác nhau nên chênh lệch chỉ để tham khảo.");
     li(el("strong", { text: "ARIMA thắng SARIMA ở " + arimaWins + "/" + cmp.per_record.length + " record 2xx" }),
-      " (MAE trung bình " + fmt(cmp.mean.ARIMA.mae, 2) + " so với " + fmt(cmp.mean.SARIMA.mae, 2) + " bpm). Thành phần mùa vụ không giúp ích cho HR ngắn hạn.");
+      " (MAE trung bình " + fmt(cmp.mean.ARIMA.mae, 2) + " so với " + fmt(cmp.mean.SARIMA.mae, 2) + " bpm). Trong thiết lập thử nghiệm này, SARIMA không cải thiện MAE.");
     li(el("strong", { text: "Quy tắc gán nhãn thay đổi kết quả rất nhiều" }),
       ": ở record " + D.label_examples.record + ", hai quy tắc cho nhãn khác nhau ở " + nDis + "/" + nEx + " cửa sổ " + D.label_examples.window_s + " s.");
     li(el("strong", { text: pct(nNormal / ds.n_beats) + " số beat là nhịp N" }),
       ", nên dữ liệu lệch lớp; các mô hình dùng class weight hoặc SMOTE để bù.");
     f.body.appendChild(ul);
     f.body.appendChild(el("p", { class: "card-foot" },
-      "Muốn xem nhịp tim chạy như trên máy theo dõi, kèm cảnh báo bất thường? ",
-      el("a", { href: "monitor.html", text: "Mở màn hình theo dõi →" })));
+      "Xem lại một đoạn ECG ghi sẵn cùng HR/RR, các dấu hiệu theo quy tắc và điểm ST-MEM: ",
+      el("a", { href: "monitor.html", text: "Mở trang phát lại →" })));
     body.appendChild(f.card);
   });
 
@@ -1008,10 +1019,8 @@
       miniTile("HR trung bình", fmt(s.mean_hr, 1) + " bpm", "min " + fmt(s.min_hr, 0) + " · max " + fmt(s.max_hr, 0)),
       miniTile("Nhịp nhanh > 120", fmt(s.tachy_seconds) + " s", "tổng thời gian"),
       miniTile("Nhịp chậm < 50", fmt(s.brady_seconds) + " s", "tổng thời gian"),
-      miniTile("Beat kiểu PVC", fmt(s.pvc_like), "RR ngắn rồi bù dài"),
-      miniTile("RR outlier", fmt(s.rr_outliers), "lệch xa trung vị"),
-      miniTile("Beat không đều", fmt(s.irregular_beats), "RMSSD > " + fmt(h.rmssd_threshold_ms) + " ms"),
-      miniTile("Đột biến STL", fmt(s.resid_spikes), "|residual| > " + fmt(h.stl.resid_threshold, 1))));
+      miniTile("Mẫu RR ngắn–dài", fmt(s.pvc_like), "gợi ý nhịp sớm; không xác nhận PVC"),
+      miniTile("RR outlier", fmt(s.rr_outliers), "lệch xa trung vị")));
 
     var tHr = range(h.hr_1hz.length, function (i) { return (h.hr_1hz_t0 + i) / 60; });
     var c1 = chartCard({
@@ -1036,7 +1045,7 @@
 
     var g = el("div", { class: "grid-2" });
     var tb = h.beat_t_ms.map(function (v) { return v / 60000; });
-    var c2 = chartCard({ title: "Chuỗi RR theo loại beat", sub: "Mỗi chấm là một khoảng RR, màu theo nhãn beat chuyên gia. Vòng tròn rỗng: beat kiểu PVC và RR outlier do luật 02_EDA phát hiện." });
+    var c2 = chartCard({ title: "Chuỗi RR theo loại beat", sub: "Mỗi chấm là một khoảng RR, màu theo nhãn beat chuyên gia. Vòng tròn rỗng: mẫu RR ngắn–dài và RR outlier do quy tắc phát hiện; không xác nhận loại rối loạn nhịp." });
     g.appendChild(c2.card);
     plot(sid, c2.chart, function (P) {
       var bySym = {};
@@ -1053,7 +1062,7 @@
           hovertemplate: "%{x:.2f} phút: RR %{y} ms<extra>" + k + "</extra>",
         };
       });
-      [[h.pvc_like_idx, "Beat kiểu PVC (luật)", "circle-open", P.ink2], [h.rr_outlier_idx, "RR outlier", "circle-open", P.status.critical]].forEach(function (m) {
+      [[h.pvc_like_idx, "Mẫu RR ngắn–dài", "circle-open", P.ink2], [h.rr_outlier_idx, "RR outlier", "circle-open", P.status.critical]].forEach(function (m) {
         if (!m[0].length) return;
         data.push({
           type: "scatter", mode: "markers", name: m[1],
@@ -1072,7 +1081,7 @@
       };
     });
 
-    var c3 = chartCard({ title: "RMSSD cuộn (20 beat)", sub: "Độ biến thiên giữa các nhịp liên tiếp. Vạch đứt: ngưỡng \"không đều\" " + fmt(h.rmssd_threshold_ms) + " ms." });
+    var c3 = chartCard({ title: "RMSSD của RR (20 beat)", sub: "Tính trên mọi khoảng RR, gồm cả nhịp ngoại tâm thu. Vạch đứt là mốc phân vị 90 của chính record này (" + fmt(h.rmssd_threshold_ms) + " ms), không phải ngưỡng lâm sàng." });
     g.appendChild(c3.card);
     plot(sid, c3.chart, function (P) {
       return {
@@ -1092,8 +1101,7 @@
       sub: "Quan sát = xu hướng + mùa vụ + phần dư. Chấm đỏ: phần dư vượt ngưỡng " + fmt(h.stl.resid_threshold, 1) + " bpm.",
       tall: true,
     });
-    body.appendChild(c4.card);
-    plot(sid, c4.chart, function (P) {
+    var stlEntry = plot(sid, c4.chart, function (P) {
       var spikes = h.stl.resid_spike_idx;
       var parts = [["Quan sát", h.hr_1hz, P.series[0]], ["Xu hướng", h.stl.trend, P.series[1]], ["Mùa vụ", h.stl.seasonal, P.series[2]], ["Phần dư", h.stl.resid, P.other]];
       var data = parts.map(function (p, i) {
@@ -1119,6 +1127,7 @@
       delete lay.grid;
       return { data: data, layout: lay };
     });
+    body.appendChild(advancedDetails("Phân tích thêm: phân rã STL của HR", c4.card, stlEntry));
   });
 
   // ---------- 05. Dự báo ----------
@@ -1166,7 +1175,7 @@
       body.appendChild(g);
     }
 
-    var g2 = el("div", { class: "grid-2" });
+    var g2 = el("div");
     var gs = D.forecast.grid_search;
     var top = gs.top.slice().reverse();
     var c3 = chartCard({
@@ -1179,8 +1188,7 @@
         };
       },
     });
-    g2.appendChild(c3.card);
-    plot(sid, c3.chart, function (P) {
+    var aicEntry = plot(sid, c3.chart, function (P) {
       var bestKey = "(" + gs.best_order.join(",") + ")";
       var names = top.map(function (x) { return "(" + x.order.join(",") + ")"; });
       return {
@@ -1198,6 +1206,7 @@
         }),
       };
     });
+    body.appendChild(advancedDetails("Phân tích thêm: chọn bậc ARIMA theo AIC", c3.card, aicEntry));
 
     var cmp = D.forecast.compare_2xx;
     var rows = cmp.per_record.slice().sort(function (a, b) { return a[1] - b[1]; });

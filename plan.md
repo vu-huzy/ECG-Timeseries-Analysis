@@ -160,7 +160,7 @@ Yêu cầu: một trang **chạy sóng ECG như máy monitor thật**, HR cập 
 
 ### Còn lại
 1. Sửa 2 vấn đề trên, chạy lại `train_stmem.py` (~10–20 phút GPU) rồi `build_monitor.py`.
-2. Viết `monitor.html` / `monitor.js` / `monitor.css`: nền tối kiểu monitor bệnh viện; sóng ECG quét trên canvas (~8 s/màn hình); HR lớn + tim nhấp nháy theo nhịp (tuỳ chọn tiếng bíp); ô ST-MEM cho 9 s gần nhất (xác suất + nhãn chuyên gia để đối chiếu); băng cảnh báo + nhật ký sự kiện (gộp sự kiện cùng loại trong 10 s); dải thời gian các cửa sổ tô theo xác suất, bấm để tua; chọn record, phát/tạm dừng, tốc độ 1×/2×/4×.
+2. Viết `monitor.html` / `monitor.js` / `monitor.css`: nền tối kiểu monitor bệnh viện; sóng ECG quét trên canvas (~8 s/màn hình); HR lớn + tim nhấp nháy theo nhịp (tuỳ chọn tiếng bíp); ô ST-MEM cho cửa sổ 9 s đã hoàn tất (điểm mô hình + nhãn chuyên gia để đối chiếu); băng dấu hiệu + nhật ký sự kiện (gộp sự kiện cùng loại trong 10 s); dải thời gian chỉ hiện điểm của cửa sổ đã hoàn tất, bấm để tua; chọn record, phát/tạm dừng, tốc độ 1×/2×/4×.
 3. Thêm nút "Mở màn hình theo dõi" ở trang demo; cập nhật mục 07 ST-MEM bằng kết quả test thật (đọc `stmem_results.json` trong `build_data.py`).
 4. Kiểm tra trình duyệt (`.claude/launch.json`, cấu hình `ecg-demo`, cổng 8765), rồi quay lại bước 3.
 
@@ -215,10 +215,10 @@ Bố cục tham khảo màn hình monitor đầu giường và phần mềm Holt
   2. RR tachogram: chấm xanh là RR thường, vàng là beat sớm, đỏ là RR > 2 s; nền vàng ở đoạn "không đều".
   3. ST-MEM: cột xác suất mỗi 9 s, vạch ngưỡng, gạch đỏ dưới cột cho cửa sổ chuyên gia gán bất thường.
 
-  Phần chưa phát tới được vẽ mờ. Ô trắng mờ đánh dấu cửa sổ 9 s đang hiện trên màn ECG.
+  Chỉ vẽ HR/RR đã phát và điểm ST-MEM của cửa sổ 9 s đã hoàn tất. Ô trắng mờ đánh dấu phần đã phát của cửa sổ 9 s đang hiện trên màn ECG.
 - **Poincaré RR** (RRₙ → RRₙ₊₁, 60 s gần nhất): nhịp đôi hiện thành 2 cụm, ngưng nhịp hiện thành điểm xa.
 - **Băng cảnh báo** (`role=alert`) hiện cảnh báo nặng nhất đang có, kèm "+N cảnh báo khác". Mức critical thì nhấp nháy, tắt khi người dùng bật giảm chuyển động. **Nhật ký** gộp các sự kiện cùng loại trong 10 s thành "×N".
-- Điều khiển: chọn record, phát/dừng (phím cách), tốc độ 1×/2×/4×, ← → để tua 9 s, tiếng bíp (mặc định tắt), tự lặp khi hết. Nhớ record, tốc độ và lựa chọn nhãn bằng localStorage.
+- Điều khiển: chọn record, phát/dừng (phím cách), tốc độ 1×/2×/4×, ← → để tua 9 s, tiếng bíp (mặc định tắt). Phát dừng ở cuối để hiện cửa sổ cuối; bấm Phát để xem lại. Nhớ record, tốc độ và lựa chọn nhãn bằng localStorage.
 - 5 record: 103 (gần bình thường), 106 (PVC, nhịp đôi), 105 (nhiễu) thuộc tập test; 208 (PVC + F), 232 (nhịp chậm, ngưng dài) thuộc tập val. Mỗi record phát một đoạn 306 s (34 cửa sổ).
 
 **Sửa trong `build_monitor.py`** (2 vấn đề ghi ở 5b):
@@ -400,3 +400,12 @@ Model bắt được hầu hết cửa sổ bất thường (recall 0.92), nhưn
   - Bỏ dòng "Ensemble RF+ET+XGB" (F1 0.437 / 0.393): report không có kết quả bỏ phiếu mềm. Mô tả phương pháp ML cũng sửa theo (ba mô hình riêng, 86/165 đặc trưng).
   - CNN 4.5 s / 9 s khớp Bảng 5.2. Riêng accuracy CNN 9 s: ma trận cho 0.938, report ghi 0.9354 (trùng precision, có vẻ là gõ nhầm); demo giữ 0.938 và ghi chú. Dòng CNN 0.75 s chỉ có trong notebook.
   - ARIMA/SARIMA không có trong report. Đã kiểm lại: các số chép (grid search 360.434, MAE 1.1808 / 2.0553, bảng 2xx 7.962726 / 13.307283) vẫn có đúng trong notebook chạy lại, cùng ô.
+
+### Rà soát logic web (30/10/2026)
+
+- Trang chính ưu tiên tín hiệu ECG, RR/HR, dự báo và phân loại. Đồ thị STL và AIC vẫn giữ trong mục "Phân tích thêm"; không dùng chúng làm bằng chứng về tình trạng tim.
+- Trang `monitor.html` được gọi là **phát lại bản ghi**. Tín hiệu và điểm ST-MEM đều có sẵn, không phải phân tích bệnh nhân trực tiếp.
+- Quy tắc RR ngắn–dài chỉ gợi ý nhịp sớm, không xác nhận PVC. Quy tắc RR dài được ghi nhận khi nhịp kế tiếp xuất hiện, không phải cảnh báo ngưng tim tức thời.
+- RMSSD ở trang web tính trên mọi RR, gồm cả beat ngoại tâm thu. Vì vậy giao diện mô tả là biến thiên RR, không trình bày như HRV lâm sàng. Ngưỡng phân vị 90 trên biểu đồ là của chính record đó.
+- Điểm ST-MEM dùng ngưỡng thử nghiệm 0.5, chưa hiệu chỉnh xác suất. Tập test có F1 0.7777 và specificity 0.4391; giao diện dùng từ "gắn cờ" và hiển thị giới hạn này thay vì báo động y tế.
+- Đồ thị phát lại giờ chỉ vẽ HR/RR đã đến và điểm ST-MEM của cửa sổ 9 s đã hoàn tất; không làm mờ dữ liệu tương lai nữa. Trục y điều chỉnh theo dữ liệu đã phát. Khi hết đoạn, trang dừng ở cuối để thấy cửa sổ cuối cùng; bấm Phát để xem lại từ đầu.

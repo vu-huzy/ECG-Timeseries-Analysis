@@ -79,7 +79,7 @@ body {
 .m-banner-icon { width: 20px; height: 20px; flex: none; display: inline-grid; place-items: center; }
 .m-banner-icon svg { width: 20px; height: 20px; }
 .m-banner-more { margin-left: auto; font-weight: 400; color: inherit; opacity: .85; font-size: 13px; }
-.m-banner.is-ok { background: rgba(12, 163, 12, 0.12); color: #7fdc7f; }
+.m-banner.is-ok { background: rgba(57, 135, 229, 0.12); color: #a9d1ff; }
 .m-banner.is-warning { background: rgba(250, 178, 25, 0.16); color: #ffd37a; }
 .m-banner.is-serious { background: rgba(236, 131, 90, 0.20); color: #ffb899; }
 .m-banner.is-critical { background: rgba(230, 103, 103, 0.28); color: #ffd0d0; animation: m-blink 1s steps(2, start) infinite; }

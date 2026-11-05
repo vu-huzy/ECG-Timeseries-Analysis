@@ -35,7 +35,9 @@ A view-only **web demo** of all of the above lives in [`demo/`](demo) (see [Web 
 A static HTML + JavaScript demo (Plotly charts and a canvas ECG monitor). It has two pages:
 
 - `demo/index.html`: seven sections (overview, signal exploration, preprocessing, HR/HRV, ARIMA/SARIMA forecast, Normal/Abnormal classification, ST-MEM).
-- `demo/monitor.html`: a bedside-monitor style replay of MIT-BIH records, with a 9 s ECG sweep, HR/RR trends, rule-based alerts and ST-MEM predictions per 9 s window.
+- `demo/monitor.html`: a replay of recorded MIT-BIH excerpts, with a 9 s ECG sweep, HR/RR trends, illustrative rule flags and precomputed ST-MEM scores per 9 s window.
+
+The website does not accept new ECG recordings or analyze a live patient. The replay trend reveals only HR/RR samples already played and ST-MEM scores for completed 9 s windows; playback stops at the end so the final window remains visible. Its RR short-long pattern is not a confirmed PVC diagnosis; a long RR interval is recorded only after the next beat arrives. Rolling RMSSD includes ectopic beats, so it is shown as RR variability rather than clinical HRV. The ST-MEM scores are uncalibrated research outputs (test F1 0.7777, specificity 0.4391), not medical alerts. Method-only STL and AIC charts remain available under **additional analysis** in the HR/RR and forecasting sections.
 
 ### 1. Just view it (no installation)
 
@@ -103,7 +105,7 @@ python demo/build_data.py
 - ST-MEM Semi-finetune reaches test F1 0.778 / AUC 0.817 with this setup, whereas `Final_Report_TS-3.pdf` (Table 5.3) reports F1 0.9695. Dataset, checkpoint and trainable parameters are the same as in the report, but the report does not give epochs, learning rate, batch size or seed, so the gap is not explained yet. Details are in `plan.md`, sections 9 and 10.
 - The feature-based and 1D CNN numbers use different window-labeling rules, see "Labeling Notes" below.
 - **Source of the classification numbers:** the feature-based models (Random Forest, Extra Trees, XGBoost) and the 1D CNN 4.5 s / 9 s rows follow `Final_Report_TS-3.pdf` (Tables 5.1 and 5.2, Figure 5.1). The sliding-window notebook on `main` was re-run later by a collaborator and no longer reproduces the report's 9 s numbers, so the report is the reference. The CNN 0.75 s row exists only in the notebook. The ARIMA/SARIMA tables are not in the report; they come from `ARIMA and SARIMA model.ipynb`, and the copied values were re-checked against the re-run notebook (same cells, same numbers). `demo/notebook_results.py` records the source of every number.
-- The monitor replays recorded data and precomputed model outputs. It is not a real-time system and not a medical device.
+- The replay page presents recorded data and precomputed model outputs. It is not a real-time system and not a medical device.
 - `demo/predict_stmem.py` re-scores the committed model (see step 3); `plan.md` is the full working log of this demo (design decisions, issues found, results, remaining work).
 
 ## Main Notebooks

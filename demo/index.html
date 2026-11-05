@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>ECG Time Series Demo</title>
-  <meta name="description" content="Demo trực quan dự án phân tích chuỗi thời gian ECG trên MIT-BIH: tiền xử lý, HRV, dự báo ARIMA/SARIMA và phân loại Normal/Abnormal.">
+  <meta name="description" content="Demo phân tích ECG MIT-BIH: tín hiệu, khoảng RR và nhịp tim, dự báo ARIMA/SARIMA, phân loại Normal/Abnormal và phát lại bản ghi.">
   <link rel="stylesheet" href="style.css">
   <script>
     // Áp theme đã lưu trước khi vẽ trang để không bị nháy màu
@@ -28,11 +28,11 @@
         <a href="#overview">Tổng quan</a>
         <a href="#explore">Tín hiệu</a>
         <a href="#preprocess">Tiền xử lý</a>
-        <a href="#hrv">Nhịp tim &amp; HRV</a>
+        <a href="#hrv">Nhịp tim &amp; RR</a>
         <a href="#forecast">Dự báo</a>
         <a href="#classification">Phân loại</a>
         <a href="#stmem">ST-MEM</a>
-        <a href="monitor.html" class="nav-ext">Theo dõi ↗</a>
+        <a href="monitor.html" class="nav-ext">Phát lại ↗</a>
       </nav>
       <div class="controls">
         <label class="field" for="record-select">
@@ -51,20 +51,20 @@
       <p class="eyebrow">MIT-BIH Arrhythmia Database</p>
       <h1 id="hero-title">Phân tích chuỗi thời gian ECG</h1>
       <p class="lead">
-        Từ tín hiệu điện tim thô đến nhịp tim, dự báo HR bằng ARIMA/SARIMA và phân loại cửa sổ
-        Normal / Abnormal bằng mô hình học máy, 1D CNN và ST-MEM. Mọi biểu đồ đều có thể phóng to, rê chuột
-        để xem giá trị, và chuyển sang dạng bảng.
+        Khám phá tín hiệu ECG MIT-BIH, khoảng RR và nhịp tim; xem dự báo HR bằng ARIMA/SARIMA
+        và đối chiếu kết quả phân loại cửa sổ Normal / Abnormal bằng học máy, 1D CNN và ST-MEM.
+        Các biểu đồ có thể phóng to, xem giá trị và chuyển sang dạng bảng.
       </p>
       <p class="disclaimer">
         <svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M10 2a8 8 0 1 0 0 16 8 8 0 0 0 0-16Zm0 4a1 1 0 0 1 1 1v3.5a1 1 0 1 1-2 0V7a1 1 0 0 1 1-1Zm0 8.5a1.1 1.1 0 1 1 0-2.2 1.1 1.1 0 0 1 0 2.2Z"/></svg>
-        <span>Dự án phục vụ học tập và phân tích dữ liệu, không phải công cụ chẩn đoán y tế.</span>
+        <span>Demo chỉ xem dữ liệu MIT-BIH đã chuẩn bị sẵn; không nhận ECG mới và không dùng để chẩn đoán y tế.</span>
       </p>
       <p class="hero-cta">
         <a class="btn btn-primary" href="monitor.html">
           <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M1.5 10.5h4l1.6-4 2.6 9 2.4-12 2 7h4.4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          <span>Mở màn hình theo dõi</span>
+          <span>Phát lại bản ghi ECG</span>
         </a>
-        <span class="hero-cta-note">ECG chạy như trên máy theo dõi, cảnh báo theo luật nhịp và mô hình ST-MEM.</span>
+        <span class="hero-cta-note">Đoạn ECG ghi sẵn cùng các dấu hiệu theo quy tắc và điểm ST-MEM đã tính trước.</span>
       </p>
     </section>
 
@@ -100,8 +100,8 @@
     <section class="section" id="hrv" aria-labelledby="hrv-title">
       <div class="section-head">
         <p class="section-num">04</p>
-        <h2 id="hrv-title">Nhịp tim &amp; HRV</h2>
-        <p class="lead">Từ vị trí đỉnh R tính khoảng RR, nhịp tim HR, độ biến thiên RMSSD và phân rã STL của HR trên toàn bộ 30 phút.</p>
+        <h2 id="hrv-title">Nhịp tim &amp; khoảng RR</h2>
+        <p class="lead">Từ các nhãn beat chuyên gia tính khoảng RR, nhịp tim HR và độ biến thiên RR theo thời gian. RMSSD ở đây dùng mọi khoảng RR, gồm cả nhịp ngoại tâm thu; không diễn giải như HRV lâm sàng.</p>
       </div>
       <div class="stack" id="hrv-body"></div>
     </section>

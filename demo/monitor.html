@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>ECG Monitor</title>
-  <meta name="description" content="Màn hình theo dõi nhịp tim mô phỏng: phát lại ECG MIT-BIH như thời gian thực, xu hướng HR/RR, cảnh báo theo luật nhịp và theo mô hình ST-MEM.">
+  <title>Phát lại và phân tích ECG</title>
+  <meta name="description" content="Phát lại bản ghi MIT-BIH để xem sóng ECG, HR/RR, các dấu hiệu theo quy tắc và điểm ST-MEM đã tính trước.">
   <link rel="stylesheet" href="monitor.css">
 </head>
 <body>
@@ -13,7 +13,7 @@
       <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
       <span>Demo</span>
     </a>
-    <h1 class="m-title">Màn hình theo dõi nhịp tim</h1>
+    <h1 class="m-title">Phát lại và phân tích ECG</h1>
     <div class="m-controls">
       <label class="m-field">
         <span class="sr-only">Bản ghi</span>
@@ -55,16 +55,16 @@
       <div class="m-num m-num-hr">
         <div class="m-num-label">HR <span class="m-dim">bpm</span><span class="m-beat" id="m-beat" aria-hidden="true"></span></div>
         <div id="m-hr" class="m-num-value">--</div>
-        <div class="m-num-limits"><span>120</span><span>50</span></div>
+        <div class="m-num-limits" title="Ngưỡng minh họa từ notebook, không phải giới hạn lâm sàng"><span>120</span><span>50</span></div>
       </div>
       <div class="m-num">
         <div class="m-num-label">RR <span class="m-dim">ms</span></div>
         <div id="m-rr" class="m-num-value m-num-sm">--</div>
       </div>
       <div class="m-num m-num-pair">
-        <div><div class="m-num-label">PVC</div><div id="m-pvc" class="m-num-value m-num-xs">0</div></div>
-        <div><div class="m-num-label">Ngưng</div><div id="m-pause" class="m-num-value m-num-xs">0</div></div>
-        <div><div class="m-num-label">RMSSD <span class="m-dim">ms</span></div><div id="m-rmssd" class="m-num-value m-num-xs">--</div></div>
+        <div><div class="m-num-label" title="Mẫu RR ngắn rồi dài; không xác nhận PVC">RR ngắn–dài</div><div id="m-pvc" class="m-num-value m-num-xs">0</div></div>
+        <div><div class="m-num-label" title="Khoảng RR dài, được ghi nhận khi nhịp tiếp theo xuất hiện">RR dài</div><div id="m-pause" class="m-num-value m-num-xs">0</div></div>
+        <div><div class="m-num-label" title="RMSSD tính trên 20 khoảng RR, gồm cả nhịp ngoại tâm thu; không phải HRV lâm sàng">RR var. <span class="m-dim">ms</span></div><div id="m-rmssd" class="m-num-value m-num-xs">--</div></div>
       </div>
       <div class="m-num m-model">
         <div class="m-num-label">ST-MEM <span class="m-dim" id="m-model-sub">cửa sổ 9 s</span></div>
@@ -78,35 +78,35 @@
         <span class="m-panel-label">Xu hướng</span>
         <span class="m-legend">
           <span><i class="lg lg-hr"></i>HR</span>
-          <span><i class="lg lg-rr"></i>RR (N)</span>
-          <span><i class="lg lg-pvc"></i>RR beat sớm</span>
-          <span><i class="lg lg-p"></i>ST-MEM ≥ ngưỡng</span>
+          <span><i class="lg lg-rr"></i>RR</span>
+          <span><i class="lg lg-pvc"></i>Mẫu RR ngắn–dài</span>
+          <span><i class="lg lg-p"></i>ST-MEM gắn cờ</span>
           <span><i class="lg lg-t"></i>Chuyên gia: bất thường</span>
         </span>
       </div>
       <div class="m-trend-wrap" id="m-trend-wrap" role="slider" tabindex="0" aria-label="Vị trí phát — bấm vào biểu đồ để tua" aria-valuemin="0">
         <canvas id="m-trend"></canvas>
       </div>
-      <p class="m-dim m-hint">Bấm vào biểu đồ để tua · phím cách: phát/dừng · ← →: lùi/tiến 9 s · phần mờ là dữ liệu chưa tới</p>
+      <p class="m-dim m-hint">Chỉ hiện dữ liệu đã phát và cửa sổ ST-MEM đã hoàn tất · bấm vào biểu đồ để tua · phím cách: phát/dừng · ← →: lùi/tiến 9 s</p>
     </section>
 
     <aside class="m-side2">
       <div class="m-panel">
-        <div class="m-panel-label">Poincaré RR <span class="m-dim">RRₙ → RRₙ₊₁ · 60 s gần nhất</span></div>
+        <div class="m-panel-label">RR liên tiếp <span class="m-dim">RRₙ → RRₙ₊₁ · 60 s gần nhất</span></div>
         <div class="m-poin-wrap"><canvas id="m-poincare" aria-label="Biểu đồ Poincaré của khoảng RR"></canvas></div>
       </div>
       <div class="m-panel m-log-panel">
-        <div class="m-panel-label">Nhật ký cảnh báo <span class="m-dim" id="m-log-count"></span></div>
+        <div class="m-panel-label">Nhật ký dấu hiệu <span class="m-dim" id="m-log-count"></span></div>
         <ol id="m-log" class="m-log"></ol>
       </div>
     </aside>
 
     <section class="m-about">
       <details>
-        <summary>Cảnh báo được tính thế nào?</summary>
+        <summary>Các dấu hiệu được tính thế nào?</summary>
         <div id="m-rules"></div>
       </details>
-      <p class="m-disclaimer">Mô phỏng cho mục đích học tập, phát lại dữ liệu MIT-BIH có sẵn. Không dùng để chẩn đoán hay theo dõi bệnh nhân thật.</p>
+      <p class="m-disclaimer">Dữ liệu MIT-BIH được ghi sẵn; điểm ST-MEM cũng được tính trước. Các ngưỡng chỉ phục vụ minh họa nghiên cứu, không dùng để chẩn đoán hay theo dõi bệnh nhân thật.</p>
     </section>
   </main>
 

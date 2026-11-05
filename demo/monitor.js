@@ -1,6 +1,6 @@
-/* Màn hình theo dõi nhịp tim — phát lại ECG như thời gian thực.
-   Dữ liệu: window.MONITOR_DATA (demo/build_monitor.py). Mọi cảnh báo đã được tính trước
-   chỉ từ dữ liệu quá khứ của mỗi thời điểm; trang chỉ "phát" chúng theo đồng hồ. */
+/* Phát lại ECG ghi sẵn. Dữ liệu: window.MONITOR_DATA (demo/build_monitor.py).
+   Trang chỉ vẽ HR/RR đã tới và chỉ hiện điểm ST-MEM sau khi đủ cửa sổ 9 s.
+   Quy tắc dùng dữ liệu quá khứ tại thời điểm của mỗi sự kiện. */
 (function () {
   "use strict";
 
@@ -76,6 +76,7 @@
   const ICON_PAUSE = '<path d="M7 5h3.5v14H7zM13.5 5H17v14h-3.5z" fill="currentColor"/>';
   const ICON_PLAY = '<path d="M7 4.5v15l12-7.5z" fill="currentColor"/>';
   function setPlaying(p) {
+    if (p && S.rec && S.t >= S.dur) seek(0);
     S.playing = p;
     $("m-play-icon").innerHTML = p ? ICON_PAUSE : ICON_PLAY;
     $("m-play-text").textContent = p ? "Tạm dừng" : "Phát";
@@ -131,7 +132,7 @@
     S.beatT = rec.beats.map((b) => b[0] / rec.fs);
     $("m-lead").textContent = rec.lead + " · " + rec.fs + " Hz";
     $("m-desc").textContent =
-      `Bản ghi ${rec.id} (tập ${rec.split}) — ${rec.description}. Đoạn phát: giây ${Math.round(rec.start_s)}–${Math.round(rec.start_s + rec.duration_s)} của bản ghi gốc, lặp lại khi hết.`;
+      `Bản ghi ${rec.id} (tập ${rec.split}) — ${rec.description}. Đoạn phát: giây ${Math.round(rec.start_s)}–${Math.round(rec.start_s + rec.duration_s)} của bản ghi gốc; dừng ở cuối, bấm Phát để xem lại.`;
     prepTrend();
     seek(0);
   }
@@ -145,7 +146,7 @@
 
   function seek(t) {
     const rec = S.rec;
-    t = Math.min(Math.max(0, t), S.dur - 0.001);
+    t = Math.min(Math.max(0, t), S.dur);
     resetState();
     S.t = 0;
     advance(t, true);
@@ -195,15 +196,15 @@
 
   function describe(type, value) {
     switch (type) {
-      case "pvc": return { title: "Beat sớm kiểu PVC", detail: value ? `nhịp tức thời ~${value} bpm` : "" };
-      case "pause": return { title: "Ngưng nhịp", detail: `RR ${fmt2(value)} s` };
+      case "pvc": return { title: "Mẫu RR ngắn–dài", detail: value ? `HR tức thời ~${value} bpm` : "" };
+      case "pause": return { title: "Khoảng RR dài", detail: `RR ${fmt2(value)} s` };
       case "tachy": return { title: "Nhịp nhanh", detail: `${value} bpm` };
       case "brady": return { title: "Nhịp chậm", detail: `${value} bpm` };
-      case "irregular": return { title: "Nhịp không đều", detail: `RMSSD ${value} ms` };
-      case "stmem": return { title: "ST-MEM: đoạn 9 s bất thường", detail: `p = ${fmt2(value)}` };
+      case "irregular": return { title: "Biến thiên RR cao", detail: `RMSSD RR ${value} ms` };
+      case "stmem": return { title: "ST-MEM gắn cờ cửa sổ 9 s", detail: `điểm = ${fmt2(value)}` };
       case "tachy_end": return { title: "Hết nhịp nhanh", detail: `${value} bpm` };
       case "brady_end": return { title: "Hết nhịp chậm", detail: `${value} bpm` };
-      case "irregular_end": return { title: "Nhịp đều trở lại", detail: `RMSSD ${value} ms` };
+      case "irregular_end": return { title: "Biến thiên RR giảm", detail: `RMSSD RR ${value} ms` };
       default: return { title: type, detail: String(value) };
     }
   }
@@ -211,7 +212,7 @@
 
   /* ------------------------------------------------------------------ băng cảnh báo */
   const ICONS = {
-    ok: '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="currentColor" opacity=".25"/><path d="M7 12.5l3.2 3.2L17 9" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+    ok: '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="currentColor" opacity=".25"/><path d="M10 8l6 4-6 4z" fill="currentColor"/></svg>',
     warning: '<svg viewBox="0 0 24 24"><path d="M12 3L2 20h20L12 3z" fill="currentColor" opacity=".25"/><path d="M12 9v5M12 17.2v.1" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>',
     serious: '<svg viewBox="0 0 24 24"><path d="M12 3L2 20h20L12 3z" fill="currentColor" opacity=".35"/><path d="M12 9v5M12 17.2v.1" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>',
     critical: '<svg viewBox="0 0 24 24"><path d="M8 2.5h8L21.5 8v8L16 21.5H8L2.5 16V8z" fill="currentColor" opacity=".35"/><path d="M12 7v6.5M12 16.8v.1" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg>',
@@ -225,15 +226,15 @@
     items.sort((a, b) => (SEV_RANK[sevOf(b.type)] - SEV_RANK[sevOf(a.type)]) || (b.t - a.t));
     let cls, icon, text, more = "";
     if (!S.playing) {
-      cls = "is-idle"; icon = ICONS.pause; text = "Đã tạm dừng";
-      if (items.length) more = `${items.length} cảnh báo đang hiện`;
+      cls = "is-idle"; icon = ICONS.pause; text = S.t >= S.dur ? "Đã phát hết bản ghi" : "Đã tạm dừng phát lại";
+      if (items.length) more = `${items.length} dấu hiệu đang hiện`;
     } else if (!items.length) {
-      cls = "is-ok"; icon = ICONS.ok; text = "Không có cảnh báo";
+      cls = "is-ok"; icon = ICONS.ok; text = "Đang phát bản ghi · chưa có dấu hiệu vượt ngưỡng";
     } else {
       const top = items[0], sev = sevOf(top.type), d = describe(top.type, top.value);
       cls = "is-" + sev; icon = ICONS[sev];
       text = d.title + (d.detail ? " · " + d.detail : "");
-      if (items.length > 1) more = `+${items.length - 1} cảnh báo khác`;
+      if (items.length > 1) more = `+${items.length - 1} dấu hiệu khác`;
     }
     const key = cls + "|" + text + "|" + more;
     if (!force && key === S.bannerKey) return;
@@ -250,7 +251,7 @@
     const ol = $("m-log");
     ol.textContent = "";
     if (!S.log.length) {
-      ol.append(el("li", { class: "m-log-empty", text: "Chưa có cảnh báo." }));
+      ol.append(el("li", { class: "m-log-empty", text: "Chưa có dấu hiệu vượt ngưỡng." }));
     }
     S.log.slice(0, 80).forEach((x) => {
       const isEnd = x.type.endsWith("_end");
@@ -278,8 +279,8 @@
   function updateHr() {
     const lb = S.lastBeat;
     const hrEl = $("m-hr");
-    hrEl.textContent = lb && lb.hr != null ? lb.hr : "--";
     const gap = lb ? S.t - lb.t : 0;
+    hrEl.textContent = lb && lb.hr != null && gap <= 2 ? lb.hr : "--";
     hrEl.classList.toggle("is-alarm", !!(S.states.tachy || S.states.brady || gap > 2));
     $("m-rr").textContent = lb && S.prevBeat ? Math.round((lb.t - S.prevBeat.t) * 1000) : "--";
     $("m-pvc").textContent = S.pvcCount;
@@ -325,9 +326,9 @@
       if (model && w.p != null) {
         const abn = w.p >= model.threshold;
         body.append(el("div", { class: "m-verdict " + (abn ? "is-abn" : "is-norm") }, [
-          abn ? "Bất thường" : "Bình thường", el("small", { text: `p = ${fmt2(w.p)}` }),
+          abn ? "Mô hình gắn cờ" : "Mô hình không gắn cờ", el("small", { text: `điểm = ${fmt2(w.p)}` }),
         ]));
-        const bar = el("div", { class: "m-pbar", role: "img", "aria-label": `Xác suất bất thường ${fmt2(w.p)}, ngưỡng ${fmt2(model.threshold)}` }, [
+        const bar = el("div", { class: "m-pbar", role: "img", "aria-label": `Điểm mô hình cho lớp Abnormal ${fmt2(w.p)}, ngưỡng ${fmt2(model.threshold)}` }, [
           el("div", { class: "m-pbar-fill" + (abn ? " is-abn" : ""), style: `width:${(w.p * 100).toFixed(1)}%` }),
           el("div", { class: "m-pbar-thr", style: `left:calc(${model.threshold * 100}% - 1px)` }),
         ]);
@@ -348,7 +349,7 @@
     if (model) {
       const te = model.test || {};
       body.append(el("p", { class: "m-model-meta",
-        text: `${model.name}, thử nghiệm ${model.experiment} (${model.experiment_text}). Tập test: F1 ${fmt2(te.f1)}, AUC ${fmt2(te.auc)}. Xác suất tính trước, phát theo thời gian.` }));
+        text: `${model.name}, thử nghiệm ${model.experiment} (${model.experiment_text}). Tập test: F1 ${fmt2(te.f1)}, AUC ${fmt2(te.auc)}, specificity ${fmt2(te.specificity)}. Điểm tính trước, chưa hiệu chỉnh xác suất.` }));
     }
   }
 
@@ -363,15 +364,10 @@
   function prepTrend() {
     const rec = S.rec, bt = S.beatT;
     T.rr = new Float32Array(bt.length);
-    let rrMax = 1.6, hrMin = 1e9, hrMax = -1e9;
     for (let i = 1; i < bt.length; i++) {
       T.rr[i] = bt[i] - bt[i - 1];
-      rrMax = Math.max(rrMax, Math.min(4, T.rr[i]));
     }
-    rec.beats.forEach((b) => { if (b[1] != null) { hrMin = Math.min(hrMin, b[1]); hrMax = Math.max(hrMax, b[1]); } });
-    T.hrLo = Math.max(0, Math.min(40, Math.floor((hrMin - 5) / 10) * 10));
-    T.hrHi = Math.min(240, Math.max(130, Math.ceil((hrMax + 5) / 10) * 10));
-    T.rrHi = Math.ceil(rrMax * 2) / 2;
+    T.hrLo = 40; T.hrHi = 130; T.rrHi = 1.5;
     // Khoảng thời gian có cảnh báo trạng thái (tô nền)
     T.bands = []; T.pauses = [];
     const open = {};
@@ -400,6 +396,15 @@
 
   function drawTrend() {
     const rec = S.rec, c = tctx, W = T.W, H = T.H, t = S.t;
+    let rrMax = 1.5, hrMin = 40, hrMax = 130;
+    for (let i = 1; i < S.beatPtr; i++) {
+      rrMax = Math.max(rrMax, Math.min(4, T.rr[i]));
+      const hr = rec.beats[i][1];
+      if (hr != null) { hrMin = Math.min(hrMin, hr); hrMax = Math.max(hrMax, hr); }
+    }
+    T.hrLo = Math.max(0, Math.min(40, Math.floor((hrMin - 5) / 10) * 10));
+    T.hrHi = Math.min(240, Math.max(130, Math.ceil((hrMax + 5) / 10) * 10));
+    T.rrHi = Math.ceil(rrMax * 2) / 2;
     c.clearRect(0, 0, W, H);
     const x0 = TM.l, x1 = W - TM.r, pw = x1 - x0;
     const xOf = (s) => x0 + (s / S.dur) * pw;
@@ -450,8 +455,8 @@
       c.fillText(label, x1 - 2, yy - 3);
     });
     c.setLineDash([]);
-    function hrLine(from, to, alpha) {
-      c.globalAlpha = alpha; c.strokeStyle = hrC; c.lineWidth = 1.6; c.lineJoin = "round";
+    function hrLine(from, to) {
+      c.strokeStyle = hrC; c.lineWidth = 1.6; c.lineJoin = "round";
       c.beginPath(); let started = false;
       for (let i = from; i < to; i++) {
         const hr = rec.beats[i][1];
@@ -459,10 +464,9 @@
         const xx = xOf(S.beatT[i]), yy = hrY(hr);
         if (!started) { c.moveTo(xx, yy); started = true; } else c.lineTo(xx, yy);
       }
-      c.stroke(); c.globalAlpha = 1;
+      c.stroke();
     }
-    hrLine(Math.max(0, S.beatPtr - 1), rec.beats.length, 0.15);
-    hrLine(0, S.beatPtr, 1);
+    hrLine(0, S.beatPtr);
 
     // --- RR tachogram ---
     const P2 = panels[1];
@@ -471,33 +475,29 @@
     const rrTicks = [];
     for (let v = 0; v <= T.rrHi + 1e-6; v += (T.rrHi > 2.5 ? 1 : 0.5)) rrTicks.push(v);
     frameP(P2, rrTicks, rrY, (v) => v.toFixed(1), "RR (s) — tachogram");
-    for (let i = 1; i < rec.beats.length; i++) {
+    for (let i = 1; i < S.beatPtr; i++) {
       const rr = T.rr[i], pvc = rec.beats[i][2] === 1;
-      c.globalAlpha = i >= S.beatPtr ? 0.15 : 1;
       c.fillStyle = rr > 2 ? crit : pvc ? warn : "#9fd7ff";
       c.beginPath(); c.arc(xOf(S.beatT[i]), rrY(rr), pvc || rr > 2 ? 2.6 : 1.8, 0, Math.PI * 2); c.fill();
     }
-    c.globalAlpha = 1;
 
     // --- ST-MEM theo cửa sổ 9 s ---
     const P3 = panels[2];
     const pY = (v) => P3.y1 - v * (P3.h - 4);
-    frameP(P3, [0, 0.5, 1], pY, (v) => v.toFixed(1), D.model ? "ST-MEM p(bất thường) mỗi 9 s" : "ST-MEM (chưa có kết quả)");
+    frameP(P3, [0, 0.5, 1], pY, (v) => v.toFixed(1), D.model ? "Điểm ST-MEM cho lớp Abnormal · mỗi 9 s" : "ST-MEM (chưa có kết quả)");
     const thr = D.model ? D.model.threshold : 0.5;
     const kDone = Math.floor(t / S.win);
     rec.windows.forEach((w, k) => {
+      if (k >= kDone) return;
       const xa = xOf(k * S.win) + 1, xb = xOf((k + 1) * S.win) - 1;
-      const done = k < kDone;
       if (w.truth === 1) {
-        c.strokeStyle = crit; c.lineWidth = 2; c.globalAlpha = done ? 1 : 0.3;
+        c.strokeStyle = crit; c.lineWidth = 2;
         c.beginPath(); c.moveTo(xa, P3.y1 + 4); c.lineTo(xb, P3.y1 + 4); c.stroke();
       }
       if (w.p == null) return;
-      c.globalAlpha = done ? 1 : 0.15;
       c.fillStyle = w.p >= thr ? serious : "#4a5048";
       c.fillRect(xa, pY(w.p), Math.max(1, xb - xa), P3.y1 - pY(w.p));
     });
-    c.globalAlpha = 1;
     c.setLineDash([4, 4]); c.strokeStyle = "rgba(255,255,255,0.45)"; c.lineWidth = 1;
     const ty = Math.round(pY(thr)) + 0.5;
     c.beginPath(); c.moveTo(x0, ty); c.lineTo(x1, ty); c.stroke();
@@ -517,7 +517,7 @@
     // Cửa sổ 9 s đang hiện trên màn ECG + đầu phát
     const sw = Math.floor(t / S.win) * S.win;
     c.fillStyle = "rgba(255,255,255,0.06)";
-    c.fillRect(xOf(sw), TM.t, xOf(Math.min(S.dur, sw + S.win)) - xOf(sw), H - TM.t - TM.b);
+    c.fillRect(xOf(sw), TM.t, xOf(t) - xOf(sw), H - TM.t - TM.b);
     c.strokeStyle = "#fff"; c.lineWidth = 1.5;
     c.beginPath(); c.moveTo(xOf(t), TM.t); c.lineTo(xOf(t), H - TM.b + 2); c.stroke();
   }
@@ -611,8 +611,9 @@
     }
 
     const t = S.t;
-    const sweepStart = Math.floor(t / span) * span;
-    const cursorX = (t - sweepStart) * pxPerS;
+    const displayT = Math.min(t, S.dur - 1 / fs);
+    const sweepStart = Math.floor(displayT / span) * span;
+    const cursorX = (displayT - sweepStart) * pxPerS;
     const gapS = 18 / pxPerS;
     const trace = css("--trace");
 
@@ -650,7 +651,7 @@
       const x = xOfT(S.beatT[i]);
       if (x == null) continue;
       ctx.fillStyle = warn;
-      ctx.fillText("PVC", x, 14);
+      ctx.fillText("RR ngắn–dài", x, 14);
     }
     rec.events.forEach((e) => {
       if (e.type !== "pause" || e.t < bFrom || e.t > t) return;
@@ -659,7 +660,7 @@
       ctx.strokeStyle = crit; ctx.fillStyle = crit; ctx.lineWidth = 2;
       const xs = x0 != null && x0 < x1 ? x0 : Math.max(0, x1 - e.value * pxPerS);
       ctx.beginPath(); ctx.moveTo(xs, 6); ctx.lineTo(x1, 6); ctx.stroke();
-      ctx.fillText(`Ngưng ${fmt2(e.value)} s`, (xs + x1) / 2, 18);
+      ctx.fillText(`RR ${fmt2(e.value)} s`, (xs + x1) / 2, 18);
     });
 
     // Nhãn chuyên gia ở đáy
@@ -699,8 +700,10 @@
     S.lastFrame = now;
     if (S.playing && S.rec) {
       let t1 = S.t + dt * S.speed;
-      if (t1 >= S.dur) {           // hết đoạn → phát lại từ đầu
-        seek(0);
+      if (t1 >= S.dur) {
+        advance(S.dur, false);
+        updateHr(); renderModel(true);
+        setPlaying(false);
       } else {
         advance(t1, false);
         updateHr();
@@ -734,7 +737,7 @@
     });
     const box = $("m-rules");
     box.append(el("p", { class: "m-dim", style: "margin:10px 0 0",
-      text: "Luật nhịp chạy trên từng R-peak, chỉ dùng các beat đã qua (giống chạy thời gian thực). ST-MEM chấm mỗi cửa sổ 9 s khi đã thu đủ; xác suất được tính trước bằng demo/train_stmem.py." }));
+      text: "Các dấu hiệu dùng R-peak đã phát hiện và chỉ tính khi có đủ nhịp. Khoảng RR dài được ghi nhận sau nhịp kế tiếp. ST-MEM dùng điểm tính trước cho từng cửa sổ 9 s; ngưỡng và kết quả chỉ để minh họa." }));
     box.append(ul);
   })();
 

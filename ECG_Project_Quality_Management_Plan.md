@@ -1,51 +1,51 @@
-# Kế hoạch quản lý chất lượng dự án ECG
+# ECG Project Quality Management Plan
 
-**Bản điều chỉnh:** 12/11/2026. **Lịch tham chiếu:** 27 ngày làm việc, 01/10–06/11/2026. Kế hoạch này dùng cùng 16 gói WBS, 5 điểm kiểm tra tích hợp và 6 thành viên với `ECG_Project_WBS_Revised.md` và báo cáo quản lý dự án. Các kiểm tra dưới đây là tiêu chí/bằng chứng cần có; không được đọc như kết quả đã kiểm thử nếu chưa có biên bản.
+**Revised:** 13 Nov 2026. **Baseline period:** 27 working days, 01 Oct–06 Nov 2026. This plan uses the same 16 WBS packages, five integrated review gates, and six named members as the WBS and project management report. The checks below define required criteria and evidence; they are not claims that tests have already passed.
 
-## 1. Mục tiêu chất lượng
+## 1. Quality objectives
 
-Sản phẩm là tài liệu nghiên cứu và bản trình diễn giáo dục trên ECG MIT-BIH đã ghi. Nó phải đúng phạm vi, mở được từ bản phát hành, truy nguồn được số liệu và không tạo ấn tượng rằng đang đo hoặc cảnh báo y tế trực tiếp. Các chỉ số của mô hình phải đi cùng nhãn, chia tập và cấu hình thí nghiệm. Khác biệt F1 ST-MEM trong báo cáo nghiên cứu (0,9695) và kết quả chạy lại (0,7777) phải được nêu như hai nguồn riêng, chưa kết luận nguyên nhân.
+The deliverable is research documentation and a learning demo based on recorded MIT-BIH ECG. It must stay within scope, open from the release package, make metrics traceable, and avoid suggesting live medical monitoring or alerting. Model metrics must identify their labels, splits, and experiment configurations. The ST-MEM F1 in the research report (0.9695) and the rerun result (0.7777) remain separate results until the difference is explained.
 
-## 2. Trách nhiệm và thời điểm
+## 2. Responsibilities and timing
 
-| Thành viên (vai trò) | Trách nhiệm chất lượng | Ngày LV liên quan |
+| Member (role) | Quality responsibility | Relevant workdays |
 |---|---|---:|
-| Trần Tuấn Anh (DATA) | Kiểm tra nguồn MIT-BIH, lead, nhãn, xử lý tín hiệu và quy tắc chia tập | 4–9, 23–25 |
-| Vũ Quốc Huy (ML) | Kiểm tra chuỗi HR, tham số ARIMA/SARIMA, metric và điều kiện so sánh mô hình đặc trưng | 10–13, 19–25 |
-| Nguyễn Quang Huy (DL) | Kiểm tra CNN/ST-MEM, split, cấu hình và tệp kết quả; hỗ trợ đối chiếu điểm hiển thị | 10–22, 23–25 |
-| Mai Tuấn Mạnh (WEB) | Tự kiểm chức năng và nguồn dữ liệu hai trang trước khi giao QA | 14–22 |
-| Hoàng Thị Ngọc Hân (QA) | Dẫn dắt tiêu chí kiểm tra, thử độc lập, ghi lỗi và thử lại; chịu trách nhiệm gói 5.1 | 1–9, 14–25 |
-| Nguyễn Tuấn Anh (PM) | Chốt phạm vi/tiêu chí; xử lý ngoại lệ và ra quyết định nghiệm thu nội bộ | 1–3, 21–27 |
+| Trần Tuấn Anh (DATA) | Check MIT-BIH source, leads, labels, signal processing, and split rules. | 4–9, 23–25 |
+| Vũ Quốc Huy (ML) | Check HR series, ARIMA/SARIMA parameters, metrics, and feature-model comparison conditions. | 10–13, 19–25 |
+| Nguyễn Quang Huy (DL) | Check CNN/ST-MEM splits, configurations, and result files; support reconciliation of displayed scores. | 10–22, 23–25 |
+| Mai Tuấn Mạnh (WEB) | Self-check both pages and their data sources before QA handover. | 14–22 |
+| Hoàng Thị Ngọc Hân (QA) | Lead criteria, independent tests, defect logging, and retests; own package 5.1. | 1–9, 14–25 |
+| Nguyễn Tuấn Anh (PM) | Agree scope and criteria, handle exceptions, and decide internal acceptance. | 1–3, 21–27 |
 
-QA thực hiện kiểm tra độc lập với người phát triển gói. Chủ gói cung cấp dữ liệu, sửa lỗi và minh chứng; PM quyết định chấp nhận sau khi xem biên bản, không tự thay QA đánh dấu pass.
+QA tests independently of the package developer. The package owner supplies data, fixes defects, and provides evidence. The PM makes the acceptance decision after reviewing the test record and does not mark tests as passed on QA's behalf.
 
-## 3. Ma trận tiêu chí nghiệm thu
+## 3. Acceptance criteria matrix
 
-| ID | Gói WBS | Tiêu chí và cách kiểm tra | Bằng chứng tối thiểu |
+| ID | WBS packages | Criterion and verification | Minimum evidence |
 |---|---|---|---|
-| QC1 | 2.1–2.2 | Danh mục record/lead/nhãn đúng nguồn; mô tả lọc, chuẩn hóa, window và split đủ để lặp lại. | Notebook, đặc tả và mẫu đối chiếu. |
-| QC2 | 3.1 | Các đồ thị dự báo nêu record, horizon, tham số và MAE/RMSE từ đúng lần chạy. | Bảng kết quả nối tới notebook. |
-| QC3 | 3.2–3.4 | Các bảng ML/CNN/ST-MEM ghi riêng điều kiện nhãn, split, ngưỡng; không kết luận hơn/kém từ thí nghiệm không tương đương. | Bảng metric-to-source và giới hạn. |
-| QC4 | 4.1–4.2 | Trang tổng quan mở, đủ bảy mục, dữ liệu/đồ thị có nhãn và nguồn. | Checklist Chrome/Edge, ảnh màn hình. |
-| QC5 | 4.3 | HR/RR chỉ hiển thị mẫu đã phát; điểm ST-MEM chỉ hiện sau cửa sổ 9 giây; các cờ được ghi là minh họa. | Bản ghi thao tác và kiểm tra dấu thời gian. |
-| QC6 | 4.1–4.4 | Bản phát hành mở offline với JS data và thư viện đồ thị cục bộ; hướng dẫn xem không bắt người chấm tái huấn luyện. | Biên bản thử bản sao sạch, README. |
-| QC7 | 5.1–5.2 | Report, WBS, CSV/XML dùng cùng 16 mã gói, 27 ngày làm việc, 240 giờ, 6 thành viên và 5 điểm kiểm tra được gộp vào gói việc. | Bảng đối chiếu phiên bản và kết quả kiểm tra số học. |
-| QC8 | 5.1–5.3 | Không còn lỗi chặn trình diễn; lỗi còn lại có mức độ, người xử lý và quyết định chấp nhận. | Defect log, kết quả retest, biên bản nghiệm thu. |
+| QC1 | 2.1–2.2 | Record, lead, and label inventory matches the source; filtering, normalization, windows, and splits are reproducible. | Notebooks, specification, and sample reconciliation. |
+| QC2 | 3.1 | Forecast plots identify record, horizon, parameters, and MAE/RMSE from the correct run. | Results table linked to notebook. |
+| QC3 | 3.2–3.4 | ML/CNN/ST-MEM tables state label, split, and threshold rules; non-equivalent experiments are not ranked directly. | Metric-to-source table and limitations. |
+| QC4 | 4.1–4.2 | Dashboard opens with seven sections; data and charts have labels and sources. | Chrome/Edge checklist and screenshots. |
+| QC5 | 4.3 | HR/RR reveals only played samples; ST-MEM appears after each completed nine-second window; flags are identified as illustrative. | Interaction record and timestamp checks. |
+| QC6 | 4.1–4.4 | Release opens offline with local JavaScript data and charting library; viewing does not require retraining. | Clean-copy test record and README. |
+| QC7 | 5.1–5.2 | Report, WBS, CSV, and XML agree on 16 packages, 27 workdays, 240 hours, six members, and five integrated reviews. | Version reconciliation and arithmetic check. |
+| QC8 | 5.1–5.3 | No blocking demo defects remain; remaining defects have severity, owner, and acceptance decision. | Defect log, retest results, and acceptance record. |
 
-## 4. Kiểm soát và điểm kiểm tra chất lượng
+## 4. Quality control and review gates
 
-| Điểm kiểm tra | Cuối ngày LV | Gói thực hiện | Điều kiện kiểm tra |
+| Gate | End of workday | Package | Exit condition |
 |---|---:|---|---|
-| M1 | 3 | 1.3 | Scope, tiêu chí chất lượng và người kiểm tra đã được xác định. |
-| M2 | 9 | 2.2 | Quy tắc dữ liệu, nhãn và split ổn định để chạy mô hình. |
-| M3 | 20 | 3.4 | Các metric có nguồn và giới hạn; sai khác lớn được ghi riêng. |
-| M4 | 22 | 4.3–4.4 | Hai trang, tài nguyên offline và README sẵn sàng cho QA. |
-| M5 | 27 | 5.3 | QC1–QC8 được kiểm tra; PM ghi quyết định nghiệm thu nội bộ. |
+| M1 | 3 | 1.3 | Scope, quality criteria, and reviewers are defined. |
+| M2 | 9 | 2.2 | Data, labels, and splits are stable for experiments. |
+| M3 | 20 | 3.4 | Metrics have sources and limitations; major differences are recorded separately. |
+| M4 | 22 | 4.3–4.4 | Both pages, offline assets, and README are ready for QA. |
+| M5 | 27 | 5.3 | QC1–QC8 are reviewed; PM records the internal acceptance decision. |
 
-Thời gian rà soát và ghi quyết định đã nằm trong effort của các gói trên; lịch không tạo task 0 giờ cho M1–M5.
+Review and decision time is included in the listed packages; the schedule has no zero-hour tasks for M1–M5.
 
-Mỗi lỗi có ID, môi trường, bước tái hiện, kết quả mong đợi/thực tế, mức độ, người sửa, ngày retest và trạng thái. Lỗi chặn truy cập, sai nguồn chỉ số hoặc tạo hiểu lầm y tế phải được xử lý trước M5 hoặc có quyết định ngoại lệ ghi rõ. Việc thấy tệp trong kho không đồng nghĩa đã qua thử độc lập.
+Each defect has an ID, environment, reproduction steps, expected and actual result, severity, fixer, retest date, and status. A blocker, wrong metric source, or misleading medical claim is resolved before M5 or handled by a documented exception. A file's presence in the repository does not prove it passed independent testing.
 
-## 5. Quy tắc phiên bản
+## 5. Version control rules
 
-Giữ tách biệt baseline kế hoạch, kết quả kiểm tra thực tế và dự báo sửa đổi. Nếu thay đổi tiêu chí, ghi lý do, tác động WBS/lịch/chi phí/rủi ro và người quyết định. Chỉ số đánh giá được so với nguồn gốc của đúng phiên bản dữ liệu/mô hình; không thay một giá trị trong report mà không cập nhật bảng nguồn, demo và hồ sơ QA.
+Keep the plan baseline, actual test results, and revised forecasts separate. A changed criterion requires a reason, impact on WBS, schedule, cost, and risks, and a recorded decision. Check each metric against the source for the corresponding data and model version; do not change a value in the report without updating its source map, demo, and QA record.

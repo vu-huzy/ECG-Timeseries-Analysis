@@ -127,7 +127,7 @@
     <Task>
       <UID>1</UID>
       <ID>1</ID>
-      <Name>Khởi tạo và lập kế hoạch</Name>
+      <Name>Initiation and planning</Name>
       <WBS>1.0</WBS>
       <OutlineNumber>1</OutlineNumber>
       <OutlineLevel>1</OutlineLevel>
@@ -144,7 +144,7 @@
     <Task>
       <UID>2</UID>
       <ID>2</ID>
-      <Name>Hồ sơ đề xuất và điều lệ dự án</Name>
+      <Name>Project proposal and charter</Name>
       <Type>1</Type>
       <WBS>1.1</WBS>
       <OutlineNumber>1.1</OutlineNumber>
@@ -165,7 +165,7 @@
     <Task>
       <UID>3</UID>
       <ID>3</ID>
-      <Name>Kế hoạch tổng hợp</Name>
+      <Name>Integrated project plan</Name>
       <Type>1</Type>
       <WBS>1.2</WBS>
       <OutlineNumber>1.2</OutlineNumber>
@@ -186,7 +186,7 @@
     <Task>
       <UID>4</UID>
       <ID>4</ID>
-      <Name>Quy trình kiểm soát và tiêu chí nghiệm thu</Name>
+      <Name>Change control and acceptance criteria</Name>
       <Type>1</Type>
       <WBS>1.3</WBS>
       <OutlineNumber>1.3</OutlineNumber>
@@ -203,7 +203,7 @@
       <PercentComplete>0</PercentComplete>
       <ConstraintType>4</ConstraintType>
       <ConstraintDate>2026-10-05T08:00:00</ConstraintDate>
-      <Notes>M1: rà soát và phê duyệt kế hoạch trong giờ công của gói 1.3.</Notes>
+      <Notes>M1: review and approve the plan within package 1.3's work hours.</Notes>
       <PredecessorLink>
         <PredecessorUID>2</PredecessorUID>
         <Type>1</Type>
@@ -212,7 +212,7 @@
     <Task>
       <UID>5</UID>
       <ID>5</ID>
-      <Name>Nền tảng dữ liệu ECG</Name>
+      <Name>ECG data foundation</Name>
       <WBS>2.0</WBS>
       <OutlineNumber>2</OutlineNumber>
       <OutlineLevel>1</OutlineLevel>
@@ -229,7 +229,7 @@
     <Task>
       <UID>6</UID>
       <ID>6</ID>
-      <Name>Hồ sơ dữ liệu và khám phá ECG</Name>
+      <Name>ECG data inventory and exploration</Name>
       <Type>1</Type>
       <WBS>2.1</WBS>
       <OutlineNumber>2.1</OutlineNumber>
@@ -254,7 +254,7 @@
     <Task>
       <UID>7</UID>
       <ID>7</ID>
-      <Name>Bộ dữ liệu tiền xử lý và đặc tả cửa sổ</Name>
+      <Name>Preprocessed dataset and window specification</Name>
       <Type>1</Type>
       <WBS>2.2</WBS>
       <OutlineNumber>2.2</OutlineNumber>
@@ -271,7 +271,7 @@
       <PercentComplete>0</PercentComplete>
       <ConstraintType>4</ConstraintType>
       <ConstraintDate>2026-10-09T08:00:00</ConstraintDate>
-      <Notes>M2: xác nhận dữ liệu, nhãn và split sẵn sàng trong giờ công của gói 2.2.</Notes>
+      <Notes>M2: confirm data, labels, and split readiness within package 2.2's work hours.</Notes>
       <PredecessorLink>
         <PredecessorUID>6</PredecessorUID>
         <Type>1</Type>
@@ -280,7 +280,7 @@
     <Task>
       <UID>8</UID>
       <ID>8</ID>
-      <Name>Phân tích và mô hình</Name>
+      <Name>Analysis and models</Name>
       <WBS>3.0</WBS>
       <OutlineNumber>3</OutlineNumber>
       <OutlineLevel>1</OutlineLevel>
@@ -297,7 +297,7 @@
     <Task>
       <UID>9</UID>
       <ID>9</ID>
-      <Name>Kết quả dự báo ARIMA/SARIMA</Name>
+      <Name>ARIMA/SARIMA forecasting results</Name>
       <Type>1</Type>
       <WBS>3.1</WBS>
       <OutlineNumber>3.1</OutlineNumber>
@@ -322,7 +322,7 @@
     <Task>
       <UID>10</UID>
       <ID>10</ID>
-      <Name>Kết quả phân loại ML và CNN</Name>
+      <Name>ML and CNN classification results</Name>
       <Type>1</Type>
       <WBS>3.2</WBS>
       <OutlineNumber>3.2</OutlineNumber>
@@ -347,7 +347,7 @@
     <Task>
       <UID>11</UID>
       <ID>11</ID>
-      <Name>Kết quả ST-MEM</Name>
+      <Name>ST-MEM results</Name>
       <Type>1</Type>
       <WBS>3.3</WBS>
       <OutlineNumber>3.3</OutlineNumber>
@@ -372,7 +372,7 @@
     <Task>
       <UID>12</UID>
       <ID>12</ID>
-      <Name>Bảng đối chiếu mô hình và giới hạn</Name>
+      <Name>Model comparison and limitations</Name>
       <Type>1</Type>
       <WBS>3.4</WBS>
       <OutlineNumber>3.4</OutlineNumber>
@@ -389,7 +389,7 @@
       <PercentComplete>0</PercentComplete>
       <ConstraintType>4</ConstraintType>
       <ConstraintDate>2026-10-27T08:00:00</ConstraintDate>
-      <Notes>M3: đối chiếu và chốt kết quả mô hình trong giờ công của gói 3.4.</Notes>
+      <Notes>M3: reconcile and agree model results within package 3.4's work hours.</Notes>
       <PredecessorLink>
         <PredecessorUID>9</PredecessorUID>
         <Type>1</Type>
@@ -406,7 +406,7 @@
     <Task>
       <UID>13</UID>
       <ID>13</ID>
-      <Name>Demo trình diễn</Name>
+      <Name>Presentation demo</Name>
       <WBS>4.0</WBS>
       <OutlineNumber>4</OutlineNumber>
       <OutlineLevel>1</OutlineLevel>
@@ -423,7 +423,7 @@
     <Task>
       <UID>14</UID>
       <ID>14</ID>
-      <Name>Dữ liệu trình diễn và bản đồ nguồn</Name>
+      <Name>Demo dataset and source map</Name>
       <Type>1</Type>
       <WBS>4.1</WBS>
       <OutlineNumber>4.1</OutlineNumber>
@@ -448,7 +448,7 @@
     <Task>
       <UID>15</UID>
       <ID>15</ID>
-      <Name>Trang tổng quan phân tích</Name>
+      <Name>Analysis dashboard</Name>
       <Type>1</Type>
       <WBS>4.2</WBS>
       <OutlineNumber>4.2</OutlineNumber>
@@ -473,7 +473,7 @@
     <Task>
       <UID>16</UID>
       <ID>16</ID>
-      <Name>Trang phát lại ECG đã ghi</Name>
+      <Name>Recorded ECG replay page</Name>
       <Type>1</Type>
       <WBS>4.3</WBS>
       <OutlineNumber>4.3</OutlineNumber>
@@ -490,7 +490,7 @@
       <PercentComplete>0</PercentComplete>
       <ConstraintType>4</ConstraintType>
       <ConstraintDate>2026-10-27T08:00:00</ConstraintDate>
-      <Notes>M4: cùng gói 4.4 xác nhận demo sẵn sàng kiểm thử.</Notes>
+      <Notes>M4: together with 4.4, confirm that the demo is ready for testing.</Notes>
       <PredecessorLink>
         <PredecessorUID>14</PredecessorUID>
         <Type>1</Type>
@@ -503,7 +503,7 @@
     <Task>
       <UID>17</UID>
       <ID>17</ID>
-      <Name>Hướng dẫn sử dụng và tái tạo demo</Name>
+      <Name>Demo user and reproduction guide</Name>
       <Type>1</Type>
       <WBS>4.4</WBS>
       <OutlineNumber>4.4</OutlineNumber>
@@ -520,7 +520,7 @@
       <PercentComplete>0</PercentComplete>
       <ConstraintType>4</ConstraintType>
       <ConstraintDate>2026-10-28T08:00:00</ConstraintDate>
-      <Notes>M4: cùng gói 4.3 xác nhận demo sẵn sàng kiểm thử.</Notes>
+      <Notes>M4: together with 4.3, confirm that the demo is ready for testing.</Notes>
       <PredecessorLink>
         <PredecessorUID>15</PredecessorUID>
         <Type>1</Type>
@@ -529,7 +529,7 @@
     <Task>
       <UID>18</UID>
       <ID>18</ID>
-      <Name>Kiểm chứng, báo cáo và bàn giao</Name>
+      <Name>Verification, report, and handover</Name>
       <WBS>5.0</WBS>
       <OutlineNumber>5</OutlineNumber>
       <OutlineLevel>1</OutlineLevel>
@@ -546,7 +546,7 @@
     <Task>
       <UID>19</UID>
       <ID>19</ID>
-      <Name>Hồ sơ kiểm thử và đối chiếu kết quả</Name>
+      <Name>Test and results reconciliation record</Name>
       <Type>1</Type>
       <WBS>5.1</WBS>
       <OutlineNumber>5.1</OutlineNumber>
@@ -579,7 +579,7 @@
     <Task>
       <UID>20</UID>
       <ID>20</ID>
-      <Name>Báo cáo dự án hoàn chỉnh</Name>
+      <Name>Complete project report</Name>
       <Type>1</Type>
       <WBS>5.2</WBS>
       <OutlineNumber>5.2</OutlineNumber>
@@ -608,7 +608,7 @@
     <Task>
       <UID>21</UID>
       <ID>21</ID>
-      <Name>Gói bàn giao và quyết định nghiệm thu</Name>
+      <Name>Handover package and acceptance decision</Name>
       <Type>1</Type>
       <WBS>5.3</WBS>
       <OutlineNumber>5.3</OutlineNumber>
@@ -625,7 +625,7 @@
       <PercentComplete>0</PercentComplete>
       <ConstraintType>4</ConstraintType>
       <ConstraintDate>2026-11-05T08:00:00</ConstraintDate>
-      <Notes>M5: nghiệm thu nội bộ và bàn giao trong giờ công của gói 5.3.</Notes>
+      <Notes>M5: complete internal acceptance and handover within package 5.3's work hours.</Notes>
       <PredecessorLink>
         <PredecessorUID>19</PredecessorUID>
         <Type>1</Type>

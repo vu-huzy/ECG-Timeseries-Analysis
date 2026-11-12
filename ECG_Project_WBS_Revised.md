@@ -1,188 +1,144 @@
-# ECG project: revised deliverable-oriented WBS
+# WBS và kế hoạch nguồn lực dự án ECG
 
-**Version:** 11 November 2026 — proposed responsibility plan for team review.  
-**Scope:** MIT-BIH ECG research, source-traceable static web demo, recorded-data monitor replay, project reports, verification, and handoff.  
-**Excluded:** live ECG acquisition, clinical diagnosis/alarms, patient uploads, production API/hosting, and medical-device validation.
+**Bản kế hoạch điều chỉnh:** 12/11/2026. **Kỳ kế hoạch tham chiếu:** 27 ngày làm việc, 01/10–06/11/2026. Đây là lịch và giờ công **dự kiến để lập kế hoạch**, không phải nhật ký thực tế của các tệp đã được tạo trước đó.
 
-This WBS describes **what must be delivered**. The activity list, dates, dependencies, and hours remain in `ECG_Project_Revised.xml` / `ECG_Project_Revised_Tasks.csv`. A milestone is a review decision, not an extra product. Each leaf package has one proposed lead (R) and one reviewer; the lead coordinates contributors and supplies the evidence. The project manager (PM) owns scope/decision controls and final acceptance, while technical and report sections have specialist leads. These assignments are **proposals for revision and handoff**, not claims about who historically authored a file. Confirm them with the six members before treating them as approved or changing the baseline.
+## 1. Hướng thực hiện và ranh giới
 
-## Project organization
+Dự án hướng tới **nghiên cứu và trình diễn giáo dục trên dữ liệu MIT-BIH có sẵn**. Sản phẩm gồm quy trình phân tích ECG, kết quả dự báo/phân loại có thể truy nguồn, website tĩnh và màn hình phát lại bản ghi. Kết quả ST-MEM trong báo cáo nghiên cứu và kết quả chạy lại được ghi tách biệt. Dự án không xử lý ECG bệnh nhân trực tiếp, không phát cảnh báo y tế, không triển khai API sản xuất và không tự nhận là thiết bị y tế.
 
-The instructor or assessment panel has external course acceptance authority. The six-person team has one PM and five parallel workstream leads. Each specialist leads assigned deliverables and reports progress or issues to the PM.
+Cách tổ chức phù hợp là **lập mốc tổng thể và thực hiện tăng dần**: chốt dữ liệu/quy tắc nhãn trước thí nghiệm; các nhánh dự báo, ML/CNN và ST-MEM chạy song song; đối chiếu số liệu trước khi đưa lên demo; kiểm thử độc lập trước bàn giao. Việc lặp trong từng nhánh kỹ thuật không làm thay đổi phạm vi nếu không qua kiểm soát thay đổi.
+
+**Nguyên tắc phân rã:** mỗi gói dưới đây tạo một đầu ra kiểm tra được. Họp, duyệt nội bộ và cập nhật trạng thái là hoạt động nằm trong giờ công của gói liên quan; không lập thành task riêng. Một bảng kết quả chỉ được tính một lần ở gói mô hình; gói báo cáo dùng lại bằng chứng đó, không chạy lại cùng thí nghiệm để tính thêm giờ.
+
+## 2. Cơ cấu nhóm và vai trò
 
 ```mermaid
 flowchart TB
-    I["Course instructor / assessment panel<br/>External course acceptance"] --> PM["Nguyễn Tuấn Anh<br/>Project Manager: scope, decisions, integration, submission"]
-    PM --> VQH["Vũ Quốc Huy<br/>ST-MEM, demo, WBS/schedule"]
-    PM --> TTA["Trần Tuấn Anh<br/>ECG data, research report"]
-    PM --> NQH["Nguyễn Quang Huy<br/>Preprocessing, generated data, QA"]
-    PM --> HTNH["Hoàng Thị Ngọc Hân<br/>Forecasting, risk, metrics"]
-    PM --> MTM["Mai Tuấn Mạnh<br/>CNN, communication, editorial"]
+  PM["Nguyễn Tuấn Anh - Trưởng dự án"] --> DATA["Trần Tuấn Anh - Dữ liệu ECG"]
+  PM --> ML["Vũ Quốc Huy - Dự báo và ML"]
+  PM --> DL["Nguyễn Quang Huy - Học sâu / ST-MEM"]
+  PM --> WEB["Mai Tuấn Mạnh - Giao diện demo"]
+  PM --> QA["Hoàng Thị Ngọc Hân - Kiểm thử và tài liệu"]
 ```
 
-| Member | Project position | Primary responsibility |
-| --- | --- | --- |
-| Nguyễn Tuấn Anh | Project Manager | Business case, charter, change decisions, integration and internal acceptance |
-| Vũ Quốc Huy | Technical integration and schedule lead | ST-MEM, static demo, WBS/schedule/cost appendix and release export |
-| Trần Tuấn Anh | ECG data and research lead | MIT-BIH interpretation, EDA, research-report assembly and technical evidence |
-| Nguyễn Quang Huy | Data preparation and QA lead | Loader, preprocessing, windows, generated data and browser quality checks |
-| Hoàng Thị Ngọc Hân | Forecast and risk lead | ARIMA/SARIMA, feature models, metric-source review and risk register |
-| Mai Tuấn Mạnh | CNN, communication and editorial lead | CNN/model comparison, communication plan, report merge and replay QA |
+| Thành viên (vai trò) | Đầu việc chính | Quyền và điểm bàn giao |
+|---|---|---|
+| Nguyễn Tuấn Anh (PM) | Business case, charter, kế hoạch, kiểm soát thay đổi, báo cáo và nghiệm thu nội bộ | Duyệt thay đổi trong phạm vi được giao; tổng hợp quyết định, không làm thay phần kỹ thuật |
+| Trần Tuấn Anh (DATA) | Kiểm tra dữ liệu MIT-BIH, EDA, quy tắc tín hiệu/nhãn, đối chiếu dữ liệu | Bàn giao dữ liệu và đặc tả cho nhóm mô hình/demo |
+| Vũ Quốc Huy (ML) | HR series, ARIMA/SARIMA, mô hình đặc trưng và bảng so sánh | Chốt phép đo/nguồn chỉ số; bàn giao bảng kết quả |
+| Nguyễn Quang Huy (DL) | CNN và ST-MEM, cấu hình huấn luyện, trọng số và giới hạn | Bàn giao mô hình/kết quả, hỗ trợ tích hợp replay |
+| Mai Tuấn Mạnh (WEB) | Dữ liệu trình diễn, hai trang web, điều khiển replay | Bàn giao bản demo và mapping hiển thị |
+| Hoàng Thị Ngọc Hân (QA) | Tiêu chí kiểm thử, kiểm tra độc lập, tài liệu hướng dẫn | Ghi lỗi và kết quả kiểm thử; không tự phê duyệt thay PM |
 
-## Equal effort allocation for the project report
+Nhóm gồm sáu thành viên, mỗi người phụ trách một vai trò chính. Không tuyển ngoài trong kế hoạch cơ sở; khi thiếu năng lực hoặc vắng mặt, PM tổ chức hỗ trợ chéo và trình duyệt điều chỉnh lịch.
 
-The project dates remain **22 December 2025 to 6 November 2026** in the schedule. For the course report, the team's total of **222:24 (222.4 hours)** is allocated evenly: **37:04 per member**. This is an **estimated reporting allocation**, not a measured time sheet or a claim about historical authorship. It leaves task owners, dates, deliverables, evidence levels and completion statuses unchanged.
+## 3. WBS và lịch gói công việc
 
-| Member | Estimated contribution to report (h:mm) |
-| --- | ---: |
-| Nguyễn Tuấn Anh | 37:04 |
-| Vũ Quốc Huy | 37:04 |
-| Trần Tuấn Anh | 37:04 |
-| Nguyễn Quang Huy | 37:04 |
-| Hoàng Thị Ngọc Hân | 37:04 |
-| Mai Tuấn Mạnh | 37:04 |
-| **Whole team** | **222:24** |
+**Effort** là giờ làm của cả nhóm; **duration** là ngày làm việc từ Start đến Finish. Lịch tập trung trong **27 ngày làm việc (01/10–06/11/2026)**. Các công việc khác chuyên môn có thể làm song song; một gói 2 ngày có thể có ít giờ công vì người phụ trách chỉ dành một phần ngày cho dự án.
 
-The XML and CSV `Work` fields use this equal estimate. Previously recorded `ActualWork` fields and completion evidence are retained as source data; they are not evidence that each person actually logged 37:04. The illustrative labor cost remains VND 11,120,000 at VND 50,000/hour.
+| WBS | Gói bàn giao | Ngày LV | Ngày bắt đầu–kết thúc | Duration (ngày LV) | Effort (giờ) | A / trưởng gói | Phụ thuộc FS | Bằng chứng hoàn thành |
+|---|---|---:|---|---:|---:|---|---|---|
+| **1.0** | **Khởi tạo và lập kế hoạch** | **1–3** | **01/10–05/10** | **3** | **24** | — | — | Tổng hợp các gói con |
+| 1.1 | Hồ sơ đề xuất và điều lệ dự án | 1–2 | 01/10–02/10 | 2 | 6 | Nguyễn Tuấn Anh | — | Business case, mục tiêu đo được, charter và ranh giới phạm vi |
+| 1.2 | Kế hoạch tổng hợp | 1–2 | 01/10–02/10 | 2 | 8 | Nguyễn Tuấn Anh | — | WBS, lịch, dự toán, cơ cấu nhóm, RACI, truyền thông và rủi ro |
+| 1.3 | Quy trình kiểm soát và tiêu chí nghiệm thu | 3 | 05/10 | 1 | 10 | Nguyễn Tuấn Anh | 1.1 | Quy tắc thay đổi, tiêu chí chất lượng, cách ghi quyết định; M1: rà soát và phê duyệt kế hoạch trong giờ công của gói 1.3. |
+| **2.0** | **Nền tảng dữ liệu ECG** | **4–9** | **06/10–13/10** | **6** | **34** | — | — | Tổng hợp các gói con |
+| 2.1 | Hồ sơ dữ liệu và khám phá ECG | 4–6 | 06/10–08/10 | 3 | 14 | Trần Tuấn Anh | 1.3 | Danh mục MIT-BIH, lead, nhãn, biểu đồ ECG/HR/RR/HRV |
+| 2.2 | Bộ dữ liệu tiền xử lý và đặc tả cửa sổ | 7–9 | 09/10–13/10 | 3 | 20 | Trần Tuấn Anh | 2.1 | Pipeline lọc/chuẩn hóa, quy tắc nhãn và chia tập; M2: xác nhận dữ liệu, nhãn và split sẵn sàng trong giờ công của gói 2.2. |
+| **3.0** | **Phân tích và mô hình** | **10–20** | **14/10–28/10** | **11** | **68** | — | — | Tổng hợp các gói con |
+| 3.1 | Kết quả dự báo ARIMA/SARIMA | 10–13 | 14/10–19/10 | 4 | 16 | Vũ Quốc Huy | 2.2 | Cấu hình, dự báo HR, MAE/RMSE và giới hạn |
+| 3.2 | Kết quả phân loại ML và CNN | 10–13 | 14/10–19/10 | 4 | 24 | Vũ Quốc Huy | 2.2 | Đặc trưng, mô hình, nhãn, split và chỉ số theo từng thí nghiệm |
+| 3.3 | Kết quả ST-MEM | 14–18 | 20/10–26/10 | 5 | 20 | Nguyễn Quang Huy | 2.2 | Cấu hình fine-tune, trọng số, kết quả lưu và điều kiện tái chạy |
+| 3.4 | Bảng đối chiếu mô hình và giới hạn | 19–20 | 27/10–28/10 | 2 | 8 | Vũ Quốc Huy | 3.1; 3.2; 3.3 | Bảng nguồn số liệu; không so trực tiếp thí nghiệm khác nhãn/split; M3: đối chiếu và chốt kết quả mô hình trong giờ công của gói 3.4. |
+| **4.0** | **Demo trình diễn** | **14–22** | **20/10–30/10** | **9** | **56** | — | — | Tổng hợp các gói con |
+| 4.1 | Dữ liệu trình diễn và bản đồ nguồn | 14–15 | 20/10–21/10 | 2 | 14 | Mai Tuấn Mạnh | 3.2 | Dữ liệu tĩnh, tài nguyên cục bộ và mapping metric đến nguồn |
+| 4.2 | Trang tổng quan phân tích | 16–19 | 22/10–27/10 | 4 | 18 | Mai Tuấn Mạnh | 4.1 | Trang web với các mục ECG, dự báo và phân loại |
+| 4.3 | Trang phát lại ECG đã ghi | 19–22 | 27/10–30/10 | 4 | 18 | Mai Tuấn Mạnh | 4.1; 3.3 | Replay 9 giây, HR/RR quá khứ, cờ quy tắc và ST-MEM sau cửa sổ; M4: cùng gói 4.4 xác nhận demo sẵn sàng kiểm thử. |
+| 4.4 | Hướng dẫn sử dụng và tái tạo demo | 20–21 | 28/10–29/10 | 2 | 6 | Hoàng Thị Ngọc Hân | 4.2 | README, điều kiện offline, dữ liệu và giới hạn sử dụng; M4: cùng gói 4.3 xác nhận demo sẵn sàng kiểm thử. |
+| **5.0** | **Kiểm chứng, báo cáo và bàn giao** | **21–27** | **29/10–06/11** | **7** | **58** | — | — | Tổng hợp các gói con |
+| 5.1 | Hồ sơ kiểm thử và đối chiếu kết quả | 23–25 | 02/11–04/11 | 3 | 20 | Hoàng Thị Ngọc Hân | 4.3; 4.4; 3.4 | Biên bản thử offline/replay, đối chiếu metric, lỗi và kết quả sửa |
+| 5.2 | Báo cáo dự án hoàn chỉnh | 21–24 | 29/10–03/11 | 4 | 30 | Nguyễn Tuấn Anh | 3.4; 4.2 | Khởi tạo, kế hoạch, thiết kế, kết quả, đánh giá và phụ lục |
+| 5.3 | Gói bàn giao và quyết định nghiệm thu | 26–27 | 05/11–06/11 | 2 | 8 | Nguyễn Tuấn Anh | 5.1; 5.2 | Bản phát hành, danh mục tệp, kết quả kiểm tra và biên bản bàn giao; M5: nghiệm thu nội bộ và bàn giao trong giờ công của gói 5.3. |
 
-## Deliverable-oriented WBS
+**Tổng thời gian: 27 ngày làm việc; tổng effort: 240 giờ.** Duration của 5 nhóm WBS không cộng lại vì các nhóm dữ liệu/kế hoạch, mô hình/demo và demo/báo cáo chồng thời gian. M1–M5 vẫn là điểm kiểm tra trong gói có giờ công, không có task 0 giờ.
 
-| WBS | Deliverable / bounded work package | Proposed lead (R) | Reviewer / acceptance evidence |
-| --- | --- | --- | --- |
-| **1.0** | **Governance and initiation** | — | Charter, plans, logs and decision records |
-| 1.1 | Business case, intended users, value measures and options | Nguyễn Tuấn Anh (PM) | Trần Tuấn Anh; reviewed business case |
-| 1.2 | Project charter and scope boundary | Nguyễn Tuấn Anh (PM) | Vũ Quốc Huy; charter with deliverables, exclusions and success criteria |
-| 1.3 | Deliverable WBS, activity/schedule mapping and cost assumptions | Vũ Quốc Huy | Nguyễn Tuấn Anh; WBS register, XML/CSV cross-check and cost basis |
-| 1.4 | Staffing, RACI and communication plan | Mai Tuấn Mạnh | Nguyễn Tuấn Anh; named roles, information recipients and cadence |
-| 1.5 | Risk register, owners, triggers and response plan | Hoàng Thị Ngọc Hân | Nguyễn Tuấn Anh; prioritized register with responses and residual risks |
-| 1.6 | Quality and acceptance plan | Nguyễn Quang Huy | Mai Tuấn Mạnh; test criteria, owner and independent reviewer for each check |
-| 1.7 | Change, issue and gate-decision record | Nguyễn Tuấn Anh (PM) | Vũ Quốc Huy; dated decisions, impact and unresolved items |
-| **2.0** | **ECG data foundation** | — | Traceable MIT-BIH data and preparation notebooks |
-| 2.1 | MIT-BIH record, lead and beat-label inventory | Trần Tuấn Anh | Nguyễn Quang Huy; source/label inventory and `01_explore_data.ipynb` |
-| 2.2 | Data loader and signal-quality checks | Nguyễn Quang Huy | Trần Tuấn Anh; loading/check outputs and documented rejected cases |
-| 2.3 | ECG exploration, R-peaks, HR/RR and HRV results | Trần Tuấn Anh | Hoàng Thị Ngọc Hân; `02_EDA.ipynb` and labeled figures |
-| 2.4 | Filtering, baseline removal and normalization pipeline | Nguyễn Quang Huy | Trần Tuấn Anh; `03_preprocessing_data.ipynb` and before/after checks |
-| 2.5 | Classification windows, Normal/Abnormal labels and split specification | Nguyễn Quang Huy | Mai Tuấn Mạnh; reproducible window/label rules and split counts |
-| **3.0** | **Time-series forecast results** | — | Reproducible, sourced ARIMA/SARIMA outputs |
-| 3.1 | HR series and stationarity analysis | Hoàng Thị Ngọc Hân | Trần Tuấn Anh; series definition, split and diagnostic plots |
-| 3.2 | ARIMA/SARIMA configurations and forecasts | Hoàng Thị Ngọc Hân | Trần Tuấn Anh; notebook, orders, horizon and forecast plots |
-| 3.3 | Forecast error table and interpretation | Hoàng Thị Ngọc Hân | Nguyễn Quang Huy; MAE/RMSE linked to the exact run |
-| **4.0** | **Classification results** | — | Model artifacts and comparable evaluation records |
-| 4.1 | Feature-based RF/ET/XGBoost experiment | Hoàng Thị Ngọc Hân | Mai Tuấn Mạnh; features, label rule, split and metrics |
-| 4.2 | 1D CNN experiment | Mai Tuấn Mạnh | Hoàng Thị Ngọc Hân; architecture, window lengths, split and metrics |
-| 4.3 | ST-MEM pipeline, saved weights and rerun results | Vũ Quốc Huy | Mai Tuấn Mạnh; code, configuration, saved model and result JSON |
-| 4.4 | Model comparison protocol and limitations | Mai Tuấn Mạnh | Trần Tuấn Anh; source map that keeps different label/split rules distinct |
-| **5.0** | **Static demo and recorded monitor** | — | Browser-viewable, source-traceable demo assets |
-| 5.1 | Generated demo data and local third-party assets | Nguyễn Quang Huy | Vũ Quốc Huy; `demo/data/`, local Plotly and rebuild notes |
-| 5.2 | Overview page and analysis charts | Vũ Quốc Huy | Nguyễn Quang Huy; seven sections, chart labels and controls |
-| 5.3 | Nine-second ECG replay and rule-based flags | Vũ Quốc Huy | Mai Tuấn Mạnh; past-only HR/RR, completed-window model reveal and replay stop |
-| 5.4 | Model result integration and metric source labels | Vũ Quốc Huy | Hoàng Thị Ngọc Hân; displayed values match named notebooks/JSON/PDF |
-| 5.5 | Viewing and rebuild instructions | Mai Tuấn Mạnh | Nguyễn Quang Huy; README, dependencies, offline path and limits |
-| **6.0** | **Research and management reports** | — | Reviewed report sections and consolidated handoff text |
-| 6.1 | Research report: data and ECG methods | Trần Tuấn Anh | Nguyễn Quang Huy; methods, figures and source references |
-| 6.2 | Research report: forecast and feature-model results | Hoàng Thị Ngọc Hân | Mai Tuấn Mạnh; experiment settings and result tables |
-| 6.3 | Research report: CNN, ST-MEM and model limitations | Mai Tuấn Mạnh | Vũ Quốc Huy; model settings, distinct metrics and limitations |
-| 6.4 | Research report assembly and findings review | Trần Tuấn Anh | Nguyễn Tuấn Anh; assembled PDF and recorded review comments |
-| 6.5 | Management report: business case, charter and scope decisions | Nguyễn Tuấn Anh (PM) | Trần Tuấn Anh; approved/proposed status clearly labeled |
-| 6.6 | Management report: product design, technical results and evidence | Trần Tuấn Anh | Vũ Quốc Huy; artifact-to-claim checks |
-| 6.7 | Management report: WBS, schedule, cost and export appendix | Vũ Quốc Huy | Hoàng Thị Ngọc Hân; XML/CSV totals and source references |
-| 6.8 | Management report: staffing, RACI and communication | Mai Tuấn Mạnh | Nguyễn Tuấn Anh; roles and channels consistent with this WBS |
-| 6.9 | Management report: risk and quality sections | Hoàng Thị Ngọc Hân | Nguyễn Quang Huy; risk/quality plan consistency |
-| 6.10 | Management report editorial merge and format check | Mai Tuấn Mạnh | Nguyễn Tuấn Anh; one reviewed version with open comments resolved |
-| **7.0** | **Independent verification and handoff** | — | Test records, limitations and acceptance decision |
-| 7.1 | Offline browser and chart/control test record | Nguyễn Quang Huy | Mai Tuấn Mạnh; steps, expected/actual results and defect log |
-| 7.2 | Replay timing, flags and model-window test record | Mai Tuấn Mạnh | Nguyễn Quang Huy; sampled traces and pass/fail results |
-| 7.3 | Independent result-to-source cross-check | Hoàng Thị Ngọc Hân | Trần Tuấn Anh; sampled values, configurations and evidence links |
-| 7.4 | ST-MEM discrepancy and product-limit note | Vũ Quốc Huy | Trần Tuấn Anh; PDF/rerun values separately labeled and cause unresolved if unknown |
-| 7.5 | Release bundle and MS Project export | Vũ Quốc Huy | Mai Tuấn Mạnh; opening instructions, native export check and file inventory |
-| 7.6 | Internal acceptance and course submission record | Nguyễn Tuấn Anh (PM) | Course instructor/assessment panel; signed decision or explicit pending status |
+| Điểm kiểm tra | Ngày LV | Ngày dự kiến | Gói thực hiện | Điều kiện quyết định |
+|---|---:|---|---|---|
+| M1 | 3 | 05/10 | 1.3 | Phạm vi, WBS, nguồn lực và tiêu chí nghiệm thu được thống nhất |
+| M2 | 9 | 13/10 | 2.2 | Dữ liệu, nhãn và chia tập đủ điều kiện chạy thí nghiệm |
+| M3 | 20 | 28/10 | 3.4 | Kết quả ba nhánh có cấu hình, nguồn và giới hạn rõ ràng |
+| M4 | 22 | 30/10 | 4.3–4.4 | Hai trang demo và hướng dẫn sẵn sàng cho QA |
+| M5 | 27 | 06/11 | 5.3 | Hồ sơ kiểm thử, báo cáo và gói bàn giao được chấp nhận nội bộ |
 
-## Responsibility assignment matrix (RAM)
+## 4. Bảng phân nhiệm và phân bổ giờ
 
-This matrix groups the 40 leaf packages into 16 reviewable workstreams. **R** performs the work; **A** is the single team member accountable for the grouped output. The leaf-package lead above remains responsible for their own package. The evidence column identifies what must be checked before the workstream is handed over.
+Mỗi hàng có **một A** chịu trách nhiệm cuối cho đầu ra, các vai trò có giờ công là **R** tham gia thực hiện; C được hỏi trước quyết định, I được thông báo. Số giờ là dự kiến theo vai trò, không phải chấm công thực tế.
 
-| WBS | Deliverable | Responsible (R) | Accountable (A) | Evidence / handoff |
-| --- | --- | --- | --- | --- |
-| 1.1–1.2; 1.7 | Business case, charter and change decisions | Nguyễn Tuấn Anh | Nguyễn Tuấn Anh | Reviewed value case, charter, scope boundary and decision log |
-| 1.3; 6.7 | WBS, schedule, cost and export | Vũ Quốc Huy; Hoàng Thị Ngọc Hân | Vũ Quốc Huy | WBS-to-activity map and XML/CSV/cost check |
-| 1.4; 6.8 | Staffing, RACI and communications | Mai Tuấn Mạnh | Mai Tuấn Mạnh | Named roles, assignment and communication matrices |
-| 1.5; 6.9 | Risk register and responses | Hoàng Thị Ngọc Hân | Hoàng Thị Ngọc Hân | Scored risks, triggers, response owners |
-| 1.6; 7.1 | Quality plan and browser QA | Nguyễn Quang Huy | Nguyễn Quang Huy | Criteria, executed checks and defect log |
-| 2.1; 2.3 | MIT-BIH inventory and ECG exploration | Trần Tuấn Anh | Trần Tuấn Anh | Source/label inventory and EDA notebook |
-| 2.2; 2.4–2.5 | Loading, preprocessing and windows | Nguyễn Quang Huy | Nguyễn Quang Huy | Signal checks, pipeline, label/split rules |
-| 3.0 | ARIMA/SARIMA forecasts | Hoàng Thị Ngọc Hân | Hoàng Thị Ngọc Hân | Orders, horizon, plots and MAE/RMSE |
-| 4.1 | Feature-based model results | Hoàng Thị Ngọc Hân | Hoàng Thị Ngọc Hân | Features, split, metrics and source map |
-| 4.2; 4.4 | CNN and model comparison | Mai Tuấn Mạnh | Mai Tuấn Mạnh | CNN outputs and label-rule limitations |
-| 4.3 | ST-MEM pipeline and saved results | Vũ Quốc Huy | Vũ Quốc Huy | Configuration, weights and result JSON |
-| 5.0 | Static overview and monitor demo | Vũ Quốc Huy; Nguyễn Quang Huy; Mai Tuấn Mạnh | Vũ Quốc Huy | Offline pages, replay, source-labelled charts |
-| 6.1–6.4 | Research report and findings | Trần Tuấn Anh; Hoàng Thị Ngọc Hân; Mai Tuấn Mạnh; Vũ Quốc Huy | Trần Tuấn Anh | Reviewed methods, tables and limitations |
-| 6.5–6.6; 6.10 | Management report core sections and editorial merge | Nguyễn Tuấn Anh; Trần Tuấn Anh; Mai Tuấn Mạnh | Nguyễn Tuấn Anh | Charter/technical sections and edited consolidated draft |
-| 7.2–7.4 | Independent technical verification | Nguyễn Quang Huy; Mai Tuấn Mạnh; Hoàng Thị Ngọc Hân; Vũ Quốc Huy | Nguyễn Quang Huy | Test log, metric cross-check, discrepancy note |
-| 7.5–7.6 | Release package and internal acceptance | Nguyễn Tuấn Anh; Vũ Quốc Huy; Mai Tuấn Mạnh | Nguyễn Tuấn Anh | Bundle/export, internal decision and submission record |
+| WBS | Đầu ra | Nguyễn Tuấn Anh | Trần Tuấn Anh | Vũ Quốc Huy | Nguyễn Quang Huy | Mai Tuấn Mạnh | Hoàng Thị Ngọc Hân | Tổng |
+|---|---|---:|---:|---:|---:|---:|---:|
+| 1.1 | Hồ sơ đề xuất và điều lệ dự án | 6 | — | — | — | — | — | **6** |
+| 1.2 | Kế hoạch tổng hợp | 4 | — | — | — | — | 4 | **8** |
+| 1.3 | Quy trình kiểm soát và tiêu chí nghiệm thu | 8 | — | — | — | — | 2 | **10** |
+| 2.1 | Hồ sơ dữ liệu và khám phá ECG | — | 12 | — | — | — | 2 | **14** |
+| 2.2 | Bộ dữ liệu tiền xử lý và đặc tả cửa sổ | — | 8 | — | — | — | 12 | **20** |
+| 3.1 | Kết quả dự báo ARIMA/SARIMA | — | 2 | 14 | — | — | — | **16** |
+| 3.2 | Kết quả phân loại ML và CNN | — | — | 12 | 12 | — | — | **24** |
+| 3.3 | Kết quả ST-MEM | — | — | — | 20 | — | — | **20** |
+| 3.4 | Bảng đối chiếu mô hình và giới hạn | — | 2 | 4 | 2 | — | — | **8** |
+| 4.1 | Dữ liệu trình diễn và bản đồ nguồn | — | 2 | — | — | 8 | 4 | **14** |
+| 4.2 | Trang tổng quan phân tích | — | — | — | — | 18 | — | **18** |
+| 4.3 | Trang phát lại ECG đã ghi | — | — | — | 4 | 14 | — | **18** |
+| 4.4 | Hướng dẫn sử dụng và tái tạo demo | — | — | — | — | — | 6 | **6** |
+| 5.1 | Hồ sơ kiểm thử và đối chiếu kết quả | 4 | 6 | 2 | 2 | — | 6 | **20** |
+| 5.2 | Báo cáo dự án hoàn chỉnh | 10 | 8 | 8 | — | — | 4 | **30** |
+| 5.3 | Gói bàn giao và quyết định nghiệm thu | 8 | — | — | — | — | — | **8** |
+| **Tổng** |  | **40** | **40** | **40** | **40** | **40** | **40** | **240** |
 
-## RACI matrix
+Tổng 40 giờ/người trong 27 ngày làm việc, bình quân khoảng **1,48 giờ/ngày/người**. Khi chia effort đều trong duration của từng gói, tải lớn nhất là **8 giờ/ngày** ở Nguyễn Tuấn Anh (ngày 3) và Mai Tuấn Mạnh (ngày 19), bằng công suất 8 giờ/ngày, không vượt tải. Đây là kiểm tra công suất kế hoạch, không phải giờ thực tế.
 
-This expanded matrix follows the **large lifecycle RACI layout in the Chapter 4 lecture (slide 32)**: rows are grouped by Initiation, Planning, Execution, Monitoring and Control, and Closing. It maps project activities and deliverables to the six team members plus the external course approver. It complements the deliverable-oriented WBS and the 16-row RAM above; a WBS package may appear in more than one phase when its planning and control activities differ.
+**Biểu đồ thành viên có việc theo tuần lịch** (số thành viên có gói đang mở):
 
-**R** = performs; **A** = one accountable role; **C** = consulted; **I** = informed; **A/R** = performs and owns. **EXT** = course instructor/assessment panel (individual approver to be confirmed); **NTA** = Nguyễn Tuấn Anh; **VQH** = Vũ Quốc Huy; **TTA** = Trần Tuấn Anh; **NQH** = Nguyễn Quang Huy; **HTNH** = Hoàng Thị Ngọc Hân; **MTM** = Mai Tuấn Mạnh. The EXT assignment for course acceptance is proposed until the actual approver is confirmed.
+| Kỳ | Ngày LV | Thành viên có công việc | Số thành viên | Biểu đồ |
+|---|---:|---|---:|---|
+| 01–02/10 | 1–2 | Nguyễn Tuấn Anh, Hoàng Thị Ngọc Hân | 2 | ██ |
+| 05–09/10 | 3–7 | Nguyễn Tuấn Anh, Trần Tuấn Anh, Hoàng Thị Ngọc Hân | 3 | ███ |
+| 12–16/10 | 8–12 | Trần Tuấn Anh, Vũ Quốc Huy, Nguyễn Quang Huy, Hoàng Thị Ngọc Hân | 4 | ████ |
+| 19–23/10 | 13–17 | Trần Tuấn Anh, Vũ Quốc Huy, Nguyễn Quang Huy, Mai Tuấn Mạnh, Hoàng Thị Ngọc Hân | 5 | █████ |
+| 26–30/10 | 18–22 | Nguyễn Tuấn Anh, Trần Tuấn Anh, Vũ Quốc Huy, Nguyễn Quang Huy, Mai Tuấn Mạnh, Hoàng Thị Ngọc Hân | 6 | ██████ |
+| 02–06/11 | 23–27 | Nguyễn Tuấn Anh, Trần Tuấn Anh, Vũ Quốc Huy, Nguyễn Quang Huy, Hoàng Thị Ngọc Hân | 5 | █████ |
 
-| Deliverable / activity (WBS) | EXT | NTA | VQH | TTA | NQH | HTNH | MTM |
-| --- | --- | --- | --- | --- | --- | --- | --- |
-| **Initiation / Khởi tạo** |  |  |  |  |  |  |  |
-| 1.1 Define value case and MOV | I | A/R | C | C | I | I | I |
-| 1.2 Draft charter and scope boundary | C | A/R | C | C | I | I | I |
-| 1.7 Record initial stakeholders and decisions | I | A/R | I | I | I | I | C |
-| **Planning / Lập kế hoạch** |  |  |  |  |  |  |  |
-| 1.3 Build deliverable WBS and activity map | I | C | A/R | I | I | C | I |
-| 1.3 Set schedule and handover gates | I | C | A/R | I | I | C | I |
-| 1.3 Estimate cost and planning reserve | I | C | A/R | I | I | R | I |
-| 1.4 Define staffing and responsibility matrix | I | C | I | I | C | I | A/R |
-| 1.4 Define communication matrix | C | C | I | I | I | I | A/R |
-| 1.6 Set quality and acceptance criteria | C | C | I | I | A/R | I | C |
-| 1.5 Plan risk responses and reserves | I | C | I | I | C | A/R | I |
-| **Execution / Thực hiện** |  |  |  |  |  |  |  |
-| 2.1 Inventory MIT-BIH records and labels | I | I | I | A/R | C | I | I |
-| 2.2, 2.4 Build loading and preprocessing pipeline | I | I | I | C | A/R | I | I |
-| 2.3 Analyze ECG, R-peaks, HR and HRV | I | I | I | A/R | I | C | I |
-| 2.5 Prepare windows, labels and data split | I | I | I | C | A/R | I | C |
-| 3.1–3.3 Run ARIMA/SARIMA forecasts | I | I | I | C | I | A/R | I |
-| 4.1 Evaluate feature-based models | I | I | I | I | I | A/R | C |
-| 4.2, 4.4 Evaluate CNN and comparison rules | I | I | I | C | I | C | A/R |
-| 4.3 Run ST-MEM and save results | I | I | A/R | I | I | I | C |
-| 5.1 Generate demo data and local assets | I | I | C | I | A/R | I | I |
-| 5.2–5.4 Build overview and recorded monitor | I | I | A/R | I | R | C | R |
-| 5.5 Document viewing and rebuild steps | I | I | C | I | C | I | A/R |
-| 6.1–6.4 Assemble research report and findings | I | C | R | A/R | C | R | R |
-| **Monitoring and control / Theo dõi và kiểm soát** |  |  |  |  |  |  |  |
-| 1.7 Track status, issues and scope changes | I | A/R | C | I | I | I | C |
-| 1.5 Review risks and response triggers | I | C | I | I | C | A/R | I |
-| 7.1 Test offline browser and chart controls | I | I | C | I | A/R | I | C |
-| 7.2 Test replay timing and model-window flags | I | I | C | I | C | I | A/R |
-| 7.3 Cross-check metrics against source files | I | I | C | C | I | A/R | I |
-| 7.4 Document ST-MEM result discrepancy | I | I | A/R | C | I | I | C |
-| **Closing / Kết thúc** |  |  |  |  |  |  |  |
-| 6.5–6.9 Complete management report sections | C | A/R | R | R | R | R | R |
-| 6.10 Edit report and record lessons learned | I | C | I | C | I | I | A/R |
-| 7.5 Package release and export MS Project plan | I | C | A/R | I | I | I | R |
-| 7.6 Record internal acceptance and submit | C | A/R | C | I | C | I | I |
-| 7.6 Confirm course acceptance | A | R | C | C | C | C | C |
+## 5. Ma trận RACI tổng quát
 
-## Boundary and ownership rules
+| Nhóm / gói công việc | Nguyễn Tuấn Anh | Trần Tuấn Anh | Vũ Quốc Huy | Nguyễn Quang Huy | Mai Tuấn Mạnh | Hoàng Thị Ngọc Hân |
+|---|---|---|---|---|---|---|
+| **1.0 Khởi tạo và lập kế hoạch** |  |  |  |  |  |  |
+| 1.1 Hồ sơ đề xuất và điều lệ dự án | A/R | C | I | I | I | C |
+| 1.2 Kế hoạch tổng hợp | A/R | C | C | C | C | R |
+| 1.3 Quy trình kiểm soát và tiêu chí nghiệm thu | A/R | C | C | C | C | R |
+| **2.0 Nền tảng dữ liệu ECG** |  |  |  |  |  |  |
+| 2.1 Hồ sơ dữ liệu và khám phá ECG | I | A/R | C | I | I | R |
+| 2.2 Bộ dữ liệu tiền xử lý và đặc tả cửa sổ | I | A/R | C | C | I | R |
+| **3.0 Phân tích và mô hình** |  |  |  |  |  |  |
+| 3.1 Kết quả dự báo ARIMA/SARIMA | I | R | A/R | C | I | C |
+| 3.2 Kết quả phân loại ML và CNN | I | C | A/R | R | I | C |
+| 3.3 Kết quả ST-MEM | I | C | C | A/R | C | I |
+| 3.4 Bảng đối chiếu mô hình và giới hạn | I | R | A/R | R | C | C |
+| **4.0 Demo trình diễn** |  |  |  |  |  |  |
+| 4.1 Dữ liệu trình diễn và bản đồ nguồn | I | R | C | C | A/R | R |
+| 4.2 Trang tổng quan phân tích | I | C | C | C | A/R | C |
+| 4.3 Trang phát lại ECG đã ghi | I | C | C | R | A/R | C |
+| 4.4 Hướng dẫn sử dụng và tái tạo demo | I | C | I | C | C | A/R |
+| **5.0 Kiểm chứng, báo cáo và bàn giao** |  |  |  |  |  |  |
+| 5.1 Hồ sơ kiểm thử và đối chiếu kết quả | R | R | R | R | C | A/R |
+| 5.2 Báo cáo dự án hoàn chỉnh | A/R | R | R | C | C | R |
+| 5.3 Gói bàn giao và quyết định nghiệm thu | A/R | I | I | I | C | C |
 
-- A work package ends in a reviewable artifact or record. Activities such as “hold a meeting” belong in the schedule under the relevant package; they are not separate WBS deliverables.
-- The data/model packages (2.0–4.0) produce technical evidence. The report packages (6.0) communicate that evidence; they do not repeat the experiments.
-- Verification (7.0) is independent of implementation. The reviewer records a check rather than approving their own unexecuted test.
-- M0–M7 are schedule gates. Their decision records belong to 1.7 or 7.6; a dated gate is not evidence that approval happened.
-- Current XML/CSV task names and hours are the existing schedule, not a 1:1 WBS dictionary. Reallocate only unconfirmed work; retain actual author evidence and the report's “proposed” labels. Confirm dates, rates and a new baseline with the team before presenting the revised assignments as approved.
+**R:** thực hiện; **A:** chịu trách nhiệm cuối; **C:** được tham vấn; **I:** được thông báo. **A/R:** vừa phụ trách vừa làm. Ma trận chỉ có sáu thành viên nội bộ; người chấm/giảng viên nhận sản phẩm theo quy trình học phần, không được gán một cột RACI của nhóm.
 
-## Crosswalk from the former seven-package summary
+## 6. Điều kiện kiểm soát logic
 
-| Former package | Revised location |
-| --- | --- |
-| WP1 Initiation | 1.0 Governance and initiation |
-| WP2 Data and methods | 2.0 ECG data foundation |
-| WP3 Forecasting | 3.0 Time-series forecast results |
-| WP4 Classification | 4.0 Classification results |
-| WP5 Research report | 6.1–6.4 Research report packages |
-| WP6 Web demo | 5.0 Static demo and recorded monitor |
-| WP7 Handoff | 6.5–6.10 Management report and 7.0 Verification and handoff |
+1. Nhãn/cửa sổ và split của 2.2 phải cố định trước khi so mô hình. Kết quả CNN, mô hình đặc trưng và ST-MEM có điều kiện thí nghiệm khác nhau thì công bố riêng.
+2. 4.1 dùng dữ liệu/kết quả đã có; 4.3 chỉ hiển thị ST-MEM khi cửa sổ 9 giây kết thúc. Demo là phát lại dữ liệu ghi sẵn, không phải hệ thống giám sát y tế trực tiếp.
+3. 5.1 do QA dẫn dắt, có chủ mô hình đối chiếu số liệu nhưng QA tự ghi kết quả kiểm tra; 5.3 do PM đưa quyết định nghiệm thu nội bộ sau khi xem biên bản.
+4. Mọi thay đổi ảnh hưởng phạm vi, lịch 27 ngày làm việc hoặc ngân sách phải ghi nguyên nhân, tác động và quyết định trước khi sửa baseline. Không ghi giờ kế hoạch thành giờ thực tế.
+5. Chi phí tham chiếu: 240 giờ × 50.000 đồng/giờ = **12.000.000 đồng**; dự phòng kế hoạch 10% = **1.200.000 đồng**; tổng mức tham chiếu **13.200.000 đồng**. Đây là giá trị quy đổi lao động để học phần, chưa phải tiền đã chi.

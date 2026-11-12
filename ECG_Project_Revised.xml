@@ -2741,10 +2741,10 @@
       <HasFixedRateUnits>1</HasFixedRateUnits>
       <FixedMaterial>0</FixedMaterial>
       <LevelingDelayFormat>7</LevelingDelayFormat>
-      <RemainingWork>PT1H36M0S</RemainingWork>
+      <RemainingWork>PT1H23M0S</RemainingWork>
       <Start>2026-10-30T08:00:00</Start>
-      <Units>0.2</Units>
-      <Work>PT1H36M0S</Work>
+      <Units>0.1729166667</Units>
+      <Work>PT1H23M0S</Work>
     </Assignment>
     <Assignment>
       <UID>34</UID>
@@ -2756,10 +2756,10 @@
       <HasFixedRateUnits>1</HasFixedRateUnits>
       <FixedMaterial>0</FixedMaterial>
       <LevelingDelayFormat>7</LevelingDelayFormat>
-      <RemainingWork>PT1H36M0S</RemainingWork>
+      <RemainingWork>PT0H42M0S</RemainingWork>
       <Start>2026-10-30T08:00:00</Start>
-      <Units>0.2</Units>
-      <Work>PT1H36M0S</Work>
+      <Units>0.0875</Units>
+      <Work>PT0H42M0S</Work>
     </Assignment>
     <Assignment>
       <UID>35</UID>
@@ -2771,10 +2771,10 @@
       <HasFixedRateUnits>1</HasFixedRateUnits>
       <FixedMaterial>0</FixedMaterial>
       <LevelingDelayFormat>7</LevelingDelayFormat>
-      <RemainingWork>PT1H36M0S</RemainingWork>
+      <RemainingWork>PT2H59M0S</RemainingWork>
       <Start>2026-10-30T08:00:00</Start>
-      <Units>0.2</Units>
-      <Work>PT1H36M0S</Work>
+      <Units>0.3729166667</Units>
+      <Work>PT2H59M0S</Work>
     </Assignment>
     <Assignment>
       <UID>36</UID>
@@ -2786,10 +2786,10 @@
       <HasFixedRateUnits>1</HasFixedRateUnits>
       <FixedMaterial>0</FixedMaterial>
       <LevelingDelayFormat>7</LevelingDelayFormat>
-      <RemainingWork>PT1H36M0S</RemainingWork>
+      <RemainingWork>PT2H43M0S</RemainingWork>
       <Start>2026-10-30T08:00:00</Start>
-      <Units>0.2</Units>
-      <Work>PT1H36M0S</Work>
+      <Units>0.3395833333</Units>
+      <Work>PT2H43M0S</Work>
     </Assignment>
     <Assignment>
       <UID>37</UID>
@@ -2801,10 +2801,10 @@
       <HasFixedRateUnits>1</HasFixedRateUnits>
       <FixedMaterial>0</FixedMaterial>
       <LevelingDelayFormat>7</LevelingDelayFormat>
-      <RemainingWork>PT1H36M0S</RemainingWork>
+      <RemainingWork>PT1H12M0S</RemainingWork>
       <Start>2026-10-30T08:00:00</Start>
-      <Units>0.2</Units>
-      <Work>PT1H36M0S</Work>
+      <Units>0.15</Units>
+      <Work>PT1H12M0S</Work>
     </Assignment>
     <Assignment>
       <UID>38</UID>
@@ -2816,10 +2816,10 @@
       <HasFixedRateUnits>1</HasFixedRateUnits>
       <FixedMaterial>0</FixedMaterial>
       <LevelingDelayFormat>7</LevelingDelayFormat>
-      <RemainingWork>PT1H36M0S</RemainingWork>
+      <RemainingWork>PT1H26M0S</RemainingWork>
       <Start>2026-10-30T08:00:00</Start>
-      <Units>0.2</Units>
-      <Work>PT1H36M0S</Work>
+      <Units>0.1791666667</Units>
+      <Work>PT1H26M0S</Work>
     </Assignment>
     <Assignment>
       <UID>39</UID>
@@ -2831,10 +2831,10 @@
       <HasFixedRateUnits>1</HasFixedRateUnits>
       <FixedMaterial>0</FixedMaterial>
       <LevelingDelayFormat>7</LevelingDelayFormat>
-      <RemainingWork>PT1H36M0S</RemainingWork>
+      <RemainingWork>PT1H12M0S</RemainingWork>
       <Start>2026-10-30T08:00:00</Start>
-      <Units>0.2</Units>
-      <Work>PT1H36M0S</Work>
+      <Units>0.15</Units>
+      <Work>PT1H12M0S</Work>
     </Assignment>
     <Assignment>
       <UID>40</UID>
@@ -2846,25 +2846,25 @@
       <HasFixedRateUnits>1</HasFixedRateUnits>
       <FixedMaterial>0</FixedMaterial>
       <LevelingDelayFormat>7</LevelingDelayFormat>
-      <RemainingWork>PT1H36M0S</RemainingWork>
+      <RemainingWork>PT2H59M0S</RemainingWork>
       <Start>2026-10-30T08:00:00</Start>
-      <Units>0.2</Units>
-      <Work>PT1H36M0S</Work>
+      <Units>0.3729166667</Units>
+      <Work>PT2H59M0S</Work>
     </Assignment>
     <Assignment>
       <UID>41</UID>
       <TaskUID>42</TaskUID>
-      <ResourceUID>1</ResourceUID>
+      <ResourceUID>5</ResourceUID>
       <PercentWorkComplete>0</PercentWorkComplete>
       <ActualWork>PT0H0M0S</ActualWork>
       <Finish>2026-11-02T17:00:00</Finish>
       <HasFixedRateUnits>1</HasFixedRateUnits>
       <FixedMaterial>0</FixedMaterial>
       <LevelingDelayFormat>7</LevelingDelayFormat>
-      <RemainingWork>PT1H36M0S</RemainingWork>
+      <RemainingWork>PT2H43M0S</RemainingWork>
       <Start>2026-11-02T08:00:00</Start>
-      <Units>0.2</Units>
-      <Work>PT1H36M0S</Work>
+      <Units>0.3395833333</Units>
+      <Work>PT2H43M0S</Work>
     </Assignment>
     <Assignment>
       <UID>42</UID>
@@ -2876,25 +2876,25 @@
       <HasFixedRateUnits>1</HasFixedRateUnits>
       <FixedMaterial>0</FixedMaterial>
       <LevelingDelayFormat>7</LevelingDelayFormat>
-      <RemainingWork>PT1H36M0S</RemainingWork>
+      <RemainingWork>PT1H26M0S</RemainingWork>
       <Start>2026-11-02T08:00:00</Start>
-      <Units>0.2</Units>
-      <Work>PT1H36M0S</Work>
+      <Units>0.1791666667</Units>
+      <Work>PT1H26M0S</Work>
     </Assignment>
     <Assignment>
       <UID>43</UID>
       <TaskUID>43</TaskUID>
-      <ResourceUID>1</ResourceUID>
+      <ResourceUID>4</ResourceUID>
       <PercentWorkComplete>0</PercentWorkComplete>
       <ActualWork>PT0H0M0S</ActualWork>
       <Finish>2026-11-03T17:00:00</Finish>
       <HasFixedRateUnits>1</HasFixedRateUnits>
       <FixedMaterial>0</FixedMaterial>
       <LevelingDelayFormat>7</LevelingDelayFormat>
-      <RemainingWork>PT1H36M0S</RemainingWork>
+      <RemainingWork>PT1H23M0S</RemainingWork>
       <Start>2026-11-03T08:00:00</Start>
-      <Units>0.2</Units>
-      <Work>PT1H36M0S</Work>
+      <Units>0.1729166667</Units>
+      <Work>PT1H23M0S</Work>
     </Assignment>
     <Assignment>
       <UID>44</UID>
@@ -2906,10 +2906,10 @@
       <HasFixedRateUnits>1</HasFixedRateUnits>
       <FixedMaterial>0</FixedMaterial>
       <LevelingDelayFormat>7</LevelingDelayFormat>
-      <RemainingWork>PT1H36M0S</RemainingWork>
+      <RemainingWork>PT0H42M0S</RemainingWork>
       <Start>2026-11-03T08:00:00</Start>
-      <Units>0.2</Units>
-      <Work>PT1H36M0S</Work>
+      <Units>0.0875</Units>
+      <Work>PT0H42M0S</Work>
     </Assignment>
     <Assignment>
       <UID>45</UID>
@@ -2921,10 +2921,10 @@
       <HasFixedRateUnits>1</HasFixedRateUnits>
       <FixedMaterial>0</FixedMaterial>
       <LevelingDelayFormat>7</LevelingDelayFormat>
-      <RemainingWork>PT3H12M0S</RemainingWork>
+      <RemainingWork>PT5H25M0S</RemainingWork>
       <Start>2026-11-03T08:00:00</Start>
-      <Units>0.2</Units>
-      <Work>PT3H12M0S</Work>
+      <Units>0.3385416667</Units>
+      <Work>PT5H25M0S</Work>
     </Assignment>
     <Assignment>
       <UID>46</UID>
@@ -2936,25 +2936,25 @@
       <HasFixedRateUnits>1</HasFixedRateUnits>
       <FixedMaterial>0</FixedMaterial>
       <LevelingDelayFormat>7</LevelingDelayFormat>
-      <RemainingWork>PT3H12M0S</RemainingWork>
+      <RemainingWork>PT2H45M0S</RemainingWork>
       <Start>2026-11-03T08:00:00</Start>
-      <Units>0.2</Units>
-      <Work>PT3H12M0S</Work>
+      <Units>0.171875</Units>
+      <Work>PT2H45M0S</Work>
     </Assignment>
     <Assignment>
       <UID>47</UID>
       <TaskUID>45</TaskUID>
-      <ResourceUID>1</ResourceUID>
+      <ResourceUID>3</ResourceUID>
       <PercentWorkComplete>0</PercentWorkComplete>
       <ActualWork>PT0H0M0S</ActualWork>
       <Finish>2026-11-04T17:00:00</Finish>
       <HasFixedRateUnits>1</HasFixedRateUnits>
       <FixedMaterial>0</FixedMaterial>
       <LevelingDelayFormat>7</LevelingDelayFormat>
-      <RemainingWork>PT1H36M0S</RemainingWork>
+      <RemainingWork>PT2H59M0S</RemainingWork>
       <Start>2026-11-04T08:00:00</Start>
-      <Units>0.2</Units>
-      <Work>PT1H36M0S</Work>
+      <Units>0.3729166667</Units>
+      <Work>PT2H59M0S</Work>
     </Assignment>
     <Assignment>
       <UID>48</UID>
@@ -2966,10 +2966,10 @@
       <HasFixedRateUnits>1</HasFixedRateUnits>
       <FixedMaterial>0</FixedMaterial>
       <LevelingDelayFormat>7</LevelingDelayFormat>
-      <RemainingWork>PT1H36M0S</RemainingWork>
+      <RemainingWork>PT1H26M0S</RemainingWork>
       <Start>2026-11-04T08:00:00</Start>
-      <Units>0.2</Units>
-      <Work>PT1H36M0S</Work>
+      <Units>0.1791666667</Units>
+      <Work>PT1H26M0S</Work>
     </Assignment>
     <Assignment>
       <UID>49</UID>
@@ -2981,10 +2981,10 @@
       <HasFixedRateUnits>1</HasFixedRateUnits>
       <FixedMaterial>0</FixedMaterial>
       <LevelingDelayFormat>7</LevelingDelayFormat>
-      <RemainingWork>PT1H36M0S</RemainingWork>
+      <RemainingWork>PT1H12M0S</RemainingWork>
       <Start>2026-11-05T08:00:00</Start>
-      <Units>0.2</Units>
-      <Work>PT1H36M0S</Work>
+      <Units>0.15</Units>
+      <Work>PT1H12M0S</Work>
     </Assignment>
     <Assignment>
       <UID>50</UID>
@@ -2996,10 +2996,10 @@
       <HasFixedRateUnits>1</HasFixedRateUnits>
       <FixedMaterial>0</FixedMaterial>
       <LevelingDelayFormat>7</LevelingDelayFormat>
-      <RemainingWork>PT1H36M0S</RemainingWork>
+      <RemainingWork>PT1H26M0S</RemainingWork>
       <Start>2026-11-05T08:00:00</Start>
-      <Units>0.2</Units>
-      <Work>PT1H36M0S</Work>
+      <Units>0.1791666667</Units>
+      <Work>PT1H26M0S</Work>
     </Assignment>
     <Assignment>
       <UID>51</UID>
@@ -3011,10 +3011,10 @@
       <HasFixedRateUnits>1</HasFixedRateUnits>
       <FixedMaterial>0</FixedMaterial>
       <LevelingDelayFormat>7</LevelingDelayFormat>
-      <RemainingWork>PT1H36M0S</RemainingWork>
+      <RemainingWork>PT2H59M0S</RemainingWork>
       <Start>2026-11-05T08:00:00</Start>
-      <Units>0.2</Units>
-      <Work>PT1H36M0S</Work>
+      <Units>0.3729166667</Units>
+      <Work>PT2H59M0S</Work>
     </Assignment>
     <Assignment>
       <UID>52</UID>
@@ -3026,10 +3026,10 @@
       <HasFixedRateUnits>1</HasFixedRateUnits>
       <FixedMaterial>0</FixedMaterial>
       <LevelingDelayFormat>7</LevelingDelayFormat>
-      <RemainingWork>PT1H36M0S</RemainingWork>
+      <RemainingWork>PT1H23M0S</RemainingWork>
       <Start>2026-11-05T08:00:00</Start>
-      <Units>0.2</Units>
-      <Work>PT1H36M0S</Work>
+      <Units>0.1729166667</Units>
+      <Work>PT1H23M0S</Work>
     </Assignment>
     <Assignment>
       <UID>53</UID>
@@ -3041,10 +3041,10 @@
       <HasFixedRateUnits>1</HasFixedRateUnits>
       <FixedMaterial>0</FixedMaterial>
       <LevelingDelayFormat>7</LevelingDelayFormat>
-      <RemainingWork>PT1H36M0S</RemainingWork>
+      <RemainingWork>PT2H43M0S</RemainingWork>
       <Start>2026-11-05T08:00:00</Start>
-      <Units>0.2</Units>
-      <Work>PT1H36M0S</Work>
+      <Units>0.3395833333</Units>
+      <Work>PT2H43M0S</Work>
     </Assignment>
     <Assignment>
       <UID>54</UID>
@@ -3056,25 +3056,25 @@
       <HasFixedRateUnits>1</HasFixedRateUnits>
       <FixedMaterial>0</FixedMaterial>
       <LevelingDelayFormat>7</LevelingDelayFormat>
-      <RemainingWork>PT1H36M0S</RemainingWork>
+      <RemainingWork>PT0H42M0S</RemainingWork>
       <Start>2026-11-05T08:00:00</Start>
-      <Units>0.2</Units>
-      <Work>PT1H36M0S</Work>
+      <Units>0.0875</Units>
+      <Work>PT0H42M0S</Work>
     </Assignment>
     <Assignment>
       <UID>55</UID>
       <TaskUID>47</TaskUID>
-      <ResourceUID>1</ResourceUID>
+      <ResourceUID>6</ResourceUID>
       <PercentWorkComplete>0</PercentWorkComplete>
       <ActualWork>PT0H0M0S</ActualWork>
       <Finish>2026-11-06T17:00:00</Finish>
       <HasFixedRateUnits>1</HasFixedRateUnits>
       <FixedMaterial>0</FixedMaterial>
       <LevelingDelayFormat>7</LevelingDelayFormat>
-      <RemainingWork>PT1H36M0S</RemainingWork>
+      <RemainingWork>PT0H41M0S</RemainingWork>
       <Start>2026-11-06T08:00:00</Start>
-      <Units>0.2</Units>
-      <Work>PT1H36M0S</Work>
+      <Units>0.0854166667</Units>
+      <Work>PT0H41M0S</Work>
     </Assignment>
     <Assignment>
       <UID>56</UID>
@@ -3086,10 +3086,10 @@
       <HasFixedRateUnits>1</HasFixedRateUnits>
       <FixedMaterial>0</FixedMaterial>
       <LevelingDelayFormat>7</LevelingDelayFormat>
-      <RemainingWork>PT1H36M0S</RemainingWork>
+      <RemainingWork>PT1H26M0S</RemainingWork>
       <Start>2026-11-06T08:00:00</Start>
-      <Units>0.2</Units>
-      <Work>PT1H36M0S</Work>
+      <Units>0.1791666667</Units>
+      <Work>PT1H26M0S</Work>
     </Assignment>
     <Assignment>
       <UID>57</UID>
@@ -3101,10 +3101,10 @@
       <HasFixedRateUnits>1</HasFixedRateUnits>
       <FixedMaterial>0</FixedMaterial>
       <LevelingDelayFormat>7</LevelingDelayFormat>
-      <RemainingWork>PT1H36M0S</RemainingWork>
+      <RemainingWork>PT1H12M0S</RemainingWork>
       <Start>2026-03-18T08:00:00</Start>
-      <Units>0.4</Units>
-      <Work>PT1H36M0S</Work>
+      <Units>0.3</Units>
+      <Work>PT1H12M0S</Work>
     </Assignment>
     <Assignment>
       <UID>58</UID>
@@ -3116,10 +3116,10 @@
       <HasFixedRateUnits>1</HasFixedRateUnits>
       <FixedMaterial>0</FixedMaterial>
       <LevelingDelayFormat>7</LevelingDelayFormat>
-      <RemainingWork>PT1H36M0S</RemainingWork>
+      <RemainingWork>PT1H26M0S</RemainingWork>
       <Start>2026-03-18T08:00:00</Start>
-      <Units>0.4</Units>
-      <Work>PT1H36M0S</Work>
+      <Units>0.3583333333</Units>
+      <Work>PT1H26M0S</Work>
     </Assignment>
     <Assignment>
       <UID>59</UID>
@@ -3131,10 +3131,10 @@
       <HasFixedRateUnits>1</HasFixedRateUnits>
       <FixedMaterial>0</FixedMaterial>
       <LevelingDelayFormat>7</LevelingDelayFormat>
-      <RemainingWork>PT1H36M0S</RemainingWork>
+      <RemainingWork>PT1H12M0S</RemainingWork>
       <Start>2026-04-01T08:00:00</Start>
-      <Units>0.4</Units>
-      <Work>PT1H36M0S</Work>
+      <Units>0.3</Units>
+      <Work>PT1H12M0S</Work>
     </Assignment>
     <Assignment>
       <UID>60</UID>
@@ -3146,10 +3146,10 @@
       <HasFixedRateUnits>1</HasFixedRateUnits>
       <FixedMaterial>0</FixedMaterial>
       <LevelingDelayFormat>7</LevelingDelayFormat>
-      <RemainingWork>PT1H36M0S</RemainingWork>
+      <RemainingWork>PT2H58M0S</RemainingWork>
       <Start>2026-04-01T08:00:00</Start>
-      <Units>0.4</Units>
-      <Work>PT1H36M0S</Work>
+      <Units>0.7416666667</Units>
+      <Work>PT2H58M0S</Work>
     </Assignment>
     <Assignment>
       <UID>61</UID>
@@ -3161,10 +3161,10 @@
       <HasFixedRateUnits>1</HasFixedRateUnits>
       <FixedMaterial>0</FixedMaterial>
       <LevelingDelayFormat>7</LevelingDelayFormat>
-      <RemainingWork>PT1H36M0S</RemainingWork>
+      <RemainingWork>PT1H12M0S</RemainingWork>
       <Start>2026-05-14T08:00:00</Start>
-      <Units>0.4</Units>
-      <Work>PT1H36M0S</Work>
+      <Units>0.3</Units>
+      <Work>PT1H12M0S</Work>
     </Assignment>
     <Assignment>
       <UID>62</UID>
@@ -3176,10 +3176,10 @@
       <HasFixedRateUnits>1</HasFixedRateUnits>
       <FixedMaterial>0</FixedMaterial>
       <LevelingDelayFormat>7</LevelingDelayFormat>
-      <RemainingWork>PT1H36M0S</RemainingWork>
+      <RemainingWork>PT2H42M0S</RemainingWork>
       <Start>2026-05-14T08:00:00</Start>
-      <Units>0.4</Units>
-      <Work>PT1H36M0S</Work>
+      <Units>0.675</Units>
+      <Work>PT2H42M0S</Work>
     </Assignment>
     <Assignment>
       <UID>63</UID>
@@ -3191,10 +3191,10 @@
       <HasFixedRateUnits>1</HasFixedRateUnits>
       <FixedMaterial>0</FixedMaterial>
       <LevelingDelayFormat>7</LevelingDelayFormat>
-      <RemainingWork>PT1H36M0S</RemainingWork>
+      <RemainingWork>PT1H12M0S</RemainingWork>
       <Start>2026-05-12T08:00:00</Start>
-      <Units>0.4</Units>
-      <Work>PT1H36M0S</Work>
+      <Units>0.3</Units>
+      <Work>PT1H12M0S</Work>
     </Assignment>
     <Assignment>
       <UID>64</UID>
@@ -3206,10 +3206,10 @@
       <HasFixedRateUnits>1</HasFixedRateUnits>
       <FixedMaterial>0</FixedMaterial>
       <LevelingDelayFormat>7</LevelingDelayFormat>
-      <RemainingWork>PT1H36M0S</RemainingWork>
+      <RemainingWork>PT0H41M0S</RemainingWork>
       <Start>2026-05-12T08:00:00</Start>
-      <Units>0.4</Units>
-      <Work>PT1H36M0S</Work>
+      <Units>0.1708333333</Units>
+      <Work>PT0H41M0S</Work>
     </Assignment>
     <Assignment>
       <UID>65</UID>
@@ -3221,10 +3221,10 @@
       <HasFixedRateUnits>1</HasFixedRateUnits>
       <FixedMaterial>0</FixedMaterial>
       <LevelingDelayFormat>7</LevelingDelayFormat>
-      <RemainingWork>PT1H36M0S</RemainingWork>
+      <RemainingWork>PT1H12M0S</RemainingWork>
       <Start>2026-05-15T08:00:00</Start>
-      <Units>0.4</Units>
-      <Work>PT1H36M0S</Work>
+      <Units>0.3</Units>
+      <Work>PT1H12M0S</Work>
     </Assignment>
     <Assignment>
       <UID>66</UID>
@@ -3236,10 +3236,10 @@
       <HasFixedRateUnits>1</HasFixedRateUnits>
       <FixedMaterial>0</FixedMaterial>
       <LevelingDelayFormat>7</LevelingDelayFormat>
-      <RemainingWork>PT1H36M0S</RemainingWork>
+      <RemainingWork>PT2H58M0S</RemainingWork>
       <Start>2026-05-15T08:00:00</Start>
-      <Units>0.4</Units>
-      <Work>PT1H36M0S</Work>
+      <Units>0.7416666667</Units>
+      <Work>PT2H58M0S</Work>
     </Assignment>
     <Assignment>
       <UID>67</UID>
@@ -3251,10 +3251,10 @@
       <HasFixedRateUnits>1</HasFixedRateUnits>
       <FixedMaterial>0</FixedMaterial>
       <LevelingDelayFormat>7</LevelingDelayFormat>
-      <RemainingWork>PT1H36M0S</RemainingWork>
+      <RemainingWork>PT1H12M0S</RemainingWork>
       <Start>2026-10-29T08:00:00</Start>
-      <Units>0.4</Units>
-      <Work>PT1H36M0S</Work>
+      <Units>0.3</Units>
+      <Work>PT1H12M0S</Work>
     </Assignment>
     <Assignment>
       <UID>68</UID>
@@ -3266,10 +3266,10 @@
       <HasFixedRateUnits>1</HasFixedRateUnits>
       <FixedMaterial>0</FixedMaterial>
       <LevelingDelayFormat>7</LevelingDelayFormat>
-      <RemainingWork>PT1H36M0S</RemainingWork>
+      <RemainingWork>PT1H26M0S</RemainingWork>
       <Start>2026-10-29T08:00:00</Start>
-      <Units>0.4</Units>
-      <Work>PT1H36M0S</Work>
+      <Units>0.3583333333</Units>
+      <Work>PT1H26M0S</Work>
     </Assignment>
     <Assignment>
       <UID>69</UID>
@@ -3281,10 +3281,10 @@
       <HasFixedRateUnits>1</HasFixedRateUnits>
       <FixedMaterial>0</FixedMaterial>
       <LevelingDelayFormat>7</LevelingDelayFormat>
-      <RemainingWork>PT1H36M0S</RemainingWork>
+      <RemainingWork>PT1H12M0S</RemainingWork>
       <Start>2026-10-30T08:00:00</Start>
-      <Units>0.4</Units>
-      <Work>PT1H36M0S</Work>
+      <Units>0.3</Units>
+      <Work>PT1H12M0S</Work>
     </Assignment>
     <Assignment>
       <UID>70</UID>
@@ -3296,10 +3296,10 @@
       <HasFixedRateUnits>1</HasFixedRateUnits>
       <FixedMaterial>0</FixedMaterial>
       <LevelingDelayFormat>7</LevelingDelayFormat>
-      <RemainingWork>PT1H36M0S</RemainingWork>
+      <RemainingWork>PT1H22M0S</RemainingWork>
       <Start>2026-10-30T08:00:00</Start>
-      <Units>0.4</Units>
-      <Work>PT1H36M0S</Work>
+      <Units>0.3416666667</Units>
+      <Work>PT1H22M0S</Work>
     </Assignment>
     <Assignment>
       <UID>71</UID>
@@ -3311,10 +3311,10 @@
       <HasFixedRateUnits>1</HasFixedRateUnits>
       <FixedMaterial>0</FixedMaterial>
       <LevelingDelayFormat>7</LevelingDelayFormat>
-      <RemainingWork>PT1H36M0S</RemainingWork>
+      <RemainingWork>PT1H12M0S</RemainingWork>
       <Start>2026-11-06T08:00:00</Start>
-      <Units>0.4</Units>
-      <Work>PT1H36M0S</Work>
+      <Units>0.3</Units>
+      <Work>PT1H12M0S</Work>
     </Assignment>
     <Assignment>
       <UID>72</UID>
@@ -3326,10 +3326,10 @@
       <HasFixedRateUnits>1</HasFixedRateUnits>
       <FixedMaterial>0</FixedMaterial>
       <LevelingDelayFormat>7</LevelingDelayFormat>
-      <RemainingWork>PT1H36M0S</RemainingWork>
+      <RemainingWork>PT1H26M0S</RemainingWork>
       <Start>2026-11-06T08:00:00</Start>
-      <Units>0.4</Units>
-      <Work>PT1H36M0S</Work>
+      <Units>0.3583333333</Units>
+      <Work>PT1H26M0S</Work>
     </Assignment>
     <Assignment>
       <UID>73</UID>
@@ -3341,10 +3341,10 @@
       <HasFixedRateUnits>1</HasFixedRateUnits>
       <FixedMaterial>0</FixedMaterial>
       <LevelingDelayFormat>7</LevelingDelayFormat>
-      <RemainingWork>PT1H36M0S</RemainingWork>
+      <RemainingWork>PT1H11M0S</RemainingWork>
       <Start>2026-03-18T13:00:00</Start>
-      <Units>0.4</Units>
-      <Work>PT1H36M0S</Work>
+      <Units>0.2958333333</Units>
+      <Work>PT1H11M0S</Work>
     </Assignment>
     <Assignment>
       <UID>74</UID>
@@ -3356,10 +3356,10 @@
       <HasFixedRateUnits>1</HasFixedRateUnits>
       <FixedMaterial>0</FixedMaterial>
       <LevelingDelayFormat>7</LevelingDelayFormat>
-      <RemainingWork>PT1H36M0S</RemainingWork>
+      <RemainingWork>PT1H11M0S</RemainingWork>
       <Start>2026-04-01T13:00:00</Start>
-      <Units>0.4</Units>
-      <Work>PT1H36M0S</Work>
+      <Units>0.2958333333</Units>
+      <Work>PT1H11M0S</Work>
     </Assignment>
     <Assignment>
       <UID>75</UID>
@@ -3371,10 +3371,10 @@
       <HasFixedRateUnits>1</HasFixedRateUnits>
       <FixedMaterial>0</FixedMaterial>
       <LevelingDelayFormat>7</LevelingDelayFormat>
-      <RemainingWork>PT1H36M0S</RemainingWork>
+      <RemainingWork>PT1H11M0S</RemainingWork>
       <Start>2026-05-14T13:00:00</Start>
-      <Units>0.4</Units>
-      <Work>PT1H36M0S</Work>
+      <Units>0.2958333333</Units>
+      <Work>PT1H11M0S</Work>
     </Assignment>
     <Assignment>
       <UID>76</UID>
@@ -3386,10 +3386,10 @@
       <HasFixedRateUnits>1</HasFixedRateUnits>
       <FixedMaterial>0</FixedMaterial>
       <LevelingDelayFormat>7</LevelingDelayFormat>
-      <RemainingWork>PT1H36M0S</RemainingWork>
+      <RemainingWork>PT1H11M0S</RemainingWork>
       <Start>2026-05-12T13:00:00</Start>
-      <Units>0.4</Units>
-      <Work>PT1H36M0S</Work>
+      <Units>0.2958333333</Units>
+      <Work>PT1H11M0S</Work>
     </Assignment>
     <Assignment>
       <UID>77</UID>
@@ -3401,10 +3401,10 @@
       <HasFixedRateUnits>1</HasFixedRateUnits>
       <FixedMaterial>0</FixedMaterial>
       <LevelingDelayFormat>7</LevelingDelayFormat>
-      <RemainingWork>PT1H36M0S</RemainingWork>
+      <RemainingWork>PT1H11M0S</RemainingWork>
       <Start>2026-05-15T13:00:00</Start>
-      <Units>0.4</Units>
-      <Work>PT1H36M0S</Work>
+      <Units>0.2958333333</Units>
+      <Work>PT1H11M0S</Work>
     </Assignment>
     <Assignment>
       <UID>78</UID>
@@ -3416,10 +3416,10 @@
       <HasFixedRateUnits>1</HasFixedRateUnits>
       <FixedMaterial>0</FixedMaterial>
       <LevelingDelayFormat>7</LevelingDelayFormat>
-      <RemainingWork>PT1H36M0S</RemainingWork>
+      <RemainingWork>PT1H11M0S</RemainingWork>
       <Start>2026-10-29T13:00:00</Start>
-      <Units>0.4</Units>
-      <Work>PT1H36M0S</Work>
+      <Units>0.2958333333</Units>
+      <Work>PT1H11M0S</Work>
     </Assignment>
     <Assignment>
       <UID>79</UID>
@@ -3431,10 +3431,10 @@
       <HasFixedRateUnits>1</HasFixedRateUnits>
       <FixedMaterial>0</FixedMaterial>
       <LevelingDelayFormat>7</LevelingDelayFormat>
-      <RemainingWork>PT1H36M0S</RemainingWork>
+      <RemainingWork>PT1H11M0S</RemainingWork>
       <Start>2026-10-30T13:00:00</Start>
-      <Units>0.4</Units>
-      <Work>PT1H36M0S</Work>
+      <Units>0.2958333333</Units>
+      <Work>PT1H11M0S</Work>
     </Assignment>
     <Assignment>
       <UID>80</UID>
@@ -3446,10 +3446,10 @@
       <HasFixedRateUnits>1</HasFixedRateUnits>
       <FixedMaterial>0</FixedMaterial>
       <LevelingDelayFormat>7</LevelingDelayFormat>
-      <RemainingWork>PT1H36M0S</RemainingWork>
+      <RemainingWork>PT1H11M0S</RemainingWork>
       <Start>2026-11-06T13:00:00</Start>
-      <Units>0.4</Units>
-      <Work>PT1H36M0S</Work>
+      <Units>0.2958333333</Units>
+      <Work>PT1H11M0S</Work>
     </Assignment>
   </Assignments>
 </Project>

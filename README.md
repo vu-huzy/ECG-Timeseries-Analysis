@@ -16,6 +16,7 @@ A view-only **web demo** of all of the above lives in [`demo/`](demo) (see [Web 
 .
 ├── README.md
 ├── plan.md                    # working log of the demo: decisions, results, open issues
+├── project_management/        # proposed six-phase WBS, RACI, Resource Sheet, budget, and MS Project XML schedule
 ├── Final_Report_TS-3.pdf      # project report (numbers the ST-MEM results are compared with)
 ├── demo/                      # static web demo + scripts that generate its data
 └── notebooks
@@ -29,6 +30,8 @@ A view-only **web demo** of all of the above lives in [`demo/`](demo) (see [Web 
         └── ST-MEM
             └── mit-bih.py
 ```
+
+The proposed 50-working-day project schedule, six-person assignment plan, Resource Sheet with standard and overtime hourly rates, and illustrative budget scenario are in [`project_management/ECG_Project_WBS_and_Resource_Plan.md`](project_management/ECG_Project_WBS_and_Resource_Plan.md). Open [`project_management/ECG_Project_Schedule.xml`](project_management/ECG_Project_Schedule.xml) in Microsoft Project to inspect the Gantt chart, Resource Sheet, Resource Usage, and phase costs.
 
 ## Web demo (`demo/`)
 

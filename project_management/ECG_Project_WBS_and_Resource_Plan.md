@@ -15,6 +15,7 @@ The schedule uses six controlled phases. The final work package of each phase in
 - Duration is elapsed working days; work is person-hours. A 10-day model package can require 40 hours of work. Increasing Duration from 27 to 50 days does not change the 288 person-hours or the illustrative VND 160,800,000 cost. Phase/project work totals are rollups and must not be assigned a second time.
 - Every leaf work package has positive planned work and one accountable owner. Phase reviews are included in the final assigned package of each phase, so Resource Usage has no separate 'Unassigned 0 hrs' group for review milestones.
 - The **illustrative cost scenario is VND 160,800,000**: VND 151,200,000 in valued labor and VND 9,600,000 in planned compute/infrastructure. This is a professional replacement-cost scenario chosen for the exercise, not a record of money the student team paid or received.
+- The **cost baseline (BAC) and total planning budget are both VND 160,800,000**. No separate contingency or management reserve has been allocated in this WBS or the MS Project XML. Any future reserve must be estimated and approved through change control before it is added to the budget; no hypothetical reserve is included in planned value (PV).
 - Phase reviews are internal team checks, not a claim of external approval.
 
 ## 3. WBS by phase

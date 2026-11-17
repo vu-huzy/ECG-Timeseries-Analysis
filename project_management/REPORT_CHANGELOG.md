@@ -2,9 +2,16 @@
 
 Report date: **17 November 2026**. Output: `ECG_Project_Management_Report_REVISED.docx`.
 
+## Version 3.1: assignment-outline alignment
+
+- Kept five numbered report sections and moved the integrated project plan under unnumbered appendices, matching the assignment outline.
+- Added explicit subsections for organization and roles, responsibility matrices, staffing profile, recruitment and onboarding, communication matrix, quality criteria and process, and the risk matrix/register.
+- Rewrote self-referential template language in the report. The course PDFs supplied by the user are available at their original paths.
+- Preserved the project baseline, all 13 embedded figures, report tables, names, dates and budget figures.
+
 ## Changes by section
 
-- **Structure and document control:** retained cover, professional styles, page geometry, headers/footer and original figures. Applied the six required chapters and seven planning headings; evaluation is explicitly interim. Original report and XML are unchanged.
+- **Structure and document control:** retained cover, professional styles, page geometry, headers/footer and original figures. Applied five numbered sections, unnumbered appendices and seven planning headings; evaluation is explicitly interim. Original report and XML are unchanged.
 - **1. Initiation:** added a measurable, time-bound academic MOV with offline, traceability, peer-learning and independent re-scoring targets; clarified that targets are not achieved claims. Completed charter stakeholder/constraint/authority fields; distinguished internal review from formal academic acceptance. No approval or signature was invented.
 - **2.1–2.2 Scope/schedule:** retained fourteen deliverable-oriented packages, distinguished Duration from Work, synchronized predecessor references to XML (including M1–M6), and documented calendar, Baseline 0, unrecorded actuals and unavailable forecast. Defined the 50-day critical path and retained 2-day/1-day slack for forecasting/ML-CNN.
 - **2.3 Cost:** retained 288 person-hours, VND 151.2m labor + VND 9.6m direct = VND 160.8m total. Added bottom-up example/package reconciliation, professional replacement/opportunity-cost basis, task `FixedCost` treatment, GPU/storage limitations and distinctions between planned/baseline/actual/earned value. No actual-cost or performance indices were fabricated.
@@ -13,12 +20,12 @@ Report date: **17 November 2026**. Output: `ECG_Project_Management_Report_REVISE
 - **2.6–2.7 Quality/risk:** distinguished QA/QC, added measurable criteria and checkpoints, a scored/color-coded 5×5 matrix, priority bands and statuses. Preserved all eight inherited risk scores; transferred observed labeling/ST-MEM discrepancies to I01/I02 with historical scores retained, and logged CNN accuracy inconsistency as I03.
 - **3. Analysis/design:** preserved use-case, activity, organization, WBS, pipeline, artifact diagrams and inherited screenshots. Clarified 360→250 Hz versus HR-at-1-Hz resampling, record/patient split limitations, train-only fit controls, labeling/sample-count differences, checkpoint composition, saved ST-MEM run protocol and absent encoder. Retained reported vs saved/reproducible result distinction; no fresh inference or clinical function is claimed. A separate class diagram adds no meaningful application abstraction to the existing artifact model.
 - **4–5 Results/evaluation:** added eight evidence/test cases with expected/actual results and qualified statuses; verified only bounded inspections. Added scope/schedule/effort/cost/quality/deliverable planned-vs-actual assessment. Preserved lessons and honest evidence gaps; final acceptance/handover remain future activities.
-- **6. Appendices:** separated Completion Criteria from Actual Completion Evidence; synchronized package/phase/assignment summaries; added generated Gantt, critical-path network, weekly resource demand and package/phase cost summaries. Charts are explicitly Python-generated from XML, not Microsoft Project exports. Retained inherited classroom references while marking unavailable originals.
+- **Appendices:** separated Completion Criteria from Actual Completion Evidence; synchronized package/phase/assignment summaries; added generated Gantt, critical-path network, weekly resource demand and package/phase cost summaries. Charts are explicitly Python-generated from XML, not Microsoft Project exports. Aligned the source register with the supplied course PDFs.
 
 ## Validation completed
 
 - Read original DOCX text/tables and image inventory; parsed the complete XML, including calendars, 27 tasks (14 packages + 6 milestones + 7 rollups), 6 resources and 47 assignments.
-- Reopened revised DOCX with python-docx; verified ZIP integrity, every XML part, six exact chapter headings, all 7 planning headings, package/milestone totals, all original media bytes, and 13 embedded figures (9 retained + 4 generated).
+- Reopened revised DOCX with python-docx; verified ZIP integrity, every XML part, five numbered sections plus appendices, all 7 planning headings, package/milestone totals, all original media bytes, and 13 embedded figures (9 retained + 4 generated).
 - Verified current task fields match Baseline 0; all milestones have zero duration/work/cost; all dependencies use Finish-to-Start/zero lag. Reconciled assignment hours/rates, all package costs, resource totals (48 h each), phase totals and weekly totals without double-counting rollups.
 - Checked ST-MEM saved matrix arithmetic: accuracy 0.7065, F1 0.7777, specificity 0.4391. AUC 0.8165 is retained from saved results, not independently recomputed or freshly inferred.
 - Checked 48 unique source record IDs and disjoint 38/5/5 record lists; checked all 7 HTML-linked local script/stylesheet files exist. These checks do not establish patient independence, historical pipeline correctness or browser behavior.
@@ -33,5 +40,5 @@ Report date: **17 November 2026**. Output: `ECG_Project_Management_Report_REVISE
 - **Reproducibility:** pretrained ST-MEM encoder and PyTorch are absent here. Obtain the README-specified encoder, verify its SHA-256, run `python demo/predict_stmem.py`, retain the log and dependency versions. Do not overwrite/train models merely to close this report. Original F1 0.9695 logs/settings, the CNN original predictions and a patient-ID audit remain unavailable; I01–I03 stay open.
 - **MOV/people:** conduct and document the six peer walkthroughs, independent source audit and offline/re-scoring checks by planned M6 (09 December 2026); no achieved benefit is asserted now.
 - **Estimate basis:** replace GPU/storage lump sums with quantities, rates, term, tax basis and quotations if required. Current estimates are illustrative professional-equivalent costs, not paid student salaries or actual charges.
-- **References:** original Trakora/template and lecture PDFs are not in this workspace. Confirm bibliographic details and course-required citation format against the professor's originals; no new unverified source citation was invented.
+- **References:** the lecture PDFs and Trakora sample are available at the paths supplied by the user. Confirm bibliographic details and course-required citation format before submission.
 - **Visual layout:** Microsoft Word PDF export was attempted but failed (first a document-reference error, then an AppleEvent timeout); no full-document PDF/page rendering is claimed. The read-only report opened for this check was closed without saving. All four generated chart images were visually inspected; original media bytes and A4 geometry/styles were preserved. Open the revised DOCX in Word to confirm pagination, table widths, repeated headers, figure captions, footer page fields and final submission requirements.

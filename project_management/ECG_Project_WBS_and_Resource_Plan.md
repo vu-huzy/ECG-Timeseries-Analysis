@@ -1,6 +1,6 @@
 # ECG Time Series Analysis and Static Web Demo — WBS and resource plan
 
-> **Illustrative planning scenario.** Dates, work and costs below are estimates for an academic planning exercise, not timesheets, actual payments, invoices or an approved budget. The six-phase structure and resource sheet adapt the Trakora MPP example. Each phase's completion check is part of its final assigned work package, so the schedule contains no unassigned zero-hour milestone rows.
+> **Illustrative planning scenario.** Dates, work and costs below are estimates for an academic planning exercise, not timesheets, actual payments, invoices or an approved budget. The six-phase structure and resource sheet adapt the Trakora MPP example. Phase review work is included in the final assigned work package; M1–M6 are zero-duration schedule gates with no additional work or cost.
 
 ## 1. Scope and approach
 
@@ -13,7 +13,7 @@ The schedule uses six controlled phases. The final work package of each phase in
 - Planned start: **01/10/2026**; planned finish: **09/12/2026**; **50 working days**, Monday–Friday, 08:00–12:00 and 13:00–17:00. The six phases follow the example's 5 + 10 + 10 + 10 + 10 + 5 day rhythm; the dates remain planning estimates.
 - Total planned work: **288 person-hours**, exactly **48 hours per member**. Work is distributed by skill and task; equal total hours do not mean every person performs every task.
 - Duration is elapsed working days; work is person-hours. A 10-day model package can require 40 hours of work. Increasing Duration from 27 to 50 days does not change the 288 person-hours or the illustrative VND 160,800,000 cost. Phase/project work totals are rollups and must not be assigned a second time.
-- Every leaf work package has positive planned work and one accountable owner. Phase reviews are included in the final assigned package of each phase, so Resource Usage has no separate 'Unassigned 0 hrs' group for review milestones.
+- Every leaf work package has positive planned work and one accountable owner. The six zero-duration milestones are schedule gates, not extra work packages or resource assignments. They can appear as unassigned 0-hour events in Microsoft Project; the associated review work remains in the preceding assigned package.
 - The **illustrative cost scenario is VND 160,800,000**: VND 151,200,000 in valued labor and VND 9,600,000 in planned compute/infrastructure. This is a professional replacement-cost scenario chosen for the exercise, not a record of money the student team paid or received.
 - The **cost baseline (BAC) and total planning budget are both VND 160,800,000**. No separate contingency or management reserve has been allocated in this WBS or the MS Project XML. Any future reserve must be estimated and approved through change control before it is added to the budget; no hypothetical reserve is included in planned value (PV).
 - Phase reviews are internal team checks, not a claim of external approval.
@@ -26,22 +26,28 @@ The schedule uses six controlled phases. The final work package of each phase in
 | 1.1 | Project charter, scope and acceptance criteria | 01/10/2026 | 02/10/2026 | 2 days | 8 h | Nguyễn Tuấn Anh | — |
 | 1.2 | Integrated WBS, schedule and resource plan | 05/10/2026 | 06/10/2026 | 2 days | 10 h | Nguyễn Tuấn Anh | 1.1 |
 | 1.3 | Quality, risk and communication baseline with plan review | 07/10/2026 | 07/10/2026 | 1 day | 6 h | Nguyễn Tuấn Anh | 1.2 |
+| 1.4 | M1: Integrated project plan gate | 07/10/2026 | 07/10/2026 | 0 days | 0 h | Nguyễn Tuấn Anh | 1.3 |
 | **2** | **Phase 2: ECG data foundation** | 08/10/2026 | 21/10/2026 | **10 days** | **48 h** | Rollup | — |
-| 2.1 | MIT-BIH inventory and ECG exploration baseline | 08/10/2026 | 13/10/2026 | 4 days | 18 h | Vũ Quốc Huy | 1.3 |
+| 2.1 | MIT-BIH inventory and ECG exploration baseline | 08/10/2026 | 13/10/2026 | 4 days | 18 h | Vũ Quốc Huy | M1 |
 | 2.2 | Preprocessed ECG and HR/RR dataset with data review | 14/10/2026 | 21/10/2026 | 6 days | 30 h | Vũ Quốc Huy | 2.1 |
+| 2.3 | M2: ECG data readiness gate | 21/10/2026 | 21/10/2026 | 0 days | 0 h | Vũ Quốc Huy | 2.2 |
 | **3** | **Phase 3: Analysis and model evidence** | 22/10/2026 | 04/11/2026 | **10 days** | **110 h** | Rollup | — |
-| 3.1 | ARIMA/SARIMA forecasting results | 22/10/2026 | 02/11/2026 | 8 days | 30 h | Trần Tuấn Anh | 2.2 |
-| 3.2 | ML/CNN classification results | 22/10/2026 | 03/11/2026 | 9 days | 40 h | Mai Tuấn Mạnh | 2.2 |
-| 3.3 | ST-MEM evaluation and combined model review | 22/10/2026 | 04/11/2026 | 10 days | 40 h | Nguyễn Quang Huy | 2.2 |
+| 3.1 | ARIMA/SARIMA forecasting results | 22/10/2026 | 02/11/2026 | 8 days | 30 h | Trần Tuấn Anh | M2 |
+| 3.2 | ML/CNN classification results | 22/10/2026 | 03/11/2026 | 9 days | 40 h | Mai Tuấn Mạnh | M2 |
+| 3.3 | ST-MEM evaluation and combined model review | 22/10/2026 | 04/11/2026 | 10 days | 40 h | Nguyễn Quang Huy | M2 |
+| 3.4 | M3: Model evidence review gate | 04/11/2026 | 04/11/2026 | 0 days | 0 h | Nguyễn Quang Huy | 3.1, 3.2, 3.3 |
 | **4** | **Phase 4: Static web demo** | 05/11/2026 | 18/11/2026 | **10 days** | **56 h** | Rollup | — |
-| 4.1 | Static analysis pages and prepared demo data | 05/11/2026 | 12/11/2026 | 6 days | 32 h | Hoàng Thị Ngọc Hân | 3.1, 3.2, 3.3 |
+| 4.1 | Static analysis pages and prepared demo data | 05/11/2026 | 12/11/2026 | 6 days | 32 h | Hoàng Thị Ngọc Hân | M3 |
 | 4.2 | ECG replay monitor, integration and demo review | 13/11/2026 | 18/11/2026 | 4 days | 24 h | Hoàng Thị Ngọc Hân | 4.1 |
+| 4.3 | M4: Static demo review gate | 18/11/2026 | 18/11/2026 | 0 days | 0 h | Hoàng Thị Ngọc Hân | 4.2 |
 | **5** | **Phase 5: Verification and final report** | 19/11/2026 | 02/12/2026 | **10 days** | **38 h** | Rollup | — |
-| 5.1 | Verification evidence and issue resolution | 19/11/2026 | 26/11/2026 | 6 days | 24 h | Nguyễn Tuấn Anh | 4.2 |
+| 5.1 | Verification evidence and issue resolution | 19/11/2026 | 26/11/2026 | 6 days | 24 h | Nguyễn Tuấn Anh | M4 |
 | 5.2 | Final project report, user guide and quality review | 27/11/2026 | 02/12/2026 | 4 days | 14 h | Nguyễn Tuấn Anh | 5.1 |
+| 5.3 | M5: QA and report review gate | 02/12/2026 | 02/12/2026 | 0 days | 0 h | Nguyễn Tuấn Anh | 5.2 |
 | **6** | **Phase 6: Acceptance and handover** | 03/12/2026 | 09/12/2026 | **5 days** | **12 h** | Rollup | — |
-| 6.1 | User acceptance and final corrections | 03/12/2026 | 07/12/2026 | 3 days | 8 h | Nguyễn Tuấn Anh | 5.2 |
+| 6.1 | User acceptance and final corrections | 03/12/2026 | 07/12/2026 | 3 days | 8 h | Nguyễn Tuấn Anh | M5 |
 | 6.2 | Handover package, retrospective and final acceptance | 08/12/2026 | 09/12/2026 | 2 days | 4 h | Nguyễn Tuấn Anh | 6.1 |
+| 6.3 | M6: Final acceptance and handover gate | 09/12/2026 | 09/12/2026 | 0 days | 0 h | Nguyễn Tuấn Anh | 6.2 |
 
 ## 4. Work-package completion evidence
 
@@ -94,13 +100,13 @@ flowchart TB
 | Mai Tuấn Mạnh | Work | 100% | 550,000 VND/h | 825,000 VND/h | 48 h | 26,400,000 |
 | Nguyễn Quang Huy | Work | 100% | 550,000 VND/h | 825,000 VND/h | 48 h | 26,400,000 |
 | Hoàng Thị Ngọc Hân | Work | 100% | 450,000 VND/h | 675,000 VND/h | 48 h | 21,600,000 |
-| GPU compute provision (estimate) | Cost | — | — | — | — | 7,200,000 |
-| Storage and demo infrastructure (estimate) | Cost | — | — | — | — | 2,400,000 |
-| **Total** | | | | | **288 person-hours** | **160,800,000** |
+| **Work resource subtotal** | | | | | **288 person-hours** | **151,200,000** |
 
-Work-resource cost equals planned person-hours multiplied by the illustrative standard hourly rate. **Ovt. Rate is an assumed 150% of Std. Rate** for all six people. No overtime work is scheduled, so the VND 160,800,000 plan includes no overtime charge. Cost resources carry money rather than person-hours: GPU compute is assigned to 3.2 and 3.3; infrastructure is assigned to 2.2, 4.1 and 6.2. In Microsoft Project, a Cost resource may show **0 hours** in Resource Usage while its **Cost** is positive. It is a named budget item, not an unassigned work package.
+Work-resource cost equals planned person-hours multiplied by the illustrative standard hourly rate. **Ovt. Rate is an assumed 150% of Std. Rate** for all six people. No overtime work is scheduled. The other VND 9,600,000 is entered as **Fixed Cost on the five work packages that incur it**, so the Resource Sheet contains only the six team members and the overall project budget remains VND 160,800,000.
 
 ### Planned work by phase and member
+
+![Resource histogram by phase](ECG_Resource_Histogram_by_Phase.png)
 
 | Phase | Nguyễn Tuấn Anh | Vũ Quốc Huy | Trần Tuấn Anh | Mai Tuấn Mạnh | Nguyễn Quang Huy | Hoàng Thị Ngọc Hân | Total |
 |---|---:|---:|---:|---:|---:|---:|---:|
@@ -126,7 +132,7 @@ Microsoft Project's Gantt view shows the six phase summaries. Resource Usage gro
 | Phase 6: Acceptance and handover | 6,350,000 | 400,000 | 6,750,000 |
 | **Total** | **151,200,000** | **9,600,000** | **160,800,000** |
 
-The direct-cost assignments are 800,000 VND to 2.2 (data infrastructure), 2,400,000 VND to 3.2 (CNN compute), 4,800,000 VND to 3.3 (ST-MEM compute), 1,200,000 VND to 4.1 (demo infrastructure), and 400,000 VND to 6.2 (backup and handover). These are planning assumptions and should be replaced if the group obtains actual quotations.
+The fixed costs are 800,000 VND on 2.2 (data infrastructure), 2,400,000 VND on 3.2 (CNN compute), 4,800,000 VND on 3.3 (ST-MEM compute), 1,200,000 VND on 4.1 (demo infrastructure), and 400,000 VND on 6.2 (backup and handover). These are planning assumptions and should be replaced if the group obtains actual quotations.
 
 ### Work assignment by package
 
@@ -178,6 +184,6 @@ The direct-cost assignments are 800,000 VND to 2.2 (data infrastructure), 2,400,
 
 ## 8. Source mapping
 
-- Trakora.mpp: six phase summaries, leaf work packages, phase-end checks and finish-to-start links. The six standalone zero-hour milestones are folded into assigned phase-end work packages; tasks, roles, work and dates are ECG-specific.
+- Trakora.mpp: six phase summaries, leaf work packages, phase-end checks and finish-to-start links. M1–M6 are zero-duration phase gates following the assigned review work packages; tasks, roles, work and dates are ECG-specific.
 - IT project-management lectures: deliverable-oriented WBS and 100% rule; distinct work/duration; phase review criteria; dependency logic; RAM/RACI with one A; quality and risk controls. See `IT_Project_Management_Knowledge_Synthesis.md` sections 4–5, 7–8 and 10–13.
 - ECG repository: `README.md`, `plan.md`, notebooks, `demo/` and `Final_Report_TS-3.pdf` for scope, existing artifacts and known model/demo limitations.

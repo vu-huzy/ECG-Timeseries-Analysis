@@ -2,6 +2,16 @@
 
 Report date: **17 November 2026**. Output: `ECG_Project_Management_Report_REVISED.docx`.
 
+## Version 3.2: requirements traceability and gate decisions
+
+- Clarified the six-phase, phase-gated delivery approach and separated fourteen WBS work packages from six schedule milestones.
+- Added a twelve-row FR/NFR-to-WBS, deliverable, test and evidence-status matrix; kept pending tests and approvals explicitly unverified.
+- Added decision rules, reviewers and recorded status for M1–M6. Milestone target dates remain planned dates, not proof of acceptance.
+- Consolidated saved/reported ARIMA, SARIMA, Extra Trees, CNN and ST-MEM results with source and evaluation-protocol caveats; retained I01–I03 as open issues.
+- Corrected Figure 3's caption and clarified the classifier use-case caption and interpretation.
+- Expanded the XML `Notes` on fourteen work packages and six milestones with requirement/test references and gate-decision controls. All dates, dependencies, durations, assignments, work, costs and baseline fields remain unchanged.
+- Reopened the edited DOCX, checked all 33 tables and 13 original embedded figures, and verified that the XML differs only in `Notes` among schedule fields.
+
 ## Version 3.1: assignment-outline alignment
 
 - Kept five numbered report sections and moved the integrated project plan under unnumbered appendices, matching the assignment outline.

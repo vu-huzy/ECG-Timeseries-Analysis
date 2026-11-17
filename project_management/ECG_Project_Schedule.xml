@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='utf-8'?>
+<?xml version='1.0' encoding='UTF-8'?>
 <Project xmlns="http://schemas.microsoft.com/project">
   <SaveVersion>14</SaveVersion>
   <Name>ECG Time Series Analysis and Static Web Demo</Name>
@@ -51,7 +51,7 @@
   <ActualsInSync>0</ActualsInSync>
   <RemoveFileProperties>0</RemoveFileProperties>
   <AdminProject>0</AdminProject>
-  <ExtendedAttributes />
+  <ExtendedAttributes/>
   <Calendars>
     <Calendar>
       <UID>1</UID>
@@ -334,7 +334,8 @@
       <LevelingCanSplit>0</LevelingCanSplit>
       <LevelingDelayFormat>5</LevelingDelayFormat>
       <IgnoreResourceCalendar>0</IgnoreResourceCalendar>
-      <Notes>Charter names the ECG research/demo objective, users, exclusions, deliverables, acceptance criteria and risks; team reviews it.</Notes>
+      <Notes>Charter names the ECG research/demo objective, users, exclusions, deliverables, acceptance criteria and risks; team reviews it.
+Traceability: Governance: charter and scope. Verification: TC01, TC08. The planned task dates and saved baseline do not establish actual completion.</Notes>
       <HideBar>0</HideBar>
       <Rollup>0</Rollup>
       <EarnedValueMethod>0</EarnedValueMethod>
@@ -390,7 +391,8 @@
       <LevelingCanSplit>0</LevelingCanSplit>
       <LevelingDelayFormat>5</LevelingDelayFormat>
       <IgnoreResourceCalendar>0</IgnoreResourceCalendar>
-      <Notes>Every work package has one owner, estimated work, duration, dependency and completion evidence; six-person load is checked.</Notes>
+      <Notes>Every work package has one owner, estimated work, duration, dependency and completion evidence; six-person load is checked.
+Traceability: Governance: integrated schedule and resource plan. Verification: TC01. The planned task dates and saved baseline do not establish actual completion.</Notes>
       <HideBar>0</HideBar>
       <Rollup>0</Rollup>
       <EarnedValueMethod>0</EarnedValueMethod>
@@ -453,7 +455,8 @@
       <LevelingCanSplit>0</LevelingCanSplit>
       <LevelingDelayFormat>5</LevelingDelayFormat>
       <IgnoreResourceCalendar>0</IgnoreResourceCalendar>
-      <Notes>Quality checks, key data/model/demo risks and the weekly update channel are recorded; the baseline version is ready for team review. Phase 1 closes when the six-member team reviews the charter and baseline.</Notes>
+      <Notes>Quality checks, key data/model/demo risks and the weekly update channel are recorded; the baseline version is ready for team review. Phase 1 closes when the six-member team reviews the charter and baseline.
+Traceability: Governance: quality, risk and communications. Verification: TC01, TC08. The planned task dates and saved baseline do not establish actual completion.</Notes>
       <HideBar>0</HideBar>
       <Rollup>0</Rollup>
       <EarnedValueMethod>0</EarnedValueMethod>
@@ -516,7 +519,7 @@
       <LevelingCanSplit>0</LevelingCanSplit>
       <LevelingDelayFormat>5</LevelingDelayFormat>
       <IgnoreResourceCalendar>0</IgnoreResourceCalendar>
-      <Notes>Zero-duration schedule marker M1. Review and acceptance work remains in the preceding assigned package. No actual completion or approval has been recorded.</Notes>
+      <Notes>Zero-duration schedule marker; review effort is assigned to the preceding work package. Decision rule: Charter, scope, WBS, schedule, resources, quality, risk and communication plan reviewed; decision logged. Reviewer / decision authority: PM and technical leads. Status as at 17 November 2026: Target passed; decision not recorded. No actual completion or approval is inferred.</Notes>
       <HideBar>0</HideBar>
       <Rollup>0</Rollup>
       <EarnedValueMethod>0</EarnedValueMethod>
@@ -634,7 +637,8 @@
       <LevelingCanSplit>0</LevelingCanSplit>
       <LevelingDelayFormat>5</LevelingDelayFormat>
       <IgnoreResourceCalendar>0</IgnoreResourceCalendar>
-      <Notes>Record list, lead/sampling details, annotations, basic signal/label plots and source provenance are reproducible.</Notes>
+      <Notes>Record list, lead/sampling details, annotations, basic signal/label plots and source provenance are reproducible.
+Traceability: FR01, NFR01. Verification: TC02, TC05. The planned task dates and saved baseline do not establish actual completion.</Notes>
       <HideBar>0</HideBar>
       <Rollup>0</Rollup>
       <EarnedValueMethod>0</EarnedValueMethod>
@@ -698,7 +702,8 @@
       <LevelingCanSplit>0</LevelingCanSplit>
       <LevelingDelayFormat>5</LevelingDelayFormat>
       <IgnoreResourceCalendar>0</IgnoreResourceCalendar>
-      <Notes>Filtering, R-peak handling, HR/RR derivation, windowing, record-level split and checks against overlapping-window leakage are documented. Phase 2 closes when the data lead records the data-readiness check.</Notes>
+      <Notes>Filtering, R-peak handling, HR/RR derivation, windowing, record-level split and checks against overlapping-window leakage are documented. Phase 2 closes when the data lead records the data-readiness check.
+Traceability: FR02, NFR03. Verification: TC02, TC05. The planned task dates and saved baseline do not establish actual completion.</Notes>
       <HideBar>0</HideBar>
       <Rollup>0</Rollup>
       <EarnedValueMethod>0</EarnedValueMethod>
@@ -762,7 +767,7 @@
       <LevelingCanSplit>0</LevelingCanSplit>
       <LevelingDelayFormat>5</LevelingDelayFormat>
       <IgnoreResourceCalendar>0</IgnoreResourceCalendar>
-      <Notes>Zero-duration schedule marker M2. Review and acceptance work remains in the preceding assigned package. No actual completion or approval has been recorded.</Notes>
+      <Notes>Zero-duration schedule marker; review effort is assigned to the preceding work package. Decision rule: 48-record inventory, preprocessing, split and label checks reviewed; blocking data defects dispositioned. Reviewer / decision authority: Data lead and model leads. Status as at 17 November 2026: Target passed; decision not recorded. No actual completion or approval is inferred.</Notes>
       <HideBar>0</HideBar>
       <Rollup>0</Rollup>
       <EarnedValueMethod>0</EarnedValueMethod>
@@ -880,7 +885,8 @@
       <LevelingCanSplit>0</LevelingCanSplit>
       <LevelingDelayFormat>5</LevelingDelayFormat>
       <IgnoreResourceCalendar>0</IgnoreResourceCalendar>
-      <Notes>Forecast configuration, held-out period, MAE/RMSE and reproducible plots are recorded with the exact model orders used.</Notes>
+      <Notes>Forecast configuration, held-out period, MAE/RMSE and reproducible plots are recorded with the exact model orders used.
+Traceability: FR03, NFR01. Verification: TC05. The planned task dates and saved baseline do not establish actual completion.</Notes>
       <HideBar>0</HideBar>
       <Rollup>0</Rollup>
       <EarnedValueMethod>0</EarnedValueMethod>
@@ -944,7 +950,8 @@
       <LevelingCanSplit>0</LevelingCanSplit>
       <LevelingDelayFormat>5</LevelingDelayFormat>
       <IgnoreResourceCalendar>0</IgnoreResourceCalendar>
-      <Notes>Feature-based ML and 1D CNN results include record-level split, confusion matrix, F1/AUC and each method's window-label rule; comparisons state limits.</Notes>
+      <Notes>Feature-based ML and 1D CNN results include record-level split, confusion matrix, F1/AUC and each method's window-label rule; comparisons state limits.
+Traceability: FR04, NFR01. Verification: TC05; issues I01/I03. The planned task dates and saved baseline do not establish actual completion.</Notes>
       <HideBar>0</HideBar>
       <Rollup>0</Rollup>
       <EarnedValueMethod>0</EarnedValueMethod>
@@ -1009,7 +1016,8 @@
       <LevelingCanSplit>0</LevelingCanSplit>
       <LevelingDelayFormat>5</LevelingDelayFormat>
       <IgnoreResourceCalendar>0</IgnoreResourceCalendar>
-      <Notes>Checkpoint provenance, fine-tuning setup, test metrics and difference from the earlier report are explicit; demo uses saved results only. Phase 3 closes after the ARIMA/SARIMA, ML/CNN and ST-MEM leads review all three result sets together.</Notes>
+      <Notes>Checkpoint provenance, fine-tuning setup, test metrics and difference from the earlier report are explicit; demo uses saved results only. Phase 3 closes after the ARIMA/SARIMA, ML/CNN and ST-MEM leads review all three result sets together.
+Traceability: FR05, NFR03. Verification: TC03, TC07; issue I02. The planned task dates and saved baseline do not establish actual completion.</Notes>
       <HideBar>0</HideBar>
       <Rollup>0</Rollup>
       <EarnedValueMethod>0</EarnedValueMethod>
@@ -1073,7 +1081,7 @@
       <LevelingCanSplit>0</LevelingCanSplit>
       <LevelingDelayFormat>5</LevelingDelayFormat>
       <IgnoreResourceCalendar>0</IgnoreResourceCalendar>
-      <Notes>Zero-duration schedule marker M3. Review and acceptance work remains in the preceding assigned package. No actual completion or approval has been recorded.</Notes>
+      <Notes>Zero-duration schedule marker; review effort is assigned to the preceding work package. Decision rule: All three model result sets have sources, protocols and limitations; I01–I03 have a recorded disposition. Reviewer / decision authority: Three model leads and PM. Status as at 17 November 2026: Target passed; decision not recorded. No actual completion or approval is inferred.</Notes>
       <HideBar>0</HideBar>
       <Rollup>0</Rollup>
       <EarnedValueMethod>0</EarnedValueMethod>
@@ -1206,7 +1214,8 @@
       <LevelingCanSplit>0</LevelingCanSplit>
       <LevelingDelayFormat>5</LevelingDelayFormat>
       <IgnoreResourceCalendar>0</IgnoreResourceCalendar>
-      <Notes>Overview, ECG exploration, preprocessing, forecast and classification pages load prepared data and show source/limitations for metrics.</Notes>
+      <Notes>Overview, ECG exploration, preprocessing, forecast and classification pages load prepared data and show source/limitations for metrics.
+Traceability: FR01–FR05, FR07, NFR01, NFR02, NFR04, NFR05. Verification: TC04, TC05. The planned task dates and saved baseline do not establish actual completion.</Notes>
       <HideBar>0</HideBar>
       <Rollup>0</Rollup>
       <EarnedValueMethod>0</EarnedValueMethod>
@@ -1270,7 +1279,8 @@
       <LevelingCanSplit>0</LevelingCanSplit>
       <LevelingDelayFormat>5</LevelingDelayFormat>
       <IgnoreResourceCalendar>0</IgnoreResourceCalendar>
-      <Notes>Recorded ECG replay, HR/RR trends and completed-window ST-MEM scores work offline; no live diagnosis or upload is implied. Phase 4 closes after the integrated demo is reviewed against the scope and limitations.</Notes>
+      <Notes>Recorded ECG replay, HR/RR trends and completed-window ST-MEM scores work offline; no live diagnosis or upload is implied. Phase 4 closes after the integrated demo is reviewed against the scope and limitations.
+Traceability: FR06, FR07, NFR02, NFR04. Verification: TC04–TC06. The planned task dates and saved baseline do not establish actual completion.</Notes>
       <HideBar>0</HideBar>
       <Rollup>0</Rollup>
       <EarnedValueMethod>0</EarnedValueMethod>
@@ -1333,7 +1343,7 @@
       <LevelingCanSplit>0</LevelingCanSplit>
       <LevelingDelayFormat>5</LevelingDelayFormat>
       <IgnoreResourceCalendar>0</IgnoreResourceCalendar>
-      <Notes>Zero-duration schedule marker M4. Review and acceptance work remains in the preceding assigned package. No actual completion or approval has been recorded.</Notes>
+      <Notes>Zero-duration schedule marker; review effort is assigned to the preceding work package. Decision rule: Both pages, seven sections and completed-window replay meet offline checks TC05–TC06, or exceptions are accepted. Reviewer / decision authority: Web lead, PM and peer reviewer. Status as at 17 November 2026: Future target; decision not recorded. No actual completion or approval is inferred.</Notes>
       <HideBar>0</HideBar>
       <Rollup>0</Rollup>
       <EarnedValueMethod>0</EarnedValueMethod>
@@ -1451,7 +1461,8 @@
       <LevelingCanSplit>0</LevelingCanSplit>
       <LevelingDelayFormat>5</LevelingDelayFormat>
       <IgnoreResourceCalendar>0</IgnoreResourceCalendar>
-      <Notes>Data, model, web and replay checks are logged; major issues are fixed or listed with owner and impact; metrics match their source files.</Notes>
+      <Notes>Data, model, web and replay checks are logged; major issues are fixed or listed with owner and impact; metrics match their source files.
+Traceability: FR01–FR07, NFR01–NFR05. Verification: TC02–TC07. The planned task dates and saved baseline do not establish actual completion.</Notes>
       <HideBar>0</HideBar>
       <Rollup>0</Rollup>
       <EarnedValueMethod>0</EarnedValueMethod>
@@ -1514,7 +1525,8 @@
       <LevelingCanSplit>0</LevelingCanSplit>
       <LevelingDelayFormat>5</LevelingDelayFormat>
       <IgnoreResourceCalendar>0</IgnoreResourceCalendar>
-      <Notes>Report explains scope, method, WBS, schedule, roles, risks, evidence and limitations; guide shows how to open and reproduce the demo. Phase 5 closes after the report and QA evidence are checked together.</Notes>
+      <Notes>Report explains scope, method, WBS, schedule, roles, risks, evidence and limitations; guide shows how to open and reproduce the demo. Phase 5 closes after the report and QA evidence are checked together.
+Traceability: NFR01, NFR03–NFR05. Verification: TC08. The planned task dates and saved baseline do not establish actual completion.</Notes>
       <HideBar>0</HideBar>
       <Rollup>0</Rollup>
       <EarnedValueMethod>0</EarnedValueMethod>
@@ -1577,7 +1589,7 @@
       <LevelingCanSplit>0</LevelingCanSplit>
       <LevelingDelayFormat>5</LevelingDelayFormat>
       <IgnoreResourceCalendar>0</IgnoreResourceCalendar>
-      <Notes>Zero-duration schedule marker M5. Review and acceptance work remains in the preceding assigned package. No actual completion or approval has been recorded.</Notes>
+      <Notes>Zero-duration schedule marker; review effort is assigned to the preceding work package. Decision rule: QA results, issue disposition, report and guide are reviewed together; blocking defects are closed or accepted. Reviewer / decision authority: PM and peer reviewer. Status as at 17 November 2026: Future target; decision not recorded. No actual completion or approval is inferred.</Notes>
       <HideBar>0</HideBar>
       <Rollup>0</Rollup>
       <EarnedValueMethod>0</EarnedValueMethod>
@@ -1695,7 +1707,8 @@
       <LevelingCanSplit>0</LevelingCanSplit>
       <LevelingDelayFormat>5</LevelingDelayFormat>
       <IgnoreResourceCalendar>0</IgnoreResourceCalendar>
-      <Notes>Acceptance checklist is run on the delivered demo/report; defects are corrected or explicitly accepted with limitations.</Notes>
+      <Notes>Acceptance checklist is run on the delivered demo/report; defects are corrected or explicitly accepted with limitations.
+Traceability: FR01–FR07, NFR01–NFR05. Verification: TC05–TC08. The planned task dates and saved baseline do not establish actual completion.</Notes>
       <HideBar>0</HideBar>
       <Rollup>0</Rollup>
       <EarnedValueMethod>0</EarnedValueMethod>
@@ -1759,7 +1772,8 @@
       <LevelingCanSplit>0</LevelingCanSplit>
       <LevelingDelayFormat>5</LevelingDelayFormat>
       <IgnoreResourceCalendar>0</IgnoreResourceCalendar>
-      <Notes>Source, generated data, report, setup/usage instructions and decision log are handed over; team records lessons learned. Phase 6 closes when final acceptance and handover are recorded.</Notes>
+      <Notes>Source, generated data, report, setup/usage instructions and decision log are handed over; team records lessons learned. Phase 6 closes when final acceptance and handover are recorded.
+Traceability: NFR03, NFR05. Verification: TC08. The planned task dates and saved baseline do not establish actual completion.</Notes>
       <HideBar>0</HideBar>
       <Rollup>0</Rollup>
       <EarnedValueMethod>0</EarnedValueMethod>
@@ -1823,7 +1837,7 @@
       <LevelingCanSplit>0</LevelingCanSplit>
       <LevelingDelayFormat>5</LevelingDelayFormat>
       <IgnoreResourceCalendar>0</IgnoreResourceCalendar>
-      <Notes>Zero-duration schedule marker M6. Review and acceptance work remains in the preceding assigned package. No actual completion or approval has been recorded.</Notes>
+      <Notes>Zero-duration schedule marker; review effort is assigned to the preceding work package. Decision rule: Acceptance checklist, source package, setup guide and lessons are received; decision is signed and dated. Reviewer / decision authority: Course assessor / designated sponsor (identity to confirm). Status as at 17 November 2026: Future target; decision not recorded. No actual completion or approval is inferred.</Notes>
       <HideBar>0</HideBar>
       <Rollup>0</Rollup>
       <EarnedValueMethod>0</EarnedValueMethod>
